@@ -133,21 +133,25 @@ export default function LoginPage() {
 
                 {/* Click-to-Fill Demo Credentials (High conversion value for buyers) */}
                 <div className="mt-6 bg-slate-950/40 border border-slate-900 rounded-3xl p-5 text-center">
-                    <p className="text-xs font-bold text-indigo-400 mb-3 uppercase tracking-wider">
-                        ⚡ Quick Demo Accounts
-                    </p>
+                    <div className="flex items-center justify-center gap-1.5 mb-3">
+                        <span className="text-xs font-bold text-indigo-400 uppercase tracking-wider">
+                            Quick Demo Accounts
+                        </span>
+                    </div>
                     <div className="flex flex-col sm:flex-row gap-2 justify-center">
                         <button
                             onClick={() => fillDemoAccount('superadmin@saas.core')}
-                            className="text-xs bg-slate-900 border border-slate-800 hover:border-indigo-500/30 rounded-xl py-2 px-3 transition font-medium text-slate-300"
+                            className="text-xs bg-slate-900 border border-slate-800 hover:border-indigo-500/30 rounded-xl py-2 px-3 transition font-medium text-slate-300 flex items-center justify-center gap-1.5"
                         >
-                            🔑 Fill SuperAdmin
+                            <Key className="w-3.5 h-3.5 text-slate-500" />
+                            Fill SuperAdmin
                         </button>
                         <button
                             onClick={() => fillDemoAccount('tenantadmin@nexus.corp')}
-                            className="text-xs bg-slate-900 border border-slate-800 hover:border-indigo-500/30 rounded-xl py-2 px-3 transition font-medium text-slate-300"
+                            className="text-xs bg-slate-900 border border-slate-800 hover:border-indigo-500/30 rounded-xl py-2 px-3 transition font-medium text-slate-300 flex items-center justify-center gap-1.5"
                         >
-                            🔑 Fill TenantAdmin
+                            <Key className="w-3.5 h-3.5 text-slate-500" />
+                            Fill TenantAdmin
                         </button>
                     </div>
                 </div>
