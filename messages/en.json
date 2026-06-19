@@ -1,0 +1,183 @@
+{
+  "common": {
+    "home": "Home",
+    "about": "About",
+    "culture": "Corporate Culture",
+    "architecture": "Organization",
+    "announcements": "Announcements",
+    "events": "Corporate Meetings & Meetings",
+    "gallery": "Document Library",
+    "dharma_talks": "Internal Documents",
+    "donate": "Budget",
+    "contact": "Contact",
+    "pagoda": "Enterprise System",
+    "read_more": "Read More",
+    "developed_by": "Developed by Cham Roch Thi & Nguyen Ngoc Minh Chau"
+  },
+  "navigation": {
+    "home": "Home",
+    "about": "About",
+    "about_history": "Company History",
+    "about_lineage": "Structure & Succession",
+    "about_heritage": "Achievements & Values",
+    "about_heritage_abbot": "Chief Executive Officer",
+    "about_heritage_sangha": "Board of Directors",
+    "about_heritage_secretary": "Secretariat",
+    "about_art_architecture": "Infrastructure",
+    "about_art_relics": "Assets & Certifications",
+    "about_art_traditional": "Corporate Traditions",
+    "about_art_culture": "Corporate Life",
+    "about_rules": "Company Regulations",
+    "about_extra_pages": "Other Information",
+    "company_transaction": "Contribution & Partnership",
+    "announcements": "Announcements",
+    "announcements_dharma": "Strategy & Development",
+    "announcements_sangha": "Daily Operations",
+    "announcements_culture": "Corporate Culture",
+    "announcements_charity": "CSR Activities",
+    "announcements_education": "Training & HR Development",
+    "announcements_notices": "Notices & Directives",
+    "dharma_talks": "Internal Documents",
+    "dharma_media": "Multimedia Resources",
+    "dharma_life": "Processes & Guidelines",
+    "dharma_chanting": "Operating Procedures",
+    "dharma_teaching": "Professional Training",
+    "teaching": "Professional Development",
+    "documents": "Digital Documents",
+    "lib_scriptures": "Legal Documents",
+    "lib_tripitaka": "Core Regulations",
+    "lib_linguistics": "Reference Materials",
+    "lib_rituals": "Procedures & Protocols",
+    "lib_terminology": "Industry Glossary",
+    "lib_khmer_knowledge": "Industry Knowledge",
+    "lib_language": "Language & Communications",
+    "lib_heritage": "Corporate Heritage",
+    "lib_customs": "Conventions & Ceremonies",
+    "lib_art_architecture": "Design & Infrastructure",
+    "lib_academic": "Academic Documents",
+    "lib_history": "Historical Records",
+    "lib_annals": "Annual Reports",
+    "phuoc_dien": "Budget",
+    "phuoc_dien_donate": "Budget Allocation",
+    "phuoc_dien_merit": "Contribution Records",
+    "phuoc_dien_projects": "Project Categories",
+    "phuoc_dien_ongoing": "Ongoing",
+    "phuoc_dien_completed": "Completed",
+    "transparency_portal": "Transparency Portal",
+    "contact": "Contact",
+    "transaction": "Budget",
+    "transaction_completed": "Completed",
+    "transaction_projects": "Project Categories",
+    "transaction_give": "Allocate",
+    "transaction_ongoing": "Ongoing",
+    "transaction_merit": "Contribution Records",
+    "solutions": "Solutions",
+    "projects": "Projects",
+    "impact": "Impact",
+    "knowledge": "Knowledge",
+    "story": "Our Story",
+    "team": "Team",
+    "what_is_dnxh": "What is Social Enterprise?",
+    "digital_transformation": "Digital Transformation",
+    "community_communications": "Internal Communications",
+    "culture_conservation": "Culture & Heritage",
+    "social_events": "Corporate Corporate Meetings & Meetings",
+    "mission_vision": "Mission & Vision",
+    "partnership": "Partnership",
+    "sponsorship": "Sponsorship",
+    "volunteer": "Collaborator"
+  },
+  "DharmaTalks": {
+    "title": "Internal Document Library",
+    "subtitle": "Guidelines, policies, and procedures compiled by the Board.",
+    "description": "Internal documents from Headquarters"
+  },
+  "HomePage": {
+    "title": "Home Page",
+    "subtitle": "Welcome to the Management Portal"
+  },
+  "home": {
+    "title": "Home",
+    "subtitle": "Official Portal",
+    "description": "A centralized multi-branch management platform ensuring data isolation, strict access control, and comprehensive monitoring.",
+    "viewCalendar": "View Calendar",
+    "virtualTour": "Virtual Tour",
+    "hero": {
+      "learnMore": "Learn More",
+      "viewSchedule": "View Schedule",
+      "viewRetreatSchedule": "View Training Schedule",
+      "registerNow": "Register Now",
+      "viewCharityWork": "View CSR Activities",
+      "donate": "Allocate Budget",
+      "listenToDharma": "View Documents",
+      "viewLibrary": "View Document Library",
+      "contact": "Contact"
+    },
+    "intro": {
+      "title": "Introduction",
+      "subtitle": "About Us",
+      "description": "Welcome to our Management Portal. A centralized platform for multi-branch enterprise ecosystem with data isolation, RBAC, and comprehensive audit monitoring.",
+      "readMore": "READ MORE"
+    },
+    "quickAccess": {
+      "calendar": {
+        "title": "Calendar",
+        "description": "Corporate Meetings & Meetings & Activities"
+      },
+      "donate": {
+        "title": "Budget",
+        "description": "Allocation & Contribution"
+      },
+      "announcements": {
+        "title": "Announcements",
+        "description": "Latest Updates"
+      },
+      "gallery": {
+        "title": "Document Library",
+        "description": "Documents & Media"
+      }
+    },
+    "calendar": {
+      "title": "Calendar & Corporate Meetings & Meetings",
+      "today": "Today",
+      "solar": "Gregorian Calendar",
+      "lunar": "Internal Calendar"
+    },
+    "events": {
+      "title": "Upcoming Corporate Meetings & Meetings",
+      "viewAll": "View All Corporate Meetings & Meetings"
+    },
+    "features": {
+      "history": {
+        "title": "Company History",
+        "desc": "Our journey of growth"
+      },
+      "abbot": {
+        "title": "CEO",
+        "action": "Biography"
+      },
+      "architecture": {
+        "title": "Infrastructure",
+        "desc": "Modern technology systems"
+      }
+    }
+  },
+  "transaction": {
+    "page": {
+      "title": "Budget Management",
+      "quote": "Transparency - Efficiency - Accountability",
+      "description": "All contributions and budget allocations are transparently recorded, ensuring accountability and audit compliance.",
+      "imageAlt": "Enterprise budget management",
+      "company_title": "Internal Contribution Program",
+      "company_description": "Your partnership helps create sustainable values and positive impact across the organization."
+    },
+    "cta": {
+      "title": "Budget Contribution",
+      "subtitle": "\"Financial transparency - Foundation of trust\"",
+      "description": "Every contribution is recorded, audited, and publicly displayed, ensuring absolute transparency.",
+      "button": "Proceed Now",
+      "learnMore": "View Methods",
+      "trustIndicator": "✓ 100% Transparent • Official enterprise account"
+    }
+  }
+}

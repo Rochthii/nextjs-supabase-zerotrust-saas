@@ -1,0 +1,182 @@
+{
+  "common": {
+    "home": "Trang chủ",
+    "about": "Giới thiệu",
+    "culture": "Văn hoá doanh nghiệp",
+    "architecture": "Cơ cấu tổ chức",
+    "news": "Thông báo",
+    "events": "Sự kiện công ty nội bộ",
+    "gallery": "Kho Tài liệu",
+    "dharma_talks": "Tài Liệu Nội Bộ",
+    "donate": "Ngân sách",
+    "contact": "Liên hệ",
+    "pagoda": "Hệ thống Doanh nghiệp",
+    "read_more": "Đọc thêm",
+    "developed_by": "Phát triển bởi Chăm Rốch Thi & Nguyễn Ngọc Minh Châu"
+  },
+  "navigation": {
+    "home": "Trang Chủ",
+    "about": "Giới Thiệu",
+    "about_history": "Lịch Sử Hình Thành",
+    "about_lineage": "Cơ Cấu & Kế Thừa",
+    "about_heritage": "Giá Trị & Thành Tựu",
+    "about_heritage_abbot": "Giám Đốc Điều Hành",
+    "about_heritage_sangha": "Ban Điều Hành",
+    "about_heritage_secretary": "Ban Thư Ký",
+    "about_art_architecture": "Cơ Sở Hạ Tầng",
+    "about_art_relics": "Tài Sản & Chứng Nhận",
+    "about_art_traditional": "Truyền Thống Doanh Nghiệp",
+    "about_art_culture": "Đời Sống Nội Bộ",
+    "about_rules": "Nội Quy Công Ty",
+    "about_extra_pages": "Trang Thông Tin Khác",
+    "company_transaction": "Đóng góp & Đồng hành",
+    "news": "Thông Báo",
+    "news_dharma": "Chiến Lược & Phát Triển",
+    "news_sangha": "Vận Hành Thường Nhật",
+    "news_culture": "Văn Hóa Doanh Nghiệp",
+    "news_charity": "Trách Nhiệm Xã Hội (CSR)",
+    "news_education": "Đào Tạo & Phát Triển Nhân Sự",
+    "news_notices": "Thông Báo & Chỉ Thị",
+    "dharma_talks": "Tài Liệu Nội Bộ",
+    "dharma_media": "Tài Liệu Đa Phương Tiện",
+    "dharma_life": "Quy Trình & Hướng Dẫn",
+    "dharma_chanting": "Quy Định Vận Hành",
+    "teaching": "Đào Tạo Chuyên Môn",
+    "documents": "Tài Liệu Số",
+    "lib_scriptures": "Văn Bản Pháp Lý",
+    "lib_tripitaka": "Bộ Quy Tắc Nền Tảng",
+    "lib_linguistics": "Tư Liệu Tham Khảo",
+    "lib_rituals": "Quy Trình & Thủ Tục",
+    "lib_terminology": "Thuật Ngữ Chuyên Ngành",
+    "lib_khmer_knowledge": "Tri Thức Ngành",
+    "lib_language": "Ngôn Ngữ & Truyền Thông",
+    "lib_heritage": "Di Sản Doanh Nghiệp",
+    "lib_customs": "Quy Ước & Lễ Nghi",
+    "lib_art_architecture": "Thiết Kế & Hạ Tầng",
+    "lib_academic": "Văn Kiện Học Thuật",
+    "lib_history": "Văn Kiện Lịch Sử",
+    "lib_annals": "Báo Cáo Thường Niên",
+    "phuoc_dien": "Ngân Sách",
+    "phuoc_dien_donate": "Phân Bổ Ngân Sách",
+    "phuoc_dien_merit": "Ghi Nhận Đóng Góp",
+    "phuoc_dien_projects": "Hạng Mục Dự Án",
+    "phuoc_dien_ongoing": "Đang Triển Khai",
+    "phuoc_dien_completed": "Đã Hoàn Thành",
+    "transparency_portal": "Cổng Minh Bạch",
+    "contact": "Liên Hệ",
+    "transaction": "Ngân Sách",
+    "transaction_give": "Phân Bổ",
+    "transaction_merit": "Ghi Nhận Đóng Góp",
+    "transaction_projects": "Hạng Mục Dự Án",
+    "transaction_ongoing": "Đang Triển Khai",
+    "transaction_completed": "Đã Hoàn Thành",
+    "solutions": "Giải pháp",
+    "projects": "Dự án",
+    "impact": "Tác động",
+    "knowledge": "Kiến thức",
+    "story": "Câu chuyện",
+    "team": "Đội ngũ",
+    "what_is_dnxh": "DNXH là gì?",
+    "digital_transformation": "Chuyển đổi số",
+    "community_communications": "Truyền thông Nội bộ",
+    "culture_conservation": "Văn hóa & Bảo tồn",
+    "social_events": "Sự kiện công ty Doanh nghiệp",
+    "mission_vision": "Sứ mệnh & Tầm nhìn",
+    "partnership": "Hợp tác Dự án",
+    "sponsorship": "Tài trợ",
+    "volunteer": "Cộng tác viên"
+  },
+  "DharmaTalks": {
+    "title": "Kho Tài Liệu Nội Bộ",
+    "subtitle": "Tài liệu hướng dẫn, quy trình và chính sách được biên soạn bởi Ban Điều hành.",
+    "description": "Tổng hợp tài liệu nội bộ từ Trụ sở chính"
+  },
+  "HomePage": {
+    "title": "Trang Chủ",
+    "subtitle": "Chào mừng đến với Hệ thống"
+  },
+  "home": {
+    "title": "Trang Chủ",
+    "subtitle": "Cổng thông tin chính thức",
+    "description": "Nền tảng quản trị đa chi nhánh tập trung, đảm bảo an toàn thông tin và minh bạch vận hành cho toàn bộ hệ sinh thái doanh nghiệp.",
+    "viewCalendar": "Xem lịch sự kiện",
+    "virtualTour": "Tham quan trực tuyến",
+    "hero": {
+      "learnMore": "Tìm hiểu thêm",
+      "viewSchedule": "Xem lịch hoạt động",
+      "viewRetreatSchedule": "Xem lịch đào tạo",
+      "registerNow": "Đăng ký ngay",
+      "viewCharityWork": "Xem hoạt động CSR",
+      "donate": "Đóng góp ngân sách",
+      "listenToDharma": "Xem tài liệu",
+      "viewLibrary": "Xem kho tài liệu",
+      "contact": "Liên hệ"
+    },
+    "quickAccess": {
+      "calendar": {
+        "title": "Lịch họp",
+        "description": "Sự kiện công ty & hoạt động nội bộ"
+      },
+      "donate": {
+        "title": "Ngân sách",
+        "description": "Phân bổ và đóng góp"
+      },
+      "news": {
+        "title": "Thông báo",
+        "description": "Thông báo nội bộ mới nhất"
+      },
+      "gallery": {
+        "title": "Kho Tài liệu",
+        "description": "Tài liệu & Media"
+      }
+    },
+    "events": {
+      "title": "Sự Kiện Sắp Tới",
+      "viewAll": "Xem Tất Cả Sự Kiện"
+    },
+    "intro": {
+      "title": "Giới thiệu",
+      "subtitle": "Về chúng tôi",
+      "description": "Chào mừng quý vị đến với Cổng thông tin quản trị. Đây là nền tảng quản lý tập trung dành cho hệ sinh thái doanh nghiệp đa chi nhánh. Hệ thống đảm bảo cô lập dữ liệu, phân quyền chặt chẽ và giám sát toàn diện mọi hoạt động vận hành.",
+      "readMore": "ĐỌC THÊM"
+    },
+    "calendar": {
+      "title": "Lịch & Sự Kiện",
+      "today": "Hôm nay",
+      "solar": "Dương lịch",
+      "lunar": "Lịch nội bộ"
+    },
+    "features": {
+      "history": {
+        "title": "Lịch Sử Phát Triển",
+        "desc": "Hành trình xây dựng và phát triển"
+      },
+      "abbot": {
+        "title": "Giám Đốc Điều Hành",
+        "action": "Tiểu sử"
+      },
+      "architecture": {
+        "title": "Cơ Sở Hạ Tầng",
+        "desc": "Hệ thống công nghệ hiện đại"
+      }
+    }
+  },
+  "transaction": {
+    "page": {
+      "title": "Quản Lý Ngân Sách",
+      "quote": "Minh bạch - Hiệu quả - Trách nhiệm",
+      "description": "Mọi khoản đóng góp và phân bổ ngân sách đều được ghi nhận minh bạch, đảm bảo trách nhiệm giải trình và tuân thủ quy trình kiểm toán.",
+      "imageAlt": "Quản lý ngân sách doanh nghiệp",
+      "company_title": "Chương trình Đóng góp Nội bộ",
+      "company_description": "Sự đồng hành của quý vị giúp chúng tôi kiến tạo những giá trị bền vững và lan tỏa tác động tích cực đến tổ chức."
+    },
+    "cta": {
+      "title": "Đóng Góp Ngân Sách",
+      "subtitle": "\"Minh bạch tài chính - Nền tảng tin cậy\"",
+      "description": "Mỗi khoản đóng góp từ các chi nhánh và đối tác đều được ghi nhận, kiểm toán và công khai trên hệ thống, đảm bảo tính minh bạch tuyệt đối.",
+      "button": "Thực hiện ngay",
+      "learnMore": "Xem Phương Thức",
+      "trustIndicator": "✓ Minh bạch 100% • Tài khoản chính thức doanh nghiệp"
+    }
+  }
+}

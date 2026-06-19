@@ -1,0 +1,61 @@
+import React from 'react';
+import { requirePermission } from '@/lib/permissions';
+import { getTenant } from '@/app/actions/admin/tenants';
+import { getSiteSettings } from '@/lib/site-settings';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import { ArrowLeft, Palette, Settings } from 'lucide-react';
+import { notFound } from 'next/navigation';
+import { ThemeSettingsClient } from './theme-settings-client';
+
+export default async function TenantThemePage({ params }: { params: Promise<{ id: string }> }) {
+    // SECURITY: Only Super Admin / Company Editor mới được đổi theme toàn cầu
+    await requirePermission('tenants', 'update');
+
+    const { id } = await params;
+    const { tenant, error } = await getTenant(id);
+
+    if (!tenant || error) notFound();
+
+    const settings = await getSiteSettings(id);
+
+    return (
+        <div className="space-y-6 max-w-5xl">
+            {/* Header & Navigation */}
+            <div className="flex items-center gap-4">
+                <Link href={`/admin/tenants/${id}`}>
+                    <Button variant="outline" size="icon">
+                        <ArrowLeft className="h-4 w-4" />
+                    </Button>
+                </Link>
+                <div className="flex-1">
+                    <h1 className="text-3xl font-playfair font-bold">Settings Interface (Theme)</h1>
+                    <p className="text-gray-500 mt-1 flex items-center gap-2">
+                        <Palette className="h-4 w-4 text-gold-primary" />
+                        Branch: <span className="font-semibold text-gray-700">{tenant.name}</span>
+                    </p>
+                </div>
+                <Link href={`/admin/tenants/${id}`}>
+                    <Button variant="ghost" size="sm" className="text-gray-500 gap-2">
+                        <Settings className="h-4 w-4" />
+                        Thông tin branch
+                    </Button>
+                </Link>
+            </div>
+
+            {/* Warning Banner */}
+            <div className="flex items-start gap-3 px-4 py-3 bg-amber-50 border border-amber-200 rounded-xl text-sm text-amber-800">
+                <span className="text-lg flex-shrink-0 mt-0.5">⚠️</span>
+                <div>
+                    <p className="font-semibold">Quyền hạn cao — chỉ dành cho Super Admin</p>
+                    <p className="text-amber-700 text-xs mt-0.5">
+                        Thay đổi colors sẽ áp dụng ngay lập tức cho toàn bộ page web của branch này. Hãy check kỹ ở section View Trước trước khi save.
+                    </p>
+                </div>
+            </div>
+
+            {/* Theme Editor (Client Component) */}
+            <ThemeSettingsClient initialSettings={settings} tenantId={id} tenantName={tenant.name} tenantType={tenant.tenant_type} />
+        </div>
+    );
+}

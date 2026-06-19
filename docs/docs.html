@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NextSecure SaaS Starter Kit — Documentation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --sidebar-bg: #1e293b;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --accent-color: #6366f1;
+            --accent-hover: #4f46e5;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --border-color: #334155;
+            --code-bg: #090d16;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styling */
+        aside {
+            width: 280px;
+            background-color: var(--sidebar-bg);
+            border-right: 1px solid var(--border-color);
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            padding: 2rem 1.5rem;
+            overflow-y: auto;
+            z-index: 10;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .logo-icon {
+            background: linear-gradient(135deg, var(--accent-color), #a855f7);
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: white;
+        }
+
+        .logo-text {
+            font-size: 1.25rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #ffffff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .menu-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        .menu-list {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .menu-item {
+            margin-bottom: 0.4rem;
+        }
+
+        .menu-link {
+            display: block;
+            padding: 0.6rem 0.8rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .menu-link:hover, .menu-link.active {
+            color: white;
+            background-color: rgba(99, 102, 241, 0.15);
+            border-left: 3px solid var(--accent-color);
+            padding-left: 0.7rem;
+        }
+
+        /* Main Content Styling */
+        main {
+            margin-left: 280px;
+            flex-grow: 1;
+            padding: 3rem 4rem;
+            max-width: 1000px;
+        }
+
+        header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background-color: rgba(99, 102, 241, 0.2);
+            color: #a5b4fc;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+        }
+
+        section {
+            margin-bottom: 4rem;
+            scroll-margin-top: 2rem;
+        }
+
+        h2 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 1.5rem 0 1rem 0;
+            color: #ffffff;
+        }
+
+        p {
+            margin-bottom: 1.2rem;
+            color: #cbd5e1;
+        }
+
+        ul, ol {
+            margin-bottom: 1.5rem;
+            margin-left: 1.5rem;
+            color: #cbd5e1;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Callouts / Alerts */
+        .callout {
+            background-color: #1e293b;
+            border-left: 4px solid var(--accent-color);
+            padding: 1.25rem;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 1.5rem;
+        }
+
+        .callout.success {
+            border-left-color: var(--success-color);
+            background-color: rgba(16, 185, 129, 0.05);
+        }
+
+        .callout.warning {
+            border-left-color: var(--warning-color);
+            background-color: rgba(245, 158, 11, 0.05);
+        }
+
+        .callout-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Code Blocks */
+        pre {
+            background-color: var(--code-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.25rem;
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            position: relative;
+        }
+
+        code {
+            font-family: 'JetBrains Mono', monospace;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.85em;
+            color: #e2e8f0;
+        }
+
+        pre code {
+            background-color: transparent;
+            padding: 0;
+            border-radius: 0;
+            font-size: inherit;
+            color: inherit;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+        }
+
+        th, td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: rgba(255, 255, 255, 0.05);
+            font-weight: 600;
+            color: white;
+        }
+
+        tr:hover {
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+
+            aside {
+                width: 100%;
+                position: static;
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+                padding: 1.5rem;
+            }
+
+            main {
+                margin-left: 0;
+                padding: 2rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <aside>
+        <div class="logo-area">
+            <div class="logo-icon">NS</div>
+            <div class="logo-text">NextSecure</div>
+        </div>
+
+        <h3 class="menu-title">Getting Started</h3>
+        <ul class="menu-list">
+            <li class="menu-item"><a href="#introduction" class="menu-link active">Introduction</a></li>
+            <li class="menu-item"><a href="#prerequisites" class="menu-link">Prerequisites</a></li>
+            <li class="menu-item"><a href="#db-setup" class="menu-link">1. Database Provisioning</a></li>
+            <li class="menu-item"><a href="#redis-setup" class="menu-link">2. Edge Cache (Redis)</a></li>
+            <li class="menu-item"><a href="#telegram-setup" class="menu-link">3. Telegram alerts</a></li>
+            <li class="menu-item"><a href="#local-env" class="menu-link">4. Local & Environment</a></li>
+            <li class="menu-item"><a href="#vercel-deploy" class="menu-link">5. Vercel & Subdomains</a></li>
+        </ul>
+
+        <h3 class="menu-title">Architecture</h3>
+        <ul class="menu-list">
+            <li class="menu-item"><a href="#architecture-rls" class="menu-link">FORCE RLS (Multi-Tenancy)</a></li>
+            <li class="menu-item"><a href="#architecture-worm" class="menu-link">WORM Audit Logs</a></li>
+            <li class="menu-item"><a href="#architecture-edge" class="menu-link">Edge Active Defense</a></li>
+        </ul>
+
+        <h3 class="menu-title">Support</h3>
+        <ul class="menu-list">
+            <li class="menu-item"><a href="#troubleshooting" class="menu-link">Troubleshooting</a></li>
+            <li class="menu-item"><a href="#license" class="menu-link">License Agreement</a></li>
+        </ul>
+    </aside>
+
+    <main>
+        <header>
+            <span class="badge">V1.0.0 Production Release</span>
+            <h1>NextSecure SaaS Starter Kit Documentation</h1>
+            <p class="subtitle">Complete guide to deploy NextSecure: Next.js 16 + Supabase RLS + WORM Audits + Edge Defense.</p>
+        </header>
+
+        <!-- Introduction Section -->
+        <section id="introduction">
+            <h2>🔒 Introduction</h2>
+            <p>Welcome to <strong>NextSecure</strong> — the only Next.js SaaS boilerplate built with strict database-level tenant isolation, compliance audit logs, and edge-native active threat blocking.</p>
+            <p>Most SaaS kits handle tenancy at the API/application layer. A single forgotten <code>WHERE tenant_id</code> filter can result in a critical data leak. NextSecure enforces security at the **PostgreSQL engine level (FORCE RLS)**, making it virtually impossible to leak cross-tenant data, even if your API code is faulty.</p>
+            
+            <div class="callout success">
+                <div class="callout-title">💡 Why NextSecure is different</div>
+                <p>Designed for compliance-heavy sectors (healthcare, law, finance) requiring SOC2, ISO 27001, or GDPR controls out of the box. Saves 3+ months of security engineering.</p>
+            </div>
+        </section>
+
+        <!-- Prerequisites -->
+        <section id="prerequisites">
+            <h2>🛠️ Prerequisites</h2>
+            <p>Before launching, ensure you have active accounts on these platforms:</p>
+            <ul>
+                <li><strong>Node.js:</strong> LTS version 20.x or higher installed.</li>
+                <li><strong>Supabase:</strong> Free or Pro database project.</li>
+                <li><strong>Upstash:</strong> Serverless Redis database (for Edge cache).</li>
+                <li><strong>Telegram Bot:</strong> (Optional) For real-time active defense alerts.</li>
+                <li><strong>Vercel Account:</strong> For deployment and wildcard subdomain routing.</li>
+            </ul>
+        </section>
+
+        <!-- Database Setup -->
+        <section id="db-setup">
+            <h2>1. Database Provisioning (Supabase)</h2>
+            <p>NextSecure relies heavily on PostgreSQL schemas, functions, policies, and triggers.</p>
+            <ol>
+                <li>Create a new project in the <a href="https://supabase.com/" target="_blank" style="color: var(--accent-color);">Supabase Console</a>.</li>
+                <li>Select a region closest to your target audience. Save the database password securely.</li>
+                <li>Open the <strong>SQL Editor</strong> on the sidebar.</li>
+                <li>Create a <strong>New Query</strong>, copy and execute the SQL scripts under the <code>supabase/</code> folder sequentially (from <code>001_extensions.sql</code> to <code>009_offboarding.sql</code>). Make sure you run them one after another.</li>
+                <li><strong>Seed baseline data:</strong> Paste the contents of <code>seed_saas_core.sql</code> into the SQL editor and click Run. This sets up default roles, system permissions, and initial test accounts.</li>
+            </ol>
+            
+            <div class="callout warning">
+                <div class="callout-title">⚠️ Run sequentially</div>
+                <p>Do not run the SQL files in arbitrary order, as tables and functions are heavily interdependent (e.g. <code>003_auth_rbac.sql</code> needs to run before <code>006_rls.sql</code>).</p>
+            </div>
+        </section>
+
+        <!-- Redis Setup -->
+        <section id="redis-setup">
+            <h2>2. Provisioning Edge Cache (Upstash Redis)</h2>
+            <p>To support dynamic subdomain checks and threat mitigation at the CDN edge in under 4ms, NextSecure uses Upstash Redis serverless database.</p>
+            <ol>
+                <li>Log in to the <a href="https://upstash.com/" target="_blank" style="color: var(--accent-color);">Upstash Console</a>.</li>
+                <li>Create a new Redis database:
+                    <ul>
+                        <li><strong>Name:</strong> <code>nextsecure-limiter</code></li>
+                        <li><strong>Region:</strong> Matching your Supabase database region (e.g. AWS ap-southeast-1 for Singapore).</li>
+                        <li><strong>Eviction:</strong> Enabled.</li>
+                    </ul>
+                </li>
+                <li>Once created, scroll to the <strong>REST API</strong> section -> Click <strong>.env</strong> tab -> Copy <code>UPSTASH_REDIS_REST_URL</code> and <code>UPSTASH_REDIS_REST_TOKEN</code>.</li>
+            </ol>
+        </section>
+
+        <!-- Telegram setup -->
+        <section id="telegram-setup">
+            <h2>3. Config Telegram Active Defense Alerts</h2>
+            <p>When threat indicators occur (e.g. cross-tenant database bypass attempts or rapid request floods), the active defense middleware routes live notifications to your Telegram channel.</p>
+            <ol>
+                <li>Search for <code>@BotFather</code> on Telegram.</li>
+                <li>Send <code>/newbot</code> command, give it a name (e.g. <code>SaaS SOC alerts</code>) and a username. Copy the generated HTTP Token.</li>
+                <li>Find your chat ID by messaging <code>@userinfobot</code>. Copy the numeric ID returned.</li>
+                <li>Add these to your environment configuration as <code>TELEGRAM_BOT_TOKEN</code> and <code>TELEGRAM_CHAT_ID</code>.</li>
+            </ol>
+        </section>
+
+        <!-- Local env -->
+        <section id="local-env">
+            <h2>4. Local Setup & Environment Variables</h2>
+            <p>To run NextSecure locally on your machine:</p>
+            <ol>
+                <li>Install dependencies:
+                    <pre><code>npm install --legacy-peer-deps</code></pre>
+                    <em>Note: The <code>--legacy-peer-deps</code> flag resolves peer conflicts under React 19 / Next.js 16.</em>
+                </li>
+                <li>Create <code>.env.local</code> by duplicating <code>.env.example</code>:
+                    <pre><code>cp .env.example .env.local</code></pre>
+                </li>
+                <li>Fill in the environment variables:
+                    <pre><code># SUPABASE CONFIG
+NEXT_PUBLIC_SUPABASE_URL=https://[your-project-id].supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=[your-anon-key]
+SUPABASE_SERVICE_ROLE_KEY=[your-service-role-key]
+
+# REDIS LIMITER & EDGE CACHE
+UPSTASH_REDIS_REST_URL=https://[your-redis-url].upstash.io
+UPSTASH_REDIS_REST_TOKEN=[your-redis-token]
+
+# SECURITY SECRETS (Generate random 32-character strings)
+NEXTAUTH_SECRET=a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6
+CRON_SECRET=cron_secure_secret_token_key_99
+REVALIDATE_SECRET=revalidate_secure_token_key_99
+
+# TELEGRAM BOT NOTIFIER
+TELEGRAM_BOT_TOKEN=[your-telegram-token]
+TELEGRAM_CHAT_ID=[your-telegram-chat-id]</code></pre>
+                </li>
+                <li>Start the dev server:
+                    <pre><code>npm run dev</code></pre>
+                </li>
+                <li>Visit <code>http://localhost:3000</code>. To mock a tenant locally, append the query parameter: <code>http://localhost:3000?tenant=nexus</code>.</li>
+            </ol>
+        </section>
+
+        <!-- Vercel -->
+        <section id="vercel-deploy">
+            <h2>5. Vercel Deployment & Wildcard DNS</h2>
+            <p>Hosting on Vercel is required to leverage Next.js Edge Middleware and dynamic multi-tenant custom domains/subdomains.</p>
+            <ol>
+                <li>Push the code repository to a private GitHub/GitLab repo.</li>
+                <li>Import the repository into Vercel and paste your <code>.env.local</code> environment variables.</li>
+                <li>Click <strong>Deploy</strong>.</li>
+                <li><strong>Configure Custom Subdomains:</strong>
+                    <ul>
+                        <li>Go to your Vercel Project -> <strong>Settings</strong> -> <strong>Domains</strong>.</li>
+                        <li>Add your apex domain: <code>yourdomain.com</code>.</li>
+                        <li>Add wildcard domain: <code>*.yourdomain.com</code>.</li>
+                    </ul>
+                </li>
+                <li>Set up DNS mapping: Add an A record pointing <code>@</code> to <code>76.76.21.21</code> and CNAME record pointing <code>*</code> to <code>cname.vercel-dns.com</code> at your DNS provider (e.g. Cloudflare).</li>
+            </ol>
+        </section>
+
+        <!-- FORCE RLS -->
+        <section id="architecture-rls">
+            <h2>🔒 Row-Level Security (FORCE RLS)</h2>
+            <p>NextSecure uses PostgreSQL RLS to isolate tenant datasets. This occurs directly inside PostgreSQL, completely bypassing any risk of application-level bugs exposing other clients' data.</p>
+            <pre><code>-- Example of NextSecure FORCE RLS Policy
+ALTER TABLE public.settings FORCE ROW LEVEL SECURITY;
+
+CREATE POLICY tenant_isolation_policy ON public.settings
+    FOR ALL
+    USING (tenant_id = (SELECT get_current_tenant_id()));</code></pre>
+            <p>Every tenant session passes custom JWT claims containing the <code>tenant_id</code>. The database dynamically filters records during reads, writes, and updates.</p>
+        </section>
+
+        <!-- WORM Audit -->
+        <section id="architecture-worm">
+            <h2>🛡️ WORM (Write Once, Read Many) Immutable Logs</h2>
+            <p>To fulfill regulatory audits (SOC2 compliance), logs must never be tampered with or deleted by anyone — including administrators.</p>
+            <p>NextSecure binds an immutable trigger to the <code>audit_logs</code> table. Any update or delete attempt throws a database exception:</p>
+            <pre><code>CREATE OR REPLACE FUNCTION public.prevent_audit_log_tampering()
+RETURNS TRIGGER AS $$
+BEGIN
+    RAISE EXCEPTION 'Audit log entries are WORM (Write Once, Read Many) and cannot be updated or deleted.';
+END;
+$$ LANGUAGE plpgsql;</code></pre>
+        </section>
+
+        <!-- Edge Active Defense -->
+        <section id="architecture-edge">
+            <h2>⚡ Edge Active Defense & Rate Limiting</h2>
+            <p>Traditional server security filters threats late in the request pipeline. NextSecure blocks threats before they hit your app using Vercel Edge Middleware and Upstash Redis caching.</p>
+            <ul>
+                <li><strong>IP Rate Limiter:</strong> Tracks requests per second. Suspicious spikes trigger an automatic edge block.</li>
+                <li><strong>Tenant Isolation Enforcer:</strong> Suspended tenants are instantly blocked at the edge, returning a <code>403 Forbidden</code> within 4ms without database roundtrips.</li>
+            </ul>
+        </section>
+
+        <!-- Troubleshooting -->
+        <section id="troubleshooting">
+            <h2>🔍 Troubleshooting</h2>
+            <h3>My IP was blocked by Active Defense</h3>
+            <p>Active defense blocks malicious IPs. During development, Middleware automatically bypasses local requests from <code>localhost:3000</code>. If you get blocked in staging/production, run this SQL script in Supabase to release your IP:</p>
+            <pre><code>DELETE FROM public.blocked_ips WHERE ip = 'your-actual-client-ip';</code></pre>
+
+            <h3>SUBDOMAIN ROUTING NOT WORKING LOCALLY</h3>
+            <p>Local desktop environments cannot route wildcard domains (e.g. <code>tenant.localhost:3000</code>). You must pass the tenant ID via a query parameter for local development: <code>http://localhost:3000?tenant=[tenant-subdomain]</code>.</p>
+        </section>
+
+        <!-- License -->
+        <section id="license">
+            <h2>📜 License Agreement</h2>
+            <p>By using this boilerplate code, you agree to the standard marketplace license terms:</p>
+            <ul>
+                <li><strong>Regular License:</strong> Permits installation in exactly 1 commercial or personal project. Re-distributing the starter kit source code as-is is strictly prohibited.</li>
+                <li><strong>Extended License:</strong> Allows integration inside commercial SaaS templates or building client products. Reselling as a competing boilerplate is not allowed.</li>
+            </ul>
+        </section>
+    </main>
+
+    <script>
+        // Simple script to highlight current menu section on scroll
+        const links = document.querySelectorAll('.menu-link');
+        const sections = document.querySelectorAll('section');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= (sectionTop - 150)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            links.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').slice(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+'use client';
+
+import React from 'react';
+import { Button } from '@/components/ui/button';
+import { Download } from 'lucide-react';
+
+interface ExportCSVButtonProps {
+    data: any[];
+}
+
+export function ExportCSVButton({ data }: ExportCSVButtonProps) {
+    const exportToCSV = () => {
+        if (!data || data.length === 0) return;
+
+        // CSV headers
+        const headers = ['Last name name', 'Event', 'Số người', 'Điện thoại', 'Email', 'Status', 'Ngày registration'];
+
+        // CSV rows
+        const rows = data.map((reg) => [
+            reg.full_name || '',
+            reg.events?.title_vi || 'N/A',
+            reg.num_participants || 0,
+            reg.phone || '',
+            reg.email || '',
+            reg.status === 'confirmed' ? 'Đã confirm' :
+                reg.status === 'pending' ? 'Chờ confirm' : 'Đã cancel',
+            new Date(reg.registration_date || reg.created_at).toLocaleString('vi-VN'),
+        ]);
+
+        // Combine headers and rows
+        const csvContent = [
+            headers.join(','),
+            ...rows.map((row) => row.map((cell) => `"${cell}"`).join(',')),
+        ].join('\n');
+
+        // Create blob and download
+        const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `dang-ky-su-kien-${Date.now()}.csv`;
+        link.click();
+        URL.revokeObjectURL(url);
+    };
+
+    return (
+        <Button onClick={exportToCSV} variant="outline">
+            <Download className="mr-2 h-4 w-4" />
+            Export CSV
+        </Button>
+    );
+}

@@ -1,0 +1,320 @@
+/* Kantumruy Pro loaded via next/font/google in layout.tsx — not @import (render-blocking) */
+/* Note: VS Code may warn about @tailwind rules. This is normal if the Tailwind extension is not installed. */
+
+/* stylelint-disable-next-line at-rule-no-unknown */
+@tailwind base;
+/* stylelint-disable-next-line at-rule-no-unknown */
+@tailwind components;
+/* stylelint-disable-next-line at-rule-no-unknown */
+@tailwind utilities;
+
+@layer base {
+
+    /* Accessibility: Standard font sizes for better density — 15px mobile, 16px desktop */
+    html {
+        font-size: 15px;
+        scroll-behavior: smooth;
+        -webkit-text-size-adjust: 100%;
+        -webkit-tap-highlight-color: transparent;
+
+        /* ── Theme Fallback Variables ───────────────────────────────────
+           These are overridden per-tenant by layout.tsx injection.
+           Defaults match the system's gold/coffee palette.
+        ─────────────────────────────────────────────────────────────── */
+        --theme-primary: 245 158 11;
+        --theme-primary-dark: 208 140 9;
+        --theme-primary-light: 253 183 26;
+        --theme-secondary: 92 64 51;
+        --theme-text: 44 24 16;
+        --theme-accent: 255 140 0;
+        --theme-bg-start: 254 249 243;
+        --theme-bg-end: 253 245 235;
+        --theme-hero: 26 15 9;
+        --theme-surface: 250 250 247;
+        --theme-pattern-opacity: 0.05;
+    }
+
+    @media (min-width: 640px) {
+        html {
+            font-size: 16px;
+        }
+    }
+
+    body {
+        /* stylelint-disable-next-line at-rule-no-unknown */
+        @apply text-base leading-relaxed antialiased;
+        background: linear-gradient(to bottom, rgb(var(--theme-bg-start, 254 249 243)) 0%, rgb(var(--theme-bg-end, 253 245 235)) 100%);
+        /* Dynamic Theravada Buddhist aesthetic gradient */
+        overscroll-behavior-y: contain;
+    }
+
+
+
+    /* Prevent iOS Safari zoom on input focus */
+    input,
+    select,
+    textarea {
+        font-size: 16px !important;
+    }
+
+    @media (min-width: 640px) {
+
+        input,
+        select,
+        textarea {
+            font-size: inherit !important;
+        }
+    }
+}
+
+/* ── Admin Dark Mode: Override the Buddhist cream gradient ───────────────
+   html.dark được set bởi app/admin/layout.tsx để kích hoạt dark mode.
+   Rule này phải nằm NGOÀI @layer base để có specificity cao nhất,
+   đảm bảo nền tối luôn thắng gradient màu kem của trang public.
+──────────────────────────────────────────────────────────────────────── */
+html.dark body {
+    background: #020617 !important; /* slate-950 */
+    color: #f1f5f9; /* slate-100 */
+}
+
+/* Masonry Grid Styles */
+.masonry-grid {
+    column-count: 3;
+    column-gap: 1rem;
+}
+
+@media (max-width: 768px) {
+    .masonry-grid {
+        column-count: 2;
+    }
+}
+
+@media (max-width: 640px) {
+    .masonry-grid {
+        column-count: 1;
+    }
+}
+
+.masonry-item {
+    break-inside: avoid;
+    page-break-inside: avoid;
+}
+
+/* Lightbox Custom Styles */
+.yarl__root {
+    --yarl__color_button: #F59E0B;
+    --yarl__color_button_active: #D97706;
+}
+
+/* Skeleton Shimmer Animation */
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+/* Custom Scrollbar Styles */
+@layer utilities {
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: linear-gradient(to bottom, rgb(var(--theme-bg-start, 254 249 243)), #F5E6D3);
+        border-radius: 10px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: linear-gradient(to bottom, #FFD700, #D4A860);
+        border-radius: 10px;
+        transition: background 0.3s;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(to bottom, #D4A860, #B8860B);
+    }
+
+    /* Firefox */
+    .custom-scrollbar {
+        scrollbar-width: thin;
+        scrollbar-color: rgb(var(--theme-primary, 245 158 11)) rgb(var(--theme-bg-start, 254 249 243));
+    }
+
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Hide scrollbar for IE, Edge and Firefox */
+    .no-scrollbar {
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none; /* Firefox */
+    }
+
+    /* ── iPhone notch / Dynamic Island safe area ─────────────────────── */
+    /* Use these classes where content must not be hidden behind the notch */
+    .safe-top {
+        padding-top: env(safe-area-inset-top);
+    }
+
+    .safe-bottom {
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    .safe-left {
+        padding-left: env(safe-area-inset-left);
+    }
+
+    .safe-right {
+        padding-right: env(safe-area-inset-right);
+    }
+
+    /* ── Carousel / swipe: prevent browser interfering with touch drag ── */
+    .touch-pan-x {
+        touch-action: pan-x;
+    }
+
+    .touch-pan-y {
+        touch-action: pan-y;
+    }
+
+    /* ── Content-visibility: skip rendering of far-below-fold sections ── */
+    /* Apply to sections that are very far down the page */
+    .cv-auto {
+        content-visibility: auto;
+        contain-intrinsic-size: auto 400px;
+        /* Hint: expected height */
+    }
+
+    /* ── Tap highlight for interactive elements ─────────────────────── */
+    a,
+    button,
+    [role="button"] {
+        -webkit-tap-highlight-color: rgba(212, 168, 96, 0.2);
+    }
+
+    /* ── Skeleton shimmer sweep animation ───────────────────────────── */
+    @keyframes skeleton-shimmer {
+        0% {
+            background-position: -200% 0;
+        }
+
+        100% {
+            background-position: 200% 0;
+        }
+    }
+}
+
+/* TipTap/ProseMirror editor styles đã chuyển sang app/tiptap.css
+   — chỉ import trong admin layout để không load ở public pages */
+
+
+/* ── News Content Typography (Tailwind Prose) ─────────────────────── */
+.prose {
+    --tw-prose-body: #374151;
+    /* gray-700 */
+    --tw-prose-headings: rgb(var(--theme-text, 44 24 16));
+    /* dynamic heading color (coffee) */
+    --tw-prose-links: rgb(var(--theme-primary, 245 158 11));
+    /* dynamic link color (gold primary) */
+    --tw-prose-bold: rgb(var(--theme-hero, 26 15 9));
+    /* darkest text for bold */
+    --tw-prose-counters: rgb(var(--theme-primary-dark, 208 140 9));
+    --tw-prose-bullets: rgb(var(--theme-primary, 245 158 11));
+    
+    /* Improved readability settings */
+    font-size: 1.05rem;
+    line-height: 1.8;
+    
+    /* Prevent text or long URLs from overflowing container on mobile */
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+
+
+/* Ensure images always fit the screen width, overriding any inline styles */
+.prose img, .prose iframe, .prose video {
+    max-width: 100% !important;
+    height: auto !important;
+}
+
+/* Ensure tables can be scrolled horizontally on mobile instead of breaking layout */
+.prose table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+    font-family: var(--font-playfair), serif;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    hyphens: auto;
+}
+
+/* Image Captions (WYSIWYG support) */
+.prose figure {
+    @apply my-8 flex flex-col items-center;
+}
+
+.prose figure img {
+    @apply rounded-xl shadow-lg border border-stone-200 mb-2;
+}
+
+.prose figure figcaption {
+    @apply text-sm text-gray-500 italic text-center mt-2 px-4 leading-relaxed;
+}
+
+/* Fallback for images without figure (if not using Tiptap figure extension) */
+.prose p>img {
+    @apply rounded-xl shadow-md border border-stone-100 my-4;
+}
+
+/* Custom styling for specific image labels as requested */
+.prose .image-caption,
+.prose figcaption {
+    @apply uppercase tracking-wider text-[11px] font-semibold text-gray-400 mt-2;
+}
+
+/* Bold text reinforcement */
+.prose strong,
+.prose b {
+    @apply font-bold text-gray-900;
+}
+
+/* Responsive heading adjustments for prose on small screens */
+@media (max-width: 768px) {
+    .prose h1 {
+        @apply text-2xl leading-tight mb-4 !important;
+    }
+    .prose h2 {
+        @apply text-xl leading-snug mb-3 !important;
+    }
+    .prose h3 {
+        @apply text-lg font-bold mb-2 !important;
+    }
+    /* Reduce first-letter size and disable float on extra small screens if needed */
+    .prose::first-letter {
+        @apply text-4xl pr-2 leading-none !important;
+        float: none !important;
+        margin: 0 !important;
+    }
+    
+    /* Disable floats and center images on mobile to prevent overflow/misalignment */
+    .prose img {
+        float: none !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+}

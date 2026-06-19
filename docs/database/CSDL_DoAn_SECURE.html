@@ -1,0 +1,2967 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Database ERD Interactive Schema Visualizer</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- React & ReactDOM -->
+  <script src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js"></script>
+  <!-- Babel to transpile JSX -->
+  <script src="https://cdn.jsdelivr.net/npm/@babel/standalone/babel.min.js"></script>
+  <style>
+    body {
+      background-color: #080c14;
+      color: #f3f4f6;
+      font-family: system-ui, -apple-system, sans-serif;
+      overflow: hidden;
+    }
+    .grid-bg {
+      background-image: radial-gradient(#1e293b 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+    /* Custom Scrollbar for list panels */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0b0f19;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #334155;
+    }
+    .relation-line {
+      transition: stroke 0.3s, stroke-width 0.3s, stroke-dasharray 0.3s;
+    }
+    .table-card {
+      transition: box-shadow 0.2s, border-color 0.2s, transform 0.15s;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <div id="error-fallback" style="display: none; padding: 20px; background: #1a0f0f; color: #f87171; font-family: monospace; border: 1px solid #ef4444; margin: 20px; border-radius: 8px; z-index: 9999; position: relative;">
+    <h3 style="margin-top: 0; font-weight: bold;">🚨 Đã xảy ra lỗi khi tải Sơ đồ ERD:</h3>
+    <pre id="error-message" style="white-space: pre-wrap; word-break: break-all;"></pre>
+    <p style="margin-bottom: 0; font-size: 12px; color: #9ca3af; margin-top: 10px;">Gợi ý: Vui lòng kiểm tra kết nối mạng (CDN có thể bị chặn) hoặc xem lỗi chi tiết trong Console (F12).</p>
+  </div>
+
+  <script>
+    window.addEventListener('error', function(event) {
+      document.getElementById('error-fallback').style.display = 'block';
+      document.getElementById('error-message').textContent += event.message + '\nại ' + event.filename + ':' + event.lineno + ':' + event.colno + '\n\n';
+    });
+    window.addEventListener('unhandledrejection', function(event) {
+      document.getElementById('error-fallback').style.display = 'block';
+      document.getElementById('error-message').textContent += 'Unhandled Promise Rejection: ' + event.reason + '\n\n';
+    });
+  </script>
+
+  <script type="text/babel">
+    const { useState, useEffect, useRef, useMemo } = React;
+
+    const Icons = {
+      Search: () => <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" strokeLinecap="round" strokeLinejoin="round"/></svg>,
+      Database: () => <svg className="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M4 7v10c0 2.21 3.58 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.58 4 8 4s8-1.79 8-4M4 7c0-2.21 3.58-4 8-4s8 1.79 8 4m0 5c0 2.21-3.58 4-8 4s-8-1.79-8-4" strokeLinecap="round" strokeLinejoin="round"/></svg>,
+      Key: ({ className }) => <svg className={`w-3.5 h-3.5 ${className || 'text-yellow-400'}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M15 7a2 2 0 012 2m-2-2a2 2 0 11-4 0M15 7v12a2 2 0 01-2 2h-2m2-2h2m-2-4h4M9 15H7" strokeLinecap="round" strokeLinejoin="round"/></svg>,
+      Maximize: () => <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M4 8V4h4M4 4l6 6m10-6h-4v4m4-4l-6 6M4 16v4h4m-4 0l6-6m10 6h-4v-4m4 4l-6-6" strokeLinecap="round" strokeLinejoin="round"/></svg>,
+      Minimize: () => <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M4 14h6v6m0-6l-6 6m16-6h-6v6m0-6l6 6M4 10h6V4m0 6L4 4m16 6h-6V4m0 6l6-6" strokeLinecap="round" strokeLinejoin="round"/></svg>,
+      Cpu: () => <svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m21-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" strokeLinecap="round" strokeLinejoin="round"/></svg>,
+      Warning: ({ className }) => <svg className={`w-4 h-4 ${className || 'text-amber-400'}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" strokeLinecap="round" strokeLinejoin="round"/></svg>,
+      Sparkles: () => <svg className="w-5 h-5 text-violet-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" strokeLinecap="round" strokeLinejoin="round"/></svg>,
+      Grid: () => <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" strokeLinecap="round" strokeLinejoin="round"/></svg>,
+      Close: () => <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" strokeLinecap="round" strokeLinejoin="round"/></svg>,
+      Info: () => <svg className="w-4 h-4 text-sky-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" strokeLinecap="round" strokeLinejoin="round"/></svg>,
+      ChevronDown: () => <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" strokeLinecap="round" strokeLinejoin="round"/></svg>,
+      ChevronRight: () => <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round"/></svg>,
+      Filter: () => <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" strokeLinecap="round" strokeLinejoin="round"/></svg>
+    };
+
+    const PATHWAYS = [
+      { id: "all", name: "Tất cả các luồng nghiệp vụ", highlight: [] },
+      { 
+        id: "rbac", 
+        name: "Luồng Xác thực & Phân quyền (RBAC)", 
+        highlight: ["auth.users", "auth.sessions", "public.user_roles", "public.tenants"] 
+      },
+      { 
+        id: "cms", 
+        name: "Luồng CMS & Quản trị Nội dung", 
+        highlight: ["public.news", "public.categories", "public.about_sections", "public.faq", "public.homepage_slides", "public.pages", "public.tenants"] 
+      },
+      { 
+        id: "events", 
+        name: "Luồng Sự kiện & Đăng ký", 
+        highlight: ["public.events", "public.event_registrations", "public.tenants"] 
+      },
+      { 
+        id: "donations", 
+        name: "Luồng Chiến dịch & Quyên góp", 
+        highlight: ["public.donations", "public.donation_campaigns", "public.bank_accounts", "public.tenants"] 
+      },
+      { 
+        id: "audit", 
+        name: "Luồng Giám sát & Nhật ký Bảo mật (Audit)", 
+        highlight: ["public.audit_logs", "public.active_visitors", "public.tenants"] 
+      }
+    ];
+
+    const COMPREHENSIVE_TABLES = [
+  {
+    "id": "public.about_sections",
+    "schema": "public",
+    "name": "about_sections",
+    "category": "Nội dung (CMS)",
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "isPk": true
+      },
+      {
+        "name": "key",
+        "type": "character varying"
+      },
+      {
+        "name": "title_vi",
+        "type": "text"
+      },
+      {
+        "name": "title_km",
+        "type": "text"
+      },
+      {
+        "name": "title_en",
+        "type": "text"
+      },
+      {
+        "name": "content_vi",
+        "type": "text"
+      },
+      {
+        "name": "content_km",
+        "type": "text"
+      },
+      {
+        "name": "content_en",
+        "type": "text"
+      },
+      {
+        "name": "images",
+        "type": "jsonb"
+      },
+      {
+        "name": "thumbnail_url",
+        "type": "text"
+      },
+      {
+        "name": "display_order",
+        "type": "integer"
+      },
+      {
+        "name": "is_active",
+        "type": "boolean"
+      },
+      {
+        "name": "summary_vi",
+        "type": "text"
+      },
+      {
+        "name": "summary_km",
+        "type": "text"
+      },
+      {
+        "name": "summary_en",
+        "type": "text"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone"
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamp with time zone"
+      },
+      {
+        "name": "tenant_id",
+        "type": "uuid",
+        "isFk": true,
+        "fkTo": "public.tenants",
+        "notes": "Cô lập dữ liệu RLS"
+      },
+      {
+        "name": "image_url",
+        "type": "text"
+      }
+    ],
+    "x": 940,
+    "y": 100
+  },
+  {
+    "id": "public.active_visitors",
+    "schema": "public",
+    "name": "active_visitors",
+    "category": "Kiểm toán & SOC",
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "isPk": true
+      },
+      {
+        "name": "session_hash",
+        "type": "text"
+      },
+      {
+        "name": "path",
+        "type": "text"
+      },
+      {
+        "name": "last_active_at",
+        "type": "timestamp with time zone"
+      }
+    ],
+    "x": 2200,
+    "y": 100
+  },
+  {
+    "id": "public.audit_logs",
+    "schema": "public",
+    "name": "audit_logs",
+    "category": "Kiểm toán & SOC",
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "isPk": true
+      },
+      {
+        "name": "user_id",
+        "type": "uuid",
+        "isFk": true,
+        "fkTo": "public.null"
+      },
+      {
+        "name": "action",
+        "type": "character varying"
+      },
+      {
+        "name": "table_name",
+        "type": "character varying"
+      },
+      {
+        "name": "record_id",
+        "type": "text"
+      },
+      {
+        "name": "old_data",
+        "type": "jsonb"
+      },
+      {
+        "name": "new_data",
+        "type": "jsonb"
+      },
+      {
+        "name": "ip_address",
+        "type": "inet"
+      },
+      {
+        "name": "user_agent",
+        "type": "text"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone"
+      },
+      {
+        "name": "tenant_id",
+        "type": "uuid",
+        "isFk": true,
+        "fkTo": "public.tenants",
+        "notes": "Cô lập dữ liệu RLS"
+      },
+      {
+        "name": "user_email",
+        "type": "character varying"
+      },
+      {
+        "name": "resource",
+        "type": "character varying"
+      },
+      {
+        "name": "severity",
+        "type": "text"
+      },
+      {
+        "name": "details",
+        "type": "jsonb"
+      }
+    ],
+    "x": 2620,
+    "y": 100
+  },
+  {
+    "id": "public.bank_accounts",
+    "schema": "public",
+    "name": "bank_accounts",
+    "category": "Hệ thống (Tenancy)",
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "isPk": true
+      },
+      {
+        "name": "tenant_id",
+        "type": "uuid",
+        "isFk": true,
+        "fkTo": "public.tenants",
+        "notes": "Cô lập dữ liệu RLS"
+      },
+      {
+        "name": "bank_code",
+        "type": "text"
+      },
+      {
+        "name": "bank_name",
+        "type": "text"
+      },
+      {
+        "name": "account_number",
+        "type": "text"
+      },
+      {
+        "name": "account_name",
+        "type": "text"
+      },
+      {
+        "name": "qr_template",
+        "type": "text"
+      },
+      {
+        "name": "is_active",
+        "type": "boolean"
+      },
+      {
+        "name": "is_default",
+        "type": "boolean"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone"
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamp with time zone"
+      }
+    ],
+    "x": 520,
+    "y": 100
+  },
+  {
+    "id": "public.benchmark_jwt",
+    "schema": "public",
+    "name": "benchmark_jwt",
+    "category": "Kiểm toán & SOC",
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "isPk": true
+      },
+      {
+        "name": "name",
+        "type": "text"
+      },
+      {
+        "name": "tenant_id",
+        "type": "uuid",
+        "notes": "Cô lập dữ liệu RLS"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone"
+      },
+      {
+        "name": "dataset_size",
+        "type": "integer"
+      }
+    ],
+    "x": 2200,
+    "y": 326
+  },
+  {
+    "id": "public.benchmark_legacy",
+    "schema": "public",
+    "name": "benchmark_legacy",
+    "category": "Kiểm toán & SOC",
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "isPk": true
+      },
+      {
+        "name": "name",
+        "type": "text"
+      },
+      {
+        "name": "tenant_id",
+        "type": "uuid",
+        "notes": "Cô lập dữ liệu RLS"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone"
+      },
+      {
+        "name": "dataset_size",
+        "type": "integer"
+      }
+    ],
+    "x": 2620,
+    "y": 612
+  },
+  {
+    "id": "public.categories",
+    "schema": "public",
+    "name": "categories",
+    "category": "Nội dung (CMS)",
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "isPk": true
+      },
+      {
+        "name": "name_vi",
+        "type": "character varying"
+      },
+      {
+        "name": "name_km",
+        "type": "character varying"
+      },
+      {
+        "name": "name_en",
+        "type": "character varying"
+      },
+      {
+        "name": "slug",
+        "type": "character varying"
+      },
+      {
+        "name": "type",
+        "type": "character varying"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone"
+      },
+      {
+        "name": "parent_id",
+        "type": "uuid",
+        "isFk": true,
+        "fkTo": "public.categories"
+      },
+      {
+        "name": "module",
+        "type": "character varying"
+      },
+      {
+        "name": "description_vi",
+        "type": "text"
+      },
+      {
+        "name": "description_km",
+        "type": "text"
+      },
+      {
+        "name": "description_en",
+        "type": "text"
+      },
+      {
+        "name": "thumbnail_url",
+        "type": "text"
+      },
+      {
+        "name": "tenant_id",
+        "type": "uuid",
+        "isFk": true,
+        "fkTo": "public.tenants",
+        "notes": "Cô lập dữ liệu RLS"
+      },
+      {
+        "name": "order_position",
+        "type": "integer"
+      },
+      {
+        "name": "is_visible",
+        "type": "boolean"
+      },
+      {
+        "name": "published_to",
+        "type": "uuid[]",
+        "notes": "Phát sóng đa chi nhánh"
+      }
+    ],
+    "x": 1360,
+    "y": 100
+  },
+  {
+    "id": "public.charity_posts",
+    "schema": "public",
+    "name": "charity_posts",
+    "category": "Khác",
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "isPk": true
+      },
+      {
+        "name": "title_vi",
+        "type": "text"
+      },
+      {
+        "name": "title_km",
+        "type": "text"
+      },
+      {
+        "name": "title_en",
+        "type": "text"
+      },
+      {
+        "name": "excerpt_vi",
+        "type": "text"
+      },
+      {
+        "name": "excerpt_km",
+        "type": "text"
+      },
+      {
+        "name": "excerpt_en",
+        "type": "text"
+      },
+      {
+        "name": "image_url",
+        "type": "text"
+      },
+      {
+        "name": "image_alt_vi",
+        "type": "text"
+      },
+      {
+        "name": "image_alt_km",
+        "type": "text"
+      },
+      {
+        "name": "image_alt_en",
+        "type": "text"
+      },
+      {
+        "name": "link_url",
+        "type": "text"
+      },
+      {
+        "name": "event_date",
+        "type": "date"
+      },
+      {
+        "name": "is_featured",
+        "type": "boolean"
+      },
+      {
+        "name": "order_position",
+        "type": "integer"
+      },
+      {
+        "name": "is_active",
+        "type": "boolean"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone"
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamp with time zone"
+      },
+      {
+        "name": "tenant_id",
+        "type": "uuid",
+        "isFk": true,
+        "fkTo": "public.tenants",
+        "notes": "Cô lập dữ liệu RLS"
+      }
+    ],
+    "x": 520,
+    "y": 508
+  },
+  {
+    "id": "public.contact_messages",
+    "schema": "public",
+    "name": "contact_messages",
+    "category": "Vận hành & Khách hàng",
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "isPk": true
+      },
+      {
+        "name": "name",
+        "type": "character varying"
+      },
+      {
+        "name": "email",
+        "type": "character varying"
+      },
+      {
+        "name": "phone",
+        "type": "character varying"
+      },
+      {
+        "name": "subject",
+        "type": "character varying"
+      },
+      {
+        "name": "message",
+        "type": "text"
+      },
+      {
+        "name": "status",
+        "type": "character varying"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone"
+      },
+      {
+        "name": "replied_at",
+        "type": "timestamp with time zone"
+      },
+      {
+        "name": "replied_by",
+        "type": "uuid",
+        "isFk": true,
+        "fkTo": "public.null"
+      },
+      {
+        "name": "tenant_id",
+        "type": "uuid",
+        "isFk": true,
+        "fkTo": "public.tenants",
+        "notes": "Cô lập dữ liệu RLS"
+      }
+    ],
+    "x": 520,
+    "y": 1124
+  },
+  {
+    "id": "public.content_revisions",
+    "schema": "public",
+    "name": "content_revisions",
+    "category": "Kiểm toán & SOC",
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "isPk": true
+      },
+      {
+        "name": "table_name",
+        "type": "text"
+      },
+      {
+        "name": "record_id",
+        "type": "text"
+      },
+      {
+        "name": "changed_by",
+        "type": "uuid",
+        "isFk": true,
+        "fkTo": "public.null"
+      },
+      {
+        "name": "old_data",
+        "type": "jsonb"
+      },
+      {
+        "name": "new_data",
+        "type": "jsonb"
+      },
+      {
+        "name": "change_summary",
+        "type": "text"
+      },
+      {
+        "name": "tenant_id",
+        "type": "uuid",
+        "isFk": true,
+        "fkTo": "public.tenants",
+        "notes": "Cô lập dữ liệu RLS"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone"
+      }
+    ],
+    "x": 2200,
+    "y": 578
+  },
+  {
+    "id": "public.cron_job_logs",
+    "schema": "public",
+    "name": "cron_job_logs",
+    "category": "Kiểm toán & SOC",
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "isPk": true
+      },
+      {
+        "name": "job_name",
+        "type": "text"
+      },
+      {
+        "name": "status",
+        "type": "text"
+      },
+      {
+        "name": "message",
+        "type": "text"
+      },
+      {
+        "name": "metadata",
+        "type": "jsonb"
+      },
+      {
+        "name": "duration_ms",
+        "type": "integer"
+      },
+      {
+        "name": "executed_at",
+        "type": "timestamp with time zone"
+      }
+    ],
+    "x": 2620,
+    "y": 864
+  },
+  {
+    "id": "public.dharma_embeddings",
+    "schema": "public",
+    "name": "dharma_embeddings",
+    "category": "Khác",
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "isPk": true
+      },
+      {
+        "name": "tenant_id",
+        "type": "uuid",
+        "isFk": true,
+        "fkTo": "public.tenants",
+        "notes": "Cô lập dữ liệu RLS"
+      },
+      {
+        "name": "content_id",
+        "type": "uuid"
+      },
+      {
+        "name": "content_type",
+        "type": "text"
+      },
+      {
+        "name": "content_text",
+        "type": "text"
+      },
+      {
+        "name": "embedding",
+        "type": "vector"
+      },
+      {
+        "name": "metadata",
+        "type": "jsonb"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone"
+      }
+    ],
+    "x": 520,
+    "y": 1532
+  },
+  {
+    "id": "public.dharma_talks",
+    "schema": "public",
+    "name": "dharma_talks",
+    "category": "Nội dung (CMS)",
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "isPk": true
+      },
+      {
+        "name": "title_vi",
+        "type": "text"
+      },
+      {
+        "name": "title_km",
+        "type": "text"
+      },
+      {
+        "name": "title_en",
+        "type": "text"
+      },
+      {
+        "name": "description_vi",
+        "type": "text"
+      },
+      {
+        "name": "description_km",
+        "type": "text"
+      },
+      {
+        "name": "description_en",
+        "type": "text"
+      },
+      {
+        "name": "media_type",
+        "type": "text"
+      },
+      {
+        "name": "media_url",
+        "type": "text"
+      },
+      {
+        "name": "thumbnail_url",
+        "type": "text"
+      },
+      {
+        "name": "duration_minutes",
+        "type": "integer"
+      },
+      {
+        "name": "speaker_name_vi",
+        "type": "text"
+      },
+      {
+        "name": "speaker_name_km",
+        "type": "text"
+      },
+      {
+        "name": "speaker_name_en",
+        "type": "text"
+      },
+      {
+        "name": "topic_vi",
+        "type": "text"
+      },
+      {
+        "name": "topic_km",
+        "type": "text"
+      },
+      {
+        "name": "topic_en",
+        "type": "text"
+      },
+      {
+        "name": "recorded_date",
+        "type": "date"
+      },
+      {
+        "name": "is_featured",
+        "type": "boolean"
+      },
+      {
+        "name": "order_position",
+        "type": "integer"
+      },
+      {
+        "name": "view_count",
+        "type": "integer"
+      },
+      {
+        "name": "is_active",
+        "type": "boolean"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone"
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamp with time zone"
+      },
+      {
+        "name": "category_id",
+        "type": "uuid",
+        "isFk": true,
+        "fkTo": "public.categories"
+      },
+      {
+        "name": "tenant_id",
+        "type": "uuid",
+        "isFk": true,
+        "fkTo": "public.tenants",
+        "notes": "Cô lập dữ liệu RLS"
+      },
+      {
+        "name": "published_to",
+        "type": "uuid[]",
+        "notes": "Phát sóng đa chi nhánh"
+      },
+      {
+        "name": "slug",
+        "type": "character varying"
+      }
+    ],
+    "x": 1780,
+    "y": 100
+  },
+  {
+    "id": "public.donation_campaigns",
+    "schema": "public",
+    "name": "donation_campaigns",
+    "category": "Tài chính & Quyên góp",
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "isPk": true
+      },
+      {
+        "name": "tenant_id",
+        "type": "uuid",
+        "isFk": true,
+        "fkTo": "public.tenants",
+        "notes": "Cô lập dữ liệu RLS"
+      },
+      {
+        "name": "bank_account_id",
+        "type": "uuid",
+        "isFk": true,
+        "fkTo": "public.bank_accounts"
+      },
+      {
+        "name": "type",
+        "type": "campaign_type"
+      },
+      {
+        "name": "title_vi",
+        "type": "text"
+      },
+      {
+        "name": "title_km",
+        "type": "text"
+      },
+      {
+        "name": "slug",
+        "type": "text"
+      },
+      {
+        "name": "description_vi",
+        "type": "text"
+      },
+      {
+        "name": "description_km",
+        "type": "text"
+      },
+      {
+        "name": "content_vi",
+        "type": "text"
+      },
+      {
+        "name": "content_km",
+        "type": "text"
+      },
+      {
+        "name": "thumbnail_url",
+        "type": "text"
+      },
+      {
+        "name": "target_amount",
+        "type": "numeric"
+      },
+      {
+        "name": "current_amount",
+        "type": "numeric"
+      },
+      {
+        "name": "status",
+        "type": "text"
+      },
+      {
+        "name": "is_active",
+        "type": "boolean"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone"
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamp with time zone"
+      },
+      {
+        "name": "created_by",
+        "type": "uuid",
+        "isFk": true,
+        "fkTo": "public.null"
+      },
+      {
+        "name": "order_position",
+        "type": "integer"
+      },
+      {
+        "name": "is_project",
+        "type": "boolean"
+      },
+      {
+        "name": "start_date",
+        "type": "timestamp with time zone"
+      },
+      {
+        "name": "end_date",
+        "type": "timestamp with time zone"
+      }
+    ],
+    "x": 100,
+    "y": 100
+  },
+  {
+    "id": "public.donations",
+    "schema": "public",
+    "name": "donations",
+    "category": "Tài chính & Quyên góp",
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "isPk": true
+      },
+      {
+        "name": "donor_name",
+        "type": "character varying"
+      },
+      {
+        "name": "donor_phone",
+        "type": "character varying"
+      },
+      {
+        "name": "donor_email",
+        "type": "character varying"
+      },
+      {
+        "name": "amount",
+        "type": "numeric"
+      },
+      {
+        "name": "currency",
+        "type": "character varying"
+      },
+      {
+        "name": "purpose",
+        "type": "character varying"
+      },
+      {
+        "name": "purpose_detail",
+        "type": "text"
+      },
+      {
+        "name": "payment_method",
+        "type": "character varying"
+      },
+      {
+        "name": "transaction_id",
+        "type": "character varying"
+      },
+      {
+        "name": "status",
+        "type": "character varying"
+      },
+      {
+        "name": "note",
+        "type": "text"
+      },
+      {
+        "name": "is_anonymous",
+        "type": "boolean"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone"
+      },
+      {
+        "name": "completed_at",
+        "type": "timestamp with time zone"
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamp with time zone"
+      },
+      {
+        "name": "tenant_id",
+        "type": "uuid",
+        "isFk": true,
+        "fkTo": "public.tenants",
+        "notes": "Cô lập dữ liệu RLS"
+      },
+      {
+        "name": "recipient_type",
+        "type": "donation_recipient_type"
+      },
+      {
+        "name": "bank_account_id",
+        "type": "uuid",
+        "isFk": true,
+        "fkTo": "public.bank_accounts"
+      },
+      {
+        "name": "campaign_id",
+        "type": "uuid",
+        "isFk": true,
+        "fkTo": "public.donation_campaigns"
+      }
+    ],
+    "x": 100,
+    "y": 820
+  },
+  {
+    "id": "public.event_registrations",
+    "schema": "public",
+    "name": "event_registrations",
+    "category": "Nội dung (CMS)",
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "isPk": true
+      },
+      {
+        "name": "event_id",
+        "type": "uuid",
+        "isFk": true,
+        "fkTo": "public.events"
+      },
+      {
+        "name": "full_name",
+        "type": "character varying"
+      },
+      {
+        "name": "phone",
+        "type": "character varying"
+      },
+      {
+        "name": "email",
+        "type": "character varying"
+      },
+      {
+        "name": "num_participants",
+        "type": "integer"
+      },
+      {
+        "name": "note",
+        "type": "text"
+      },
+      {
+        "name": "status",
+        "type": "character varying"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone"
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamp with time zone"
+      },
+      {
+        "name": "tenant_id",
+        "type": "uuid",
+        "isFk": true,
+        "fkTo": "public.tenants",
+        "notes": "Cô lập dữ liệu RLS"
+      }
+    ],
+    "x": 940,
+    "y": 716
+  },
+  {
+    "id": "public.events",
+    "schema": "public",
+    "name": "events",
+    "category": "Nội dung (CMS)",
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "isPk": true
+      },
+      {
+        "name": "title_vi",
+        "type": "character varying"
+      },
+      {
+        "name": "title_km",
+        "type": "character varying"
+      },
+      {
+        "name": "title_en",
+        "type": "character varying"
+      },
+      {
+        "name": "description_vi",
+        "type": "text"
+      },
+      {
+        "name": "description_km",
+        "type": "text"
+      },
+      {
+        "name": "description_en",
+        "type": "text"
+      },
+      {
+        "name": "start_date",
+        "type": "date"
+      },
+      {
+        "name": "end_date",
+        "type": "date"
+      },
+      {
+        "name": "start_time",
+        "type": "time without time zone"
+      },
+      {
+        "name": "end_time",
+        "type": "time without time zone"
+      },
+      {
+        "name": "location",
+        "type": "character varying"
+      },
+      {
+        "name": "is_recurring",
+        "type": "boolean"
+      },
+      {
+        "name": "recurrence_pattern",
+        "type": "jsonb"
+      },
+      {
+        "name": "thumbnail_url",
+        "type": "text"
+      },
+      {
+        "name": "registration_required",
+        "type": "boolean"
+      },
+      {
+        "name": "max_participants",
+        "type": "integer"
+      },
+      {
+        "name": "current_participants",
+        "type": "integer"
+      },
+      {
+        "name": "status",
+        "type": "character varying"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone"
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamp with time zone"
+      },
+      {
+        "name": "excerpt_vi",
+        "type": "text"
+      },
+      {
+        "name": "excerpt_km",
+        "type": "text"
+      },
+      {
+        "name": "excerpt_en",
+        "type": "text"
+      },
+      {
+        "name": "tenant_id",
+        "type": "uuid",
+        "isFk": true,
+        "fkTo": "public.tenants",
+        "notes": "Cô lập dữ liệu RLS"
+      },
+      {
+        "name": "published_to",
+        "type": "uuid[]",
+        "notes": "Phát sóng đa chi nhánh"
+      },
+      {
+        "name": "slug",
+        "type": "character varying"
+      },
+      {
+        "name": "is_major_festival",
+        "type": "boolean"
+      },
+      {
+        "name": "approval_status",
+        "type": "character varying"
+      }
+    ],
+    "x": 1360,
+    "y": 664
+  },
+  {
+    "id": "public.faqs",
+    "schema": "public",
+    "name": "faqs",
+    "category": "Nội dung (CMS)",
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "isPk": true
+      },
+      {
+        "name": "question_vi",
+        "type": "text"
+      },
+      {
+        "name": "question_km",
+        "type": "text"
+      },
+      {
+        "name": "question_en",
+        "type": "text"
+      },
+      {
+        "name": "answer_vi",
+        "type": "text"
+      },
+      {
+        "name": "answer_km",
+        "type": "text"
+      },
+      {
+        "name": "answer_en",
+        "type": "text"
+      },
+      {
+        "name": "category",
+        "type": "character varying"
+      },
+      {
+        "name": "display_order",
+        "type": "integer"
+      },
+      {
+        "name": "is_published",
+        "type": "boolean"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone"
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamp with time zone"
+      },
+      {
+        "name": "approval_status",
+        "type": "text"
+      },
+      {
+        "name": "tenant_id",
+        "type": "uuid",
+        "isFk": true,
+        "fkTo": "public.tenants",
+        "notes": "Cô lập dữ liệu RLS"
+      }
+    ],
+    "x": 1780,
+    "y": 950
+  },
+  {
+    "id": "public.hero_slides",
+    "schema": "public",
+    "name": "hero_slides",
+    "category": "Nội dung (CMS)",
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "isPk": true
+      },
+      {
+        "name": "order_position",
+        "type": "integer"
+      },
+      {
+        "name": "image_url",
+        "type": "text"
+      },
+      {
+        "name": "title_vi",
+        "type": "text"
+      },
+      {
+        "name": "title_km",
+        "type": "text"
+      },
+      {
+        "name": "title_en",
+        "type": "text"
+      },
+      {
+        "name": "subtitle_vi",
+        "type": "text"
+      },
+      {
+        "name": "subtitle_km",
+        "type": "text"
+      },
+      {
+        "name": "subtitle_en",
+        "type": "text"
+      },
+      {
+        "name": "cta1_text_key",
+        "type": "text"
+      },
+      {
+        "name": "cta1_link",
+        "type": "text"
+      },
+      {
+        "name": "cta2_text_key",
+        "type": "text"
+      },
+      {
+        "name": "cta2_link",
+        "type": "text"
+      },
+      {
+        "name": "is_active",
+        "type": "boolean"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone"
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamp with time zone"
+      },
+      {
+        "name": "tenant_id",
+        "type": "uuid",
+        "isFk": true,
+        "fkTo": "public.tenants",
+        "notes": "Cô lập dữ liệu RLS"
+      },
+      {
+        "name": "cta1_enabled",
+        "type": "boolean"
+      },
+      {
+        "name": "cta2_enabled",
+        "type": "boolean"
+      }
+    ],
+    "x": 940,
+    "y": 1124
+  },
+  {
+    "id": "public.homepage_stats",
+    "schema": "public",
+    "name": "homepage_stats",
+    "category": "Khác",
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "isPk": true
+      },
+      {
+        "name": "order_position",
+        "type": "integer"
+      },
+      {
+        "name": "icon_emoji",
+        "type": "text"
+      },
+      {
+        "name": "stat_value",
+        "type": "integer"
+      },
+      {
+        "name": "suffix",
+        "type": "text"
+      },
+      {
+        "name": "label_vi",
+        "type": "text"
+      },
+      {
+        "name": "label_km",
+        "type": "text"
+      },
+      {
+        "name": "label_en",
+        "type": "text"
+      },
+      {
+        "name": "is_active",
+        "type": "boolean"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone"
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamp with time zone"
+      },
+      {
+        "name": "tenant_id",
+        "type": "uuid",
+        "isFk": true,
+        "fkTo": "public.tenants",
+        "notes": "Cô lập dữ liệu RLS"
+      }
+    ],
+    "x": 520,
+    "y": 1862
+  },
+  {
+    "id": "public.media",
+    "schema": "public",
+    "name": "media",
+    "category": "Nội dung (CMS)",
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "isPk": true
+      },
+      {
+        "name": "title_vi",
+        "type": "character varying"
+      },
+      {
+        "name": "title_km",
+        "type": "character varying"
+      },
+      {
+        "name": "title_en",
+        "type": "character varying"
+      },
+      {
+        "name": "description_vi",
+        "type": "text"
+      },
+      {
+        "name": "description_km",
+        "type": "text"
+      },
+      {
+        "name": "description_en",
+        "type": "text"
+      },
+      {
+        "name": "type",
+        "type": "character varying"
+      },
+      {
+        "name": "url",
+        "type": "text"
+      },
+      {
+        "name": "thumbnail_url",
+        "type": "text"
+      },
+      {
+        "name": "file_size",
+        "type": "bigint"
+      },
+      {
+        "name": "mime_type",
+        "type": "character varying"
+      },
+      {
+        "name": "category_id",
+        "type": "uuid",
+        "isFk": true,
+        "fkTo": "public.categories"
+      },
+      {
+        "name": "event_id",
+        "type": "uuid",
+        "isFk": true,
+        "fkTo": "public.events"
+      },
+      {
+        "name": "year",
+        "type": "integer"
+      },
+      {
+        "name": "tags",
+        "type": "text[]"
+      },
+      {
+        "name": "view_count",
+        "type": "integer"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone"
+      },
+      {
+        "name": "tenant_id",
+        "type": "uuid",
+        "isFk": true,
+        "fkTo": "public.tenants",
+        "notes": "Cô lập dữ liệu RLS"
+      },
+      {
+        "name": "published_to",
+        "type": "uuid[]",
+        "notes": "Phát sóng đa chi nhánh"
+      }
+    ],
+    "x": 1360,
+    "y": 1540
+  },
+  {
+    "id": "public.news",
+    "schema": "public",
+    "name": "news",
+    "category": "Nội dung (CMS)",
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "isPk": true
+      },
+      {
+        "name": "title_vi",
+        "type": "character varying"
+      },
+      {
+        "name": "title_km",
+        "type": "character varying"
+      },
+      {
+        "name": "title_en",
+        "type": "character varying"
+      },
+      {
+        "name": "slug",
+        "type": "character varying"
+      },
+      {
+        "name": "content_vi",
+        "type": "text"
+      },
+      {
+        "name": "content_km",
+        "type": "text"
+      },
+      {
+        "name": "content_en",
+        "type": "text"
+      },
+      {
+        "name": "excerpt_vi",
+        "type": "text"
+      },
+      {
+        "name": "excerpt_km",
+        "type": "text"
+      },
+      {
+        "name": "excerpt_en",
+        "type": "text"
+      },
+      {
+        "name": "thumbnail_url",
+        "type": "text"
+      },
+      {
+        "name": "category_id",
+        "type": "uuid",
+        "isFk": true,
+        "fkTo": "public.categories"
+      },
+      {
+        "name": "status",
+        "type": "character varying"
+      },
+      {
+        "name": "published_at",
+        "type": "timestamp with time zone"
+      },
+      {
+        "name": "author_id",
+        "type": "uuid",
+        "isFk": true,
+        "fkTo": "public.null"
+      },
+      {
+        "name": "view_count",
+        "type": "integer"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone"
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamp with time zone"
+      },
+      {
+        "name": "author_name",
+        "type": "text"
+      },
+      {
+        "name": "scheduled_at",
+        "type": "timestamp with time zone"
+      },
+      {
+        "name": "reviewed_by",
+        "type": "uuid",
+        "isFk": true,
+        "fkTo": "public.null"
+      },
+      {
+        "name": "reviewed_at",
+        "type": "timestamp with time zone"
+      },
+      {
+        "name": "review_note",
+        "type": "text"
+      },
+      {
+        "name": "reviewer_name",
+        "type": "text"
+      },
+      {
+        "name": "tenant_id",
+        "type": "uuid",
+        "isFk": true,
+        "fkTo": "public.tenants",
+        "notes": "Cô lập dữ liệu RLS"
+      },
+      {
+        "name": "published_to",
+        "type": "uuid[]",
+        "notes": "Phát sóng đa chi nhánh"
+      }
+    ],
+    "x": 1780,
+    "y": 1436
+  },
+  {
+    "id": "public.newsletter_subscribers",
+    "schema": "public",
+    "name": "newsletter_subscribers",
+    "category": "Vận hành & Khách hàng",
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "isPk": true
+      },
+      {
+        "name": "email",
+        "type": "text"
+      },
+      {
+        "name": "locale",
+        "type": "text"
+      },
+      {
+        "name": "is_active",
+        "type": "boolean"
+      },
+      {
+        "name": "subscribed_at",
+        "type": "timestamp with time zone"
+      },
+      {
+        "name": "unsubscribed_at",
+        "type": "timestamp with time zone"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone"
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamp with time zone"
+      },
+      {
+        "name": "tenant_id",
+        "type": "uuid",
+        "isFk": true,
+        "fkTo": "public.tenants",
+        "notes": "Cô lập dữ liệu RLS"
+      }
+    ],
+    "x": 520,
+    "y": 2296
+  },
+  {
+    "id": "public.organizations",
+    "schema": "public",
+    "name": "organizations",
+    "category": "Hệ thống (Tenancy)",
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "isPk": true
+      },
+      {
+        "name": "name",
+        "type": "text"
+      },
+      {
+        "name": "logo_url",
+        "type": "text"
+      },
+      {
+        "name": "org_type",
+        "type": "text"
+      },
+      {
+        "name": "description",
+        "type": "text"
+      },
+      {
+        "name": "website_url",
+        "type": "text"
+      },
+      {
+        "name": "is_active",
+        "type": "boolean"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone"
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamp with time zone"
+      },
+      {
+        "name": "tenant_id",
+        "type": "uuid",
+        "isFk": true,
+        "fkTo": "public.tenants",
+        "notes": "Cô lập dữ liệu RLS"
+      }
+    ],
+    "x": 520,
+    "y": 2652
+  },
+  {
+    "id": "public.page_views",
+    "schema": "public",
+    "name": "page_views",
+    "category": "Vận hành & Khách hàng",
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "isPk": true
+      },
+      {
+        "name": "path",
+        "type": "text"
+      },
+      {
+        "name": "view_count",
+        "type": "bigint"
+      },
+      {
+        "name": "day",
+        "type": "date"
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamp with time zone"
+      }
+    ],
+    "x": 520,
+    "y": 3034
+  },
+  {
+    "id": "public.pages",
+    "schema": "public",
+    "name": "pages",
+    "category": "Nội dung (CMS)",
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "isPk": true
+      },
+      {
+        "name": "title_vi",
+        "type": "character varying"
+      },
+      {
+        "name": "title_km",
+        "type": "character varying"
+      },
+      {
+        "name": "title_en",
+        "type": "character varying"
+      },
+      {
+        "name": "slug",
+        "type": "character varying"
+      },
+      {
+        "name": "content_vi",
+        "type": "text"
+      },
+      {
+        "name": "content_km",
+        "type": "text"
+      },
+      {
+        "name": "content_en",
+        "type": "text"
+      },
+      {
+        "name": "meta_description_vi",
+        "type": "text"
+      },
+      {
+        "name": "meta_description_km",
+        "type": "text"
+      },
+      {
+        "name": "meta_description_en",
+        "type": "text"
+      },
+      {
+        "name": "status",
+        "type": "character varying"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone"
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamp with time zone"
+      },
+      {
+        "name": "tenant_id",
+        "type": "uuid",
+        "isFk": true,
+        "fkTo": "public.tenants",
+        "notes": "Cô lập dữ liệu RLS"
+      },
+      {
+        "name": "parent_id",
+        "type": "uuid",
+        "isFk": true,
+        "fkTo": "public.pages"
+      },
+      {
+        "name": "order_index",
+        "type": "integer"
+      },
+      {
+        "name": "show_in_menu",
+        "type": "boolean"
+      }
+    ],
+    "x": 940,
+    "y": 1740
+  },
+  {
+    "id": "public.provinces",
+    "schema": "public",
+    "name": "provinces",
+    "category": "Hệ thống (Tenancy)",
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "isPk": true
+      },
+      {
+        "name": "name",
+        "type": "text"
+      },
+      {
+        "name": "code",
+        "type": "text"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone"
+      }
+    ],
+    "x": 520,
+    "y": 3286
+  },
+  {
+    "id": "public.quick_access_links",
+    "schema": "public",
+    "name": "quick_access_links",
+    "category": "Nội dung (CMS)",
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "isPk": true
+      },
+      {
+        "name": "order_position",
+        "type": "integer"
+      },
+      {
+        "name": "icon_emoji",
+        "type": "text"
+      },
+      {
+        "name": "translation_key",
+        "type": "text"
+      },
+      {
+        "name": "href",
+        "type": "text"
+      },
+      {
+        "name": "color_class",
+        "type": "text"
+      },
+      {
+        "name": "is_active",
+        "type": "boolean"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone"
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamp with time zone"
+      },
+      {
+        "name": "tenant_id",
+        "type": "uuid",
+        "isFk": true,
+        "fkTo": "public.tenants",
+        "notes": "Cô lập dữ liệu RLS"
+      }
+    ],
+    "x": 1360,
+    "y": 2182
+  },
+  {
+    "id": "public.rate_limit_hits",
+    "schema": "public",
+    "name": "rate_limit_hits",
+    "category": "Kiểm toán & SOC",
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "isPk": true
+      },
+      {
+        "name": "ip_address",
+        "type": "text"
+      },
+      {
+        "name": "action_type",
+        "type": "text"
+      },
+      {
+        "name": "hit_count",
+        "type": "integer"
+      },
+      {
+        "name": "last_hit",
+        "type": "timestamp with time zone"
+      },
+      {
+        "name": "tenant_id",
+        "type": "uuid",
+        "isFk": true,
+        "fkTo": "public.tenants",
+        "notes": "Cô lập dữ liệu RLS"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone"
+      },
+      {
+        "name": "identifier",
+        "type": "text"
+      },
+      {
+        "name": "action",
+        "type": "text"
+      }
+    ],
+    "x": 2200,
+    "y": 934
+  },
+  {
+    "id": "public.role_permissions",
+    "schema": "public",
+    "name": "role_permissions",
+    "category": "Xác thực & Quyền (RBAC)",
+    "columns": [
+      {
+        "name": "role",
+        "type": "character varying",
+        "isPk": true
+      },
+      {
+        "name": "resource",
+        "type": "character varying",
+        "isPk": true
+      },
+      {
+        "name": "can_create",
+        "type": "boolean"
+      },
+      {
+        "name": "can_read",
+        "type": "boolean"
+      },
+      {
+        "name": "can_update",
+        "type": "boolean"
+      },
+      {
+        "name": "can_delete",
+        "type": "boolean"
+      }
+    ],
+    "x": 100,
+    "y": 1462
+  },
+  {
+    "id": "public.settings",
+    "schema": "public",
+    "name": "settings",
+    "category": "Hệ thống (Tenancy)",
+    "columns": [
+      {
+        "name": "key",
+        "type": "character varying",
+        "isPk": true
+      },
+      {
+        "name": "value",
+        "type": "text"
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamp with time zone"
+      }
+    ],
+    "x": 520,
+    "y": 3512
+  },
+  {
+    "id": "public.site_settings",
+    "schema": "public",
+    "name": "site_settings",
+    "category": "Hệ thống (Tenancy)",
+    "columns": [
+      {
+        "name": "key",
+        "type": "text",
+        "isPk": true
+      },
+      {
+        "name": "value",
+        "type": "text"
+      },
+      {
+        "name": "description",
+        "type": "text"
+      },
+      {
+        "name": "updated_by",
+        "type": "uuid",
+        "isFk": true,
+        "fkTo": "public.null"
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamp with time zone"
+      },
+      {
+        "name": "tenant_id",
+        "type": "uuid",
+        "isPk": true,
+        "isFk": true,
+        "fkTo": "public.tenants",
+        "notes": "Cô lập dữ liệu RLS"
+      }
+    ],
+    "x": 520,
+    "y": 3712
+  },
+  {
+    "id": "public.tenants",
+    "schema": "public",
+    "name": "tenants",
+    "category": "Hệ thống (Tenancy)",
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "isPk": true
+      },
+      {
+        "name": "domain",
+        "type": "character varying"
+      },
+      {
+        "name": "name",
+        "type": "character varying"
+      },
+      {
+        "name": "subdomain",
+        "type": "character varying"
+      },
+      {
+        "name": "layout_style",
+        "type": "character varying"
+      },
+      {
+        "name": "theme_colors",
+        "type": "jsonb"
+      },
+      {
+        "name": "logo_url",
+        "type": "text"
+      },
+      {
+        "name": "contact_info",
+        "type": "jsonb"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone"
+      },
+      {
+        "name": "layout_blocks",
+        "type": "jsonb"
+      },
+      {
+        "name": "modules_config",
+        "type": "jsonb"
+      },
+      {
+        "name": "has_web_frontend",
+        "type": "boolean"
+      },
+      {
+        "name": "latitude",
+        "type": "double precision"
+      },
+      {
+        "name": "longitude",
+        "type": "double precision"
+      },
+      {
+        "name": "address_vi",
+        "type": "text"
+      },
+      {
+        "name": "geog",
+        "type": "geography"
+      },
+      {
+        "name": "parent_id",
+        "type": "uuid",
+        "isFk": true,
+        "fkTo": "public.tenants"
+      },
+      {
+        "name": "centralized_finance",
+        "type": "boolean"
+      },
+      {
+        "name": "nav_visibility",
+        "type": "jsonb"
+      },
+      {
+        "name": "province_id",
+        "type": "uuid",
+        "isFk": true,
+        "fkTo": "public.provinces"
+      },
+      {
+        "name": "tenant_type",
+        "type": "text"
+      },
+      {
+        "name": "plan_type",
+        "type": "text"
+      },
+      {
+        "name": "lifecycle_status",
+        "type": "text"
+      }
+    ],
+    "x": 520,
+    "y": 3990
+  },
+  {
+    "id": "public.testimonials",
+    "schema": "public",
+    "name": "testimonials",
+    "category": "Nội dung (CMS)",
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "isPk": true
+      },
+      {
+        "name": "quote_vi",
+        "type": "text"
+      },
+      {
+        "name": "quote_km",
+        "type": "text"
+      },
+      {
+        "name": "quote_en",
+        "type": "text"
+      },
+      {
+        "name": "author_name_vi",
+        "type": "text"
+      },
+      {
+        "name": "author_name_km",
+        "type": "text"
+      },
+      {
+        "name": "author_name_en",
+        "type": "text"
+      },
+      {
+        "name": "author_role_vi",
+        "type": "text"
+      },
+      {
+        "name": "author_role_km",
+        "type": "text"
+      },
+      {
+        "name": "author_role_en",
+        "type": "text"
+      },
+      {
+        "name": "author_location",
+        "type": "text"
+      },
+      {
+        "name": "is_featured",
+        "type": "boolean"
+      },
+      {
+        "name": "order_position",
+        "type": "integer"
+      },
+      {
+        "name": "rating",
+        "type": "integer"
+      },
+      {
+        "name": "is_active",
+        "type": "boolean"
+      },
+      {
+        "name": "approved",
+        "type": "boolean"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone"
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamp with time zone"
+      },
+      {
+        "name": "tenant_id",
+        "type": "uuid",
+        "isFk": true,
+        "fkTo": "public.tenants",
+        "notes": "Cô lập dữ liệu RLS"
+      }
+    ],
+    "x": 1780,
+    "y": 2260
+  },
+  {
+    "id": "public.user_profiles",
+    "schema": "public",
+    "name": "user_profiles",
+    "category": "Xác thực & Quyền (RBAC)",
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "isPk": true,
+        "isFk": true,
+        "fkTo": "public.null"
+      },
+      {
+        "name": "full_name",
+        "type": "text"
+      },
+      {
+        "name": "avatar_url",
+        "type": "text"
+      },
+      {
+        "name": "phone",
+        "type": "text"
+      },
+      {
+        "name": "preferred_tenant_id",
+        "type": "uuid",
+        "isFk": true,
+        "fkTo": "public.tenants"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone"
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamp with time zone"
+      }
+    ],
+    "x": 100,
+    "y": 1740
+  },
+  {
+    "id": "public.user_roles",
+    "schema": "public",
+    "name": "user_roles",
+    "category": "Xác thực & Quyền (RBAC)",
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "isPk": true
+      },
+      {
+        "name": "user_id",
+        "type": "uuid",
+        "isFk": true,
+        "fkTo": "public.null"
+      },
+      {
+        "name": "role",
+        "type": "character varying"
+      },
+      {
+        "name": "tenant_id",
+        "type": "uuid",
+        "isFk": true,
+        "fkTo": "public.tenants",
+        "notes": "Cô lập dữ liệu RLS"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone"
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamp with time zone"
+      },
+      {
+        "name": "custom_permissions",
+        "type": "jsonb"
+      }
+    ],
+    "x": 100,
+    "y": 2044
+  },
+  {
+    "id": "auth.users",
+    "schema": "auth",
+    "name": "users",
+    "category": "Xác thực (Supabase)",
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "isPk": true
+      },
+      {
+        "name": "email",
+        "type": "varchar",
+        "notes": "UNIQUE"
+      },
+      {
+        "name": "phone",
+        "type": "varchar",
+        "notes": "UNIQUE"
+      },
+      {
+        "name": "encrypted_password",
+        "type": "varchar"
+      }
+    ],
+    "x": 100,
+    "y": 2348
+  },
+  {
+    "id": "auth.sessions",
+    "schema": "auth",
+    "name": "sessions",
+    "category": "Xác thực (Supabase)",
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "isPk": true
+      },
+      {
+        "name": "user_id",
+        "type": "uuid",
+        "isFk": true,
+        "fkTo": "auth.users"
+      },
+      {
+        "name": "ip",
+        "type": "inet"
+      },
+      {
+        "name": "user_agent",
+        "type": "text"
+      }
+    ],
+    "x": 100,
+    "y": 2574
+  }
+];
+function App() {
+      const [tables, setTables] = useState(COMPREHENSIVE_TABLES);
+      const [selectedSchema, setSelectedSchema] = useState("all");
+      const [selectedPathway, setSelectedPathway] = useState("all");
+      const [searchTerm, setSearchTerm] = useState("");
+      const [selectedTable, setSelectedTable] = useState(null);
+      const [zoom, setZoom] = useState(0.75);
+      const [pan, setPan] = useState({ x: 300, y: 100 });
+      const [isDraggingCanvas, setIsDraggingCanvas] = useState(false);
+      const [draggedTableId, setDraggedTableId] = useState(null);
+      const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+      const [hoveredColumn, setHoveredColumn] = useState(null);
+      const [isOptimized, setIsOptimized] = useState(false);
+      const [isMobile, setIsMobile] = useState(false);
+      const [expandedCategories, setExpandedCategories] = useState({
+        "Xác thực & Quyền (RBAC)": true,
+        "Xác thực (Supabase)": true
+      });
+      const [expandedTables, setExpandedTables] = useState({});
+
+      const canvasRef = useRef(null);
+      const dragStartRef = useRef({ x: 0, y: 0 });
+      const tableStartPosRef = useRef({ x: 0, y: 0 });
+
+      useEffect(() => {
+        const checkMobile = () => {
+          setIsMobile(window.innerWidth < 768);
+        };
+        checkMobile();
+        window.addEventListener("resize", checkMobile);
+        return () => window.removeEventListener("resize", checkMobile);
+      }, []);
+
+      const toggleCategory = (cat) => {
+        setExpandedCategories(prev => ({ ...prev, [cat]: !prev[cat] }));
+      };
+
+      const toggleTableExpand = (tableId) => {
+        setExpandedTables(prev => ({ ...prev, [tableId]: !prev[tableId] }));
+      };
+
+      const toggleOptimizations = () => {
+        setIsOptimized(!isOptimized);
+        setTables(prev => prev.map(t => {
+          if (t.id === "public.donation_campaigns") {
+            return {
+              ...t,
+              columns: t.columns.map(col => col.name === "id" ? { ...col, type: isOptimized ? "text" : "uuid", notes: isOptimized ? "🚨 Lệch kiểu" : "✨ Đồng bộ UUID" } : col)
+            };
+          }
+          if (t.id === "public.donations") {
+            return {
+              ...t,
+              columns: t.columns.map(col => col.name === "campaign_id" ? { ...col, type: isOptimized ? "text" : "uuid", notes: isOptimized ? "🚨 Lệch khóa ngoại" : "✨ Đồng bộ UUID" } : col)
+            };
+          }
+          return t;
+        }));
+      };
+
+      const filteredTables = useMemo(() => {
+        return tables.filter(t => {
+          const matchesSchema = selectedSchema === "all" || t.schema === selectedSchema;
+          const matchesPathway = selectedPathway === "all" || PATHWAYS.find(p => p.id === selectedPathway)?.highlight.includes(t.id);
+          const matchesSearch = t.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                               t.columns.some(c => c.name.toLowerCase().includes(searchTerm.toLowerCase()));
+          return matchesSchema && matchesPathway && matchesSearch;
+        });
+      }, [tables, selectedSchema, selectedPathway, searchTerm]);
+
+      const categoriesGrouped = useMemo(() => {
+        const groups = {};
+        filteredTables.forEach(t => {
+          const cat = t.category || "Khác";
+          if (!groups[cat]) groups[cat] = [];
+          groups[cat].push(t);
+        });
+        return groups;
+      }, [filteredTables]);
+
+      const relationships = useMemo(() => {
+        const list = [];
+        tables.forEach(sourceTable => {
+          sourceTable.columns.forEach(col => {
+            if (col.isFk && col.fkTo) {
+              const targetTable = tables.find(t => t.id === col.fkTo);
+              if (targetTable) {
+                list.push({
+                  id: `${sourceTable.id}.${col.name}->${targetTable.id}`,
+                  source: sourceTable.id,
+                  sourceCol: col.name,
+                  target: targetTable.id,
+                  targetCol: "id"
+                });
+              }
+            }
+          });
+        });
+        return list;
+      }, [tables]);
+
+      const handleMouseDown = (e) => {
+        if (e.target.closest(".table-card") || e.target.closest("button") || e.target.closest("input") || e.target.closest("select")) return;
+        setIsDraggingCanvas(true);
+        setDragStart({ x: e.clientX - pan.x, y: e.clientY - pan.y });
+      };
+
+      const handleMouseMove = (e) => {
+        if (isDraggingCanvas) {
+          setPan({ x: e.clientX - dragStart.x, y: e.clientY - dragStart.y });
+        } else if (draggedTableId) {
+          const dx = (e.clientX - dragStartRef.current.x) / zoom;
+          const dy = (e.clientY - dragStartRef.current.y) / zoom;
+          setTables(prev => prev.map(t => t.id === draggedTableId ? { ...t, x: tableStartPosRef.current.x + dx, y: tableStartPosRef.current.y + dy } : t));
+        }
+      };
+
+      const handleMouseUp = () => {
+        setIsDraggingCanvas(false);
+        setDraggedTableId(null);
+      };
+
+      const handleTableDragStart = (e, tableId) => {
+        e.stopPropagation();
+        setDraggedTableId(tableId);
+        const table = tables.find(t => t.id === tableId);
+        if (table) {
+          dragStartRef.current = { x: e.clientX, y: e.clientY };
+          tableStartPosRef.current = { x: table.x, y: table.y };
+        }
+      };
+
+      const focusOnTable = (table) => {
+        setSelectedTable(table);
+        const canvasContainer = canvasRef.current;
+        if (canvasContainer) {
+          const rect = canvasContainer.getBoundingClientRect();
+          setPan({
+            x: (rect.width / 2) - (table.x * zoom),
+            y: (rect.height / 2) - (table.y * zoom)
+          });
+        }
+      };
+
+      const getSchemaColors = (schema) => {
+        switch (schema) {
+          case "auth": return { bg: "bg-emerald-950/40", border: "border-emerald-500/30 hover:border-emerald-400", dot: "bg-emerald-500" };
+          case "realtime": return { bg: "bg-orange-950/40", border: "border-orange-500/30 hover:border-orange-400", dot: "bg-orange-500" };
+          default: return { bg: "bg-indigo-950/40", border: "border-indigo-500/30 hover:border-indigo-400", dot: "bg-indigo-500" };
+        }
+      };
+
+      if (isMobile) {
+        return (
+          <div className="min-h-screen w-full bg-[#070a13] text-slate-200 flex flex-col font-sans select-none overflow-y-auto">
+            <div className="p-4 bg-[#0d1324] border-b border-slate-800/80 flex items-center justify-between sticky top-0 z-35 shadow-md">
+              <div className="flex items-center gap-2">
+                <Icons.Database />
+                <div>
+                  <h1 className="font-bold text-sm text-slate-100">Cơ sở dữ liệu SECURE</h1>
+                  <p className="text-[10px] text-slate-400">Mobile Accordion View</p>
+                </div>
+              </div>
+              <button onClick={toggleOptimizations} className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-bold border transition ${isOptimized ? "bg-emerald-600/20 border-emerald-500 text-emerald-300" : "bg-amber-600/20 border-amber-500 text-amber-300"}`}>
+                <Icons.Sparkles />{isOptimized ? "Đã sửa FK" : "Sửa FK"}
+              </button>
+            </div>
+            <div className="p-4 space-y-3 bg-[#0d1324]/40 border-b border-slate-800/60 sticky top-[57px] z-30 backdrop-blur-md">
+              <div className="relative">
+                <input type="text" placeholder="Tìm bảng hoặc cột..." className="w-full bg-slate-900/80 text-slate-200 border border-slate-800 rounded-xl px-3 py-2 pl-9 text-xs focus:outline-none focus:border-indigo-500" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+                <span className="absolute left-3 top-2.5 text-slate-555"><Icons.Search /></span>
+              </div>
+              <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
+                <span className="text-[10px] font-bold text-slate-500 uppercase shrink-0 mr-1"><Icons.Filter /></span>
+                {["all", "public", "auth", "realtime"].map(s => (
+                  <button key={s} onClick={() => setSelectedSchema(s)} className={`px-2.5 py-1 text-[11px] rounded-lg font-semibold capitalize shrink-0 transition ${selectedSchema === s ? "bg-indigo-600 text-white" : "bg-slate-900 border border-slate-800 text-slate-400 hover:bg-slate-850"}`}>{s}</button>
+                ))}
+              </div>
+              <select className="w-full bg-slate-900 text-slate-300 border border-slate-800 rounded-lg p-2 text-xs focus:outline-none focus:border-indigo-500" value={selectedPathway} onChange={(e) => setSelectedPathway(e.target.value)}>
+                {PATHWAYS.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
+              </select>
+            </div>
+            <div className="flex-1 p-4 space-y-3 pb-8">
+              {Object.keys(categoriesGrouped).sort().map(cat => {
+                const isCatExpanded = !!expandedCategories[cat];
+                const tablesInCat = categoriesGrouped[cat];
+                return (
+                  <div key={cat} className="border border-slate-800/80 rounded-xl overflow-hidden bg-[#0a0f1d]/30">
+                    <div onClick={() => toggleCategory(cat)} className="p-3 bg-[#0d1324]/90 border-b border-slate-800/60 flex items-center justify-between cursor-pointer transition hover:bg-[#12192e]">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-bold text-slate-200">{cat}</span>
+                        <span className="text-[10px] bg-slate-800/80 text-slate-300 px-2 py-0.5 rounded-full font-mono">{tablesInCat.length}</span>
+                      </div>
+                      {isCatExpanded ? <Icons.ChevronDown /> : <Icons.ChevronRight />}
+                    </div>
+                    {isCatExpanded && (
+                      <div className="p-3 space-y-3 bg-[#080c14]/40">
+                        {tablesInCat.map(table => {
+                          const isTableExpanded = !!expandedTables[table.id];
+                          const colors = getSchemaColors(table.schema);
+                          return (
+                            <div key={table.id} className={`border rounded-lg overflow-hidden transition-all duration-200 ${isTableExpanded ? 'border-indigo-500/50 bg-[#0c1223]/70' : 'border-slate-800/60 bg-[#0b0f19]/40'}`}>
+                              <div onClick={() => toggleTableExpand(table.id)} className="p-2.5 flex items-center justify-between cursor-pointer hover:bg-[#131b31]/40">
+                                <div className="flex items-center gap-2 truncate">
+                                  <span className={`w-2 h-2 rounded-full shrink-0 ${colors.dot}`}></span>
+                                  <span className="font-mono text-xs font-bold text-slate-100 truncate">{table.name}</span>
+                                </div>
+                                <div className="flex items-center gap-1.5 shrink-0">
+                                  <span className="text-[9px] font-bold text-slate-400 bg-slate-900/80 px-1.5 py-0.5 rounded-full capitalize font-mono">{table.schema}</span>
+                                  {isTableExpanded ? <Icons.ChevronDown /> : <Icons.ChevronRight />}
+                                </div>
+                              </div>
+                              {isTableExpanded && (
+                                <div className="p-2 border-t border-slate-850/50 bg-[#070a13]/70 space-y-2">
+                                  {table.columns.map(col => (
+                                    <div key={col.name} className="p-2 bg-slate-900/60 rounded-lg border border-slate-800/40 flex flex-col gap-1 hover:border-slate-700/60 transition">
+                                      <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-1.5 min-w-0">
+                                          {col.isPk ? <Icons.Key className="text-yellow-400 shrink-0" /> : col.isFk ? <Icons.Key className="text-indigo-400 shrink-0" /> : <span className="w-3.5 shrink-0"></span>}
+                                          <span className="font-mono text-xs text-slate-200 truncate">{col.name}</span>
+                                        </div>
+                                        <span className={`font-mono text-[9px] px-1.5 py-0.5 rounded ${col.type === 'uuid' ? 'text-indigo-300 bg-indigo-500/10' : col.notes?.includes('🚨') ? 'text-amber-400 bg-amber-500/10' : 'text-slate-500 bg-slate-950'}`}>{col.type}</span>
+                                      </div>
+                                      {col.notes && <div className="text-[10px] text-amber-450 flex items-center gap-1 bg-amber-500/10 p-1.5 rounded border border-amber-500/20 mt-0.5"><Icons.Warning className="w-3 h-3 shrink-0" /><span>{col.notes}</span></div>}
+                                      {col.isFk && col.fkTo && <div className="text-[10px] text-indigo-400 font-mono flex items-center gap-1 mt-0.5 bg-indigo-500/5 p-1 rounded border border-indigo-500/10"><span>➔</span><span className="truncate">Liên kết: {col.fkTo}</span></div>}
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      }
+
+      return (
+        <div className="flex h-screen w-screen overflow-hidden bg-[#070a13]">
+          <div className="w-80 flex flex-col border-r border-slate-800 bg-[#0d1324] shrink-0 z-10 select-none">
+            <div className="p-4 border-b border-slate-800">
+              <div className="flex items-center gap-2 mb-3">
+                <Icons.Database /><h1 className="font-bold text-base text-slate-100">Cơ sở dữ liệu Đa thực thể</h1>
+              </div>
+              <div className="relative">
+                <input type="text" placeholder="Tìm bảng hoặc cột..." className="w-full bg-slate-900/80 text-slate-200 border border-slate-800 rounded-lg px-3 py-1.5 pl-8 text-xs focus:outline-none focus:border-indigo-500" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+                <span className="absolute left-2.5 top-2.5 text-slate-500"><Icons.Search /></span>
+              </div>
+            </div>
+            <div className="p-4 border-b border-slate-800 bg-[#0a0f1d]/50">
+              <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Bộ lọc Luồng Liên kết</label>
+              <select className="w-full bg-slate-900 text-slate-200 border border-slate-800 rounded-lg p-2 text-xs focus:outline-none focus:border-indigo-500" value={selectedPathway} onChange={(e) => setSelectedPathway(e.target.value)}>
+                {PATHWAYS.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
+              </select>
+            </div>
+            <div className="p-4 border-b border-slate-800">
+              <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Bộ lọc Schemas</div>
+              <div className="flex flex-wrap gap-1">
+                {["all", "public", "auth", "realtime"].map(s => (
+                  <button key={s} onClick={() => setSelectedSchema(s)} className={`px-2 py-1 text-xs rounded font-semibold transition capitalize ${selectedSchema === s ? "bg-indigo-600 text-white" : "bg-slate-800/80 text-slate-300 hover:bg-slate-700"}`}>{s}</button>
+                ))}
+              </div>
+            </div>
+            <div className="flex-1 overflow-y-auto p-4 space-y-1.5">
+              <div className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">Danh Sách Bảng ({filteredTables.length})</div>
+              {filteredTables.map(t => (
+                <div key={t.id} onClick={() => focusOnTable(t)} className={`p-2 rounded-lg cursor-pointer border text-xs flex items-center justify-between transition ${selectedTable?.id === t.id ? "bg-[#181f33] border-indigo-500 text-indigo-300 shadow-md" : "bg-[#0f1526]/50 border-slate-800 text-slate-300 hover:bg-[#151c30]"}`}>
+                  <div className="flex items-center gap-2 truncate"><span className={`w-2 h-2 rounded-full shrink-0 ${getSchemaColors(t.schema).dot}`}></span><span className="font-mono text-[11px] truncate">{t.name}</span></div>
+                  <span className="text-[9px] bg-slate-800 text-slate-400 px-1.5 py-0.5 rounded shrink-0">{t.category}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="flex-1 flex flex-col overflow-hidden relative" ref={canvasRef}>
+            <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-10 pointer-events-none">
+              <div className="bg-[#0c101b]/90 backdrop-blur-md border border-slate-800 px-4 py-2.5 rounded-xl pointer-events-auto shadow-2xl flex items-center gap-3">
+                <span className="flex h-2 w-2 relative"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span><span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span></span>
+                <span className="text-xs font-bold text-slate-200">Bản đồ Thực thể Khách hàng Supabase</span>
+                <div className="h-4 w-px bg-slate-800"></div>
+                <div className="text-[11px] text-slate-400 flex items-center gap-1.5"><Icons.Info /> Di chuyển chuột và kéo thả để sắp xếp sơ đồ</div>
+              </div>
+              <div className="flex items-center gap-2 pointer-events-auto">
+                <div className="bg-[#0c101b]/90 backdrop-blur-md border border-slate-800 p-1 rounded-xl flex items-center gap-1">
+                  <button onClick={() => setZoom(prev => Math.min(prev + 0.05, 1.5))} className="p-1.5 hover:bg-slate-800 rounded-lg text-slate-300"><Icons.Maximize /></button>
+                  <button onClick={() => setZoom(prev => Math.max(prev - 0.05, 0.4))} className="p-1.5 hover:bg-slate-800 rounded-lg text-slate-300"><Icons.Minimize /></button>
+                  <button onClick={() => { setZoom(0.75); setPan({ x: 300, y: 100 }); }} className="px-2 py-1 text-xs hover:bg-slate-800 text-slate-300 rounded-lg">Reset</button>
+                </div>
+                <button onClick={toggleOptimizations} className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border transition shadow-lg ${isOptimized ? "bg-emerald-600/20 border-emerald-500 text-emerald-300" : "bg-amber-600/20 border-amber-500 text-amber-300 animate-pulse"}`}>
+                  <Icons.Sparkles />{isOptimized ? "Đã sửa lỗi FK" : "Mô phỏng sửa lỗi FK"}
+                </button>
+              </div>
+            </div>
+            <div className="w-full h-full cursor-grab grid-bg relative" onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={handleMouseUp} onMouseLeave={handleMouseUp} style={{ cursor: isDraggingCanvas ? 'grabbing' : 'grab' }}>
+              <svg className="absolute inset-0 pointer-events-none w-full h-full overflow-visible z-0" style={{ transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`, transformOrigin: '0 0' }}>
+                <defs>
+                  <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#334155" /></marker>
+                  <marker id="arrow-active" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#6366f1" /></marker>
+                  <marker id="arrow-warning" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#f59e0b" /></marker>
+                </defs>
+                {relationships.map(rel => {
+                  const source = tables.find(t => t.id === rel.source);
+                  const target = tables.find(t => t.id === rel.target);
+                  if (!source || !target) return null;
+                  const isPathwayActive = selectedPathway === 'all' || (PATHWAYS.find(p => p.id === selectedPathway)?.highlight.includes(source.id) && PATHWAYS.find(p => p.id === selectedPathway)?.highlight.includes(target.id));
+                  const startX = source.x + 130;
+                  const startY = source.y + 70;
+                  const endX = target.x + 130;
+                  const endY = target.y + 70;
+                  const isHighlighted = hoveredColumn === `${rel.source}.${rel.sourceCol}` || selectedTable?.id === rel.source || selectedTable?.id === rel.target;
+                  const isWarning = rel.sourceCol === 'campaign_id' && !isOptimized;
+                  return (
+                    <g key={rel.id} className="transition-opacity duration-300" style={{ opacity: isPathwayActive ? 1 : 0.15 }}>
+                      <path d={`M ${startX} ${startY} C ${startX + (endX - startX) * 0.5} ${startY}, ${startX + (endX - startX) * 0.5} ${endY}, ${endX} ${endY}`} fill="none" stroke={isWarning ? "#f59e0b" : isHighlighted ? "#6366f1" : "#1e293b"} strokeWidth={isHighlighted ? 2.5 : isWarning ? 2 : 1.2} strokeDasharray={isWarning ? "5 3" : isHighlighted ? "0" : "4 2"} className="relation-line" markerEnd={`url(#${isWarning ? 'arrow-warning' : isHighlighted ? 'arrow-active' : 'arrow'})`} />
+                    </g>
+                  );
+                })}
+              </svg>
+              <div className="absolute inset-0 origin-top-left" style={{ transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})` }}>
+                {filteredTables.map(table => {
+                  const isSelected = selectedTable?.id === table.id;
+                  const colors = getSchemaColors(table.schema);
+                  const isPathwayActive = selectedPathway === 'all' || PATHWAYS.find(p => p.id === selectedPathway)?.highlight.includes(table.id);
+                  return (
+                    <div key={table.id} className={`absolute table-card bg-[#0b0f19]/95 backdrop-blur-sm rounded-xl border-2 shadow-2xl overflow-hidden select-none z-10 transition-all ${isSelected ? "border-indigo-500 ring-4 ring-indigo-500/20" : colors.border}`} style={{ left: table.x, top: table.y, width: '260px', opacity: isPathwayActive ? 1 : 0.25 }} onClick={(e) => { e.stopPropagation(); setSelectedTable(table); }}>
+                      <div className={`px-3 py-2 cursor-move flex items-center justify-between border-b border-slate-800 ${colors.bg}`} onMouseDown={(e) => handleTableDragStart(e, table.id)}>
+                        <div className="flex items-center gap-1.5 truncate"><span className={`w-2 h-2 rounded-full ${colors.dot}`}></span><span className="font-mono text-xs font-bold text-slate-100 truncate">{table.name}</span></div>
+                        <span className="text-[9px] font-bold text-slate-400 bg-slate-900/80 px-1.5 py-0.5 rounded-full capitalize">{table.schema}</span>
+                      </div>
+                      <div className="p-1.5 space-y-0.5">
+                        {table.columns.map(col => (
+                          <div key={col.name} className={`flex items-center justify-between px-2 py-1 rounded transition ${hoveredColumn === `${table.id}.${col.name}` ? "bg-indigo-500/10 text-indigo-300 font-semibold" : "text-slate-300 hover:bg-slate-800/40"}`} onMouseEnter={() => col.isFk && setHoveredColumn(`${table.id}.${col.name}`)} onMouseLeave={() => col.isFk && setHoveredColumn(null)}>
+                            <div className="flex items-center gap-1.5 min-w-0">{col.isPk ? <Icons.Key className="text-yellow-400 shrink-0" /> : col.isFk ? <Icons.Key className="text-indigo-400 shrink-0" /> : <span className="w-3.5 shrink-0"></span>}<span className="font-mono text-[11px] truncate">{col.name}</span></div>
+                            <span className={`font-mono text-[10px] px-1 py-0.5 rounded truncate ${col.type === 'uuid' ? 'text-indigo-300 bg-indigo-500/10' : col.notes?.includes('🚨') ? 'text-amber-400 bg-amber-500/10' : 'text-slate-500 bg-slate-900'}`}>{col.type}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+            {selectedTable && (
+              <div className="absolute right-4 top-20 bottom-4 w-80 bg-[#090d18]/95 backdrop-blur-md border border-slate-800 rounded-xl shadow-2xl z-20 flex flex-col overflow-hidden">
+                <div className="p-3 border-b border-slate-800 flex items-center justify-between bg-slate-900/30">
+                  <div className="flex items-center gap-1.5 truncate"><span className={`w-2.5 h-2.5 rounded-full ${getSchemaColors(selectedTable.schema).dot}`}></span><h3 className="font-mono font-bold text-sm text-slate-100 truncate">{selectedTable.id}</h3></div>
+                  <button onClick={() => setSelectedTable(null)} className="p-1 hover:bg-slate-800 rounded text-slate-400 transition"><Icons.Close /></button>
+                </div>
+                <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                  <div>
+                    <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Phân loại</div>
+                    <div className="grid grid-cols-2 gap-2 text-xs">
+                      <div className="bg-slate-900 p-2 rounded-lg border border-slate-800"><div className="text-slate-500 text-[10px]">Schema</div><div className="text-slate-200 font-mono font-semibold capitalize">{selectedTable.schema}</div></div>
+                      <div className="bg-slate-900 p-2 rounded-lg border border-slate-800"><div className="text-slate-500 text-[10px]">Mục đích</div><div className="text-slate-200 font-semibold truncate">{selectedTable.category}</div></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-2">Đặc điểm Liên kết cấu trúc</div>
+                    <div className="space-y-2">
+                      {selectedTable.columns.map(col => (
+                        <div key={col.name} className="bg-slate-900/40 p-2.5 rounded-lg border border-slate-800/80 flex flex-col gap-1">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-1.5">{col.isPk ? <Icons.Key className="text-yellow-400" /> : col.isFk ? <Icons.Key className="text-indigo-400" /> : null}<span className="font-mono text-xs font-bold text-slate-200">{col.name}</span></div>
+                            <span className="font-mono text-[10px] text-slate-400">{col.type}</span>
+                          </div>
+                          {col.notes && <div className="text-[10px] text-amber-400 flex items-center gap-1 bg-amber-500/10 p-1.5 rounded border border-amber-500/20"><Icons.Warning className="w-3.5 h-3.5" /><span>{col.notes}</span></div>}
+                          {col.isFk && col.fkTo && <span className="text-[10px] text-indigo-400 font-mono mt-1">Liên kết tới ➔ {col.fkTo}</span>}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    const rootElement = document.getElementById("root");
+    const root = ReactDOM.createRoot(rootElement);
+    root.render(<App />);
+  </script>
+</body>
+</html>
