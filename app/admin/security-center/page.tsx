@@ -53,13 +53,13 @@ export default async function SecurityCenterPage({ searchParams }: { searchParam
         .range((page - 1) * limit, page * limit - 1);
 
     // Fetch dynamic blocked_ips
-    const { data: blockedIps } = await (supabase as any)
+    const { data: blockedIps } = await supabase
         .from('blocked_ips')
         .select('*')
         .order('blocked_at', { ascending: false });
 
     // Fetch high-risk security events
-    const { data: highRiskLogs } = await (supabase as any)
+    const { data: highRiskLogs } = await supabase
         .from('audit_logs')
         .select('*')
         .or('severity.eq.WARNING,severity.eq.CRITICAL,risk_score.gt.0')

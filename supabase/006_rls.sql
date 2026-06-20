@@ -337,10 +337,10 @@ CREATE POLICY "Read write rate_limit_hits" ON public.rate_limit_hits
 
 -- active_visitors
 CREATE POLICY "Read active_visitors" ON public.active_visitors
-    FOR SELECT USING (TRUE);
+    FOR SELECT USING (public.is_global_admin());
 
 CREATE POLICY "Manage active_visitors" ON public.active_visitors
-    FOR ALL TO authenticated USING (TRUE) WITH CHECK (TRUE);
+    FOR ALL TO authenticated USING (public.is_global_admin()) WITH CHECK (public.is_global_admin());
 
 -- user_activity_baselines
 CREATE POLICY "Read user_activity_baselines" ON public.user_activity_baselines

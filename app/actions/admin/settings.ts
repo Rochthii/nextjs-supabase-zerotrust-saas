@@ -91,7 +91,7 @@ export async function updateSettings(formData: FormData) {
             .filter((s): s is NonNullable<typeof s> => s !== null);
 
         if (settingsBatch.length > 0) {
-            const { error: batchError } = await (supabase as any).from('site_settings').upsert(settingsBatch, { onConflict: 'tenant_id,key' });
+            const { error: batchError } = await supabase.from('site_settings').upsert(settingsBatch, { onConflict: 'tenant_id,key' });
             if (batchError) {
                 console.error('Batch update settings error:', batchError);
                 return { success: false, error: `Error khi save configuration: ${batchError.message}` };
@@ -101,9 +101,9 @@ export async function updateSettings(formData: FormData) {
         // ── Sync theme colors → tenants.theme_colors JSONB ──────────────────
         if (tenant_id) {
             // Fetch old data to avoid overwriting JSONB
-            const { data: tenant } = await (supabase as any).from('tenants').select('theme_colors, logo_url').eq('id', tenant_id).single();
+            const { data: tenant } = await supabase.from('tenants').select('theme_colors, logo_url').eq('id', tenant_id).single();
 
-            const currentColors = (tenant as any)?.theme_colors || {};
+            const currentColors = (tenant?.theme_colors as Record<string, any>) || {};
             const themeColors = {
                 ...currentColors,
                 primary: updates['theme_color_primary'] ?? currentColors.primary,
@@ -122,7 +122,7 @@ export async function updateSettings(formData: FormData) {
                 updatePayload.logo_url = updates['site_logo'];
             }
 
-            const { error: tenantError } = await (supabase as any)
+            const { error: tenantError } = await supabase
                 .from('tenants')
                 .update(updatePayload)
                 .eq('id', tenant_id);
@@ -170,7 +170,7 @@ export async function unblockIpAction(ip: string, tenantId: string | null) {
         await requirePermission('settings', 'update');
         const supabase = await createAdminClient();
 
-        const { error } = await (supabase as any).rpc('unblock_ip', {
+        const { error } = await (supabase.rpc as any)('unblock_ip', {
             p_ip: ip,
             p_tenant_id: tenantId || null,
             p_admin_email: user.email || 'admin@cyber.soc'

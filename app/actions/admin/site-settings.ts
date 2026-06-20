@@ -1,4 +1,4 @@
-﻿'use server';
+'use server';
 
 import { createClient } from '@/lib/supabase/server';
 import { revalidateTag } from 'next/cache';
@@ -22,7 +22,7 @@ export async function updateBankSettings(formData: FormData) {
         const tenant_id = formData.get('tenant_id') as string;
 
         // Fetch old values for audit
-        const { data: oldData } = await (supabase.from('site_settings') as any)
+        const { data: oldData } = await supabase.from('site_settings')
             .select('key, value')
             .eq('tenant_id', tenant_id)
             .in('key', Object.keys(updates));
@@ -33,7 +33,7 @@ export async function updateBankSettings(formData: FormData) {
                 value,
                 tenant_id,
                 updated_at: new Date().toISOString()
-            } as any, { onConflict: 'tenant_id,key' })
+            }, { onConflict: 'tenant_id,key' })
         );
 
         const results = await Promise.all(promises);

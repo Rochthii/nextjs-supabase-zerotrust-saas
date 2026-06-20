@@ -1,6 +1,6 @@
 <div align="center">
 
-# NextSecure – Zero Trust Multi-Tenant SaaS Framework for Next.js & Supabase
+# TenantShield – Zero Trust Multi-Tenant SaaS Framework for Next.js & Supabase
 
 ### Built with Next.js 16 - Supabase FORCE RLS - WORM Audit Logs - Edge Active Defense
 
@@ -162,8 +162,8 @@ Open [http://localhost:3000](http://localhost:3000) for the main Landing Page, o
 
 | Email | Password | Role |
 | :--- | :--- | :--- |
-| `superadmin@saas.core` | `SaaS12345678@` | SuperAdmin — full system access, SOC dashboard, tenant management |
-| `tenantadmin@nexus.corp` | `SaaS12345678@` | TenantAdmin — isolated to Nexus tenant only (`?tenant=nexus`) |
+| `superadmin@tenantshield.dev` | `SuperAdmin@123` | SuperAdmin — full system access, SOC dashboard, tenant management |
+| `member@acme.tenantshield.dev` | `Member@123` | TenantAdmin — isolated to Acme tenant only (`?tenant=acme`) |
 
 ---
 

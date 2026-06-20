@@ -42,9 +42,9 @@ export default function LoginPage() {
         }
     };
 
-    const fillDemoAccount = (demoEmail: string) => {
+    const fillDemoAccount = (demoEmail: string, demoPassword: string) => {
         setEmail(demoEmail);
-        setPassword('SaaS12345678@');
+        setPassword(demoPassword);
         setErrorMsg(null);
     };
 
@@ -61,7 +61,7 @@ export default function LoginPage() {
                         <Shield className="w-8 h-8 text-white" />
                     </div>
                     <h1 className="text-2xl font-black tracking-tight bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
-                        NextSecure Control Panel
+                        TenantShield Control Panel
                     </h1>
                     <p className="text-xs text-slate-400 mt-1 font-medium">
                         Zero Trust Multi-Tenant SaaS Workspace
@@ -140,14 +140,14 @@ export default function LoginPage() {
                     </div>
                     <div className="flex flex-col sm:flex-row gap-2 justify-center">
                         <button
-                            onClick={() => fillDemoAccount('superadmin@saas.core')}
+                            onClick={() => fillDemoAccount('superadmin@tenantshield.dev', 'SuperAdmin@123')}
                             className="text-xs bg-slate-900 border border-slate-800 hover:border-indigo-500/30 rounded-xl py-2 px-3 transition font-medium text-slate-300 flex items-center justify-center gap-1.5"
                         >
                             <Key className="w-3.5 h-3.5 text-slate-500" />
                             Fill SuperAdmin
                         </button>
                         <button
-                            onClick={() => fillDemoAccount('tenantadmin@nexus.corp')}
+                            onClick={() => fillDemoAccount('member@acme.tenantshield.dev', 'Member@123')}
                             className="text-xs bg-slate-900 border border-slate-800 hover:border-indigo-500/30 rounded-xl py-2 px-3 transition font-medium text-slate-300 flex items-center justify-center gap-1.5"
                         >
                             <Key className="w-3.5 h-3.5 text-slate-500" />

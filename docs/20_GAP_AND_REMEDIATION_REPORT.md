@@ -1,8 +1,8 @@
 # GAP & REMEDIATION RESOLUTION REPORT
 
 > **Project:** Secure Multi-tenant SaaS Platform (Row-Level Security & Audit Log)  
-> **Training Unit:** Posts and Telecommunications Institute of Technology (PTIT)  
-> **Author:** Cham Roch Thi  
+> **Training Unit:** TenantShield Security Research Lab  
+> **Author:** TenantShield Core  
 > **Audit Status:** **[100% COMPLETED - ALL VULNERABILITIES RESOLVED]**  
 > **Last Update:** 25/05/2026
 
@@ -20,23 +20,23 @@ This report serves as **Evidence of Security Testing and Vulnerability Remediati
 ### GAP 1: RLS Performance Benchmark Crash — [100% RESOLVED]
 *   **Initial Gap:** The `/admin/performance` benchmark page crashed due to the lack of `benchmark_rls_join` and `benchmark_rls_claims` RPCs in the PostgreSQL database.
 *   **Remediation Solution:** 
-    *   Successfully created migration [20260522000000_create_benchmark_rpcs.sql](file:///e:/PTIT_THESIS_SAAS/supabase/migrations/20260522000000_create_benchmark_rpcs.sql) to initialize the necessary RPC functions for direct measurement on the database server.
+    *   Successfully created migration [20260522000000_create_benchmark_rpcs.sql](file:///e:/TenantShield_THESIS_SAAS/supabase/migrations/20260522000000_create_benchmark_rpcs.sql) to initialize the necessary RPC functions for direct measurement on the database server.
     *   Seeded **111,000 lines of real data** to Supabase Cloud to accurately draw the performance curve of Custom Claims $O(1)$ compared to RLS JOIN $O(N)$.
-    *   Completely fixed the TypeScript compilation error related to Recharts Tooltip in [page.tsx](file:///e:/PTIT_THESIS_SAAS/app/admin/performance/page.tsx).
+    *   Completely fixed the TypeScript compilation error related to Recharts Tooltip in [page.tsx](file:///e:/TenantShield_THESIS_SAAS/app/admin/performance/page.tsx).
 
 ---
 
 ### GAP 2: Inaccurate App-side Benchmark Measurement — [100% RESOLVED]
 *   **Initial Gap:** The benchmark code hard-coded data filtering using the static string `'some-id'`, leading to incorrect results.
 *   **Remediation Solution:** 
-    *   Updated [scaling-engine.ts](file:///e:/PTIT_THESIS_SAAS/app/admin/performance/scaling-engine.ts) to accurately extract and filter the `currentTenantId` of the currently logged-in user, providing truthful and convincing measurement data.
+    *   Updated [scaling-engine.ts](file:///e:/TenantShield_THESIS_SAAS/app/admin/performance/scaling-engine.ts) to accurately extract and filter the `currentTenantId` of the currently logged-in user, providing truthful and convincing measurement data.
 
 ---
 
 ### GAP 3: Hard-coded Active SOC Alert Webhook Placeholders — [100% RESOLVED]
 *   **Initial Gap:** The Webhook URL and Bearer Token for sending security alerts were hard-coded with placeholders, posing a risk of alert paralysis in the event of an attack.
 *   **Remediation Solution:** 
-    *   Deployed the [20260522000002_dynamic_telegram_alerts_and_auto_suspend.sql](file:///e:/PTIT_THESIS_SAAS/supabase/migrations/20260522000002_dynamic_telegram_alerts_and_auto_suspend.sql) migration file.
+    *   Deployed the [20260522000002_dynamic_telegram_alerts_and_auto_suspend.sql](file:///e:/TenantShield_THESIS_SAAS/supabase/migrations/20260522000002_dynamic_telegram_alerts_and_auto_suspend.sql) migration file.
     *   Optimized PL/pgSQL to replace all raw `%0A` characters with the `CHR(10)` string concatenation, enabling the Telegram Bot API to recognize standard newline characters `\n` in the JSON payload and send sharp, professional SOS Cyber SOC alerts to the Admin's phone.
 
 ---
@@ -45,7 +45,7 @@ This report serves as **Evidence of Security Testing and Vulnerability Remediati
 *   **Initial Gap:** The `audit_logs` table was not protected against UPDATE/DELETE operations, allowing attackers with Super Admin privileges to erase evidence.
 *   **Remediation Solution:** 
     *   Activated a PostgreSQL trigger to block 100% of UPDATE or DELETE operations on the `audit_logs` table from all accounts, returning a `SECURITY VIOLATION [CLD.12.4.1]` error code.
-    *   **Upgraded to v1.4.0:** Developed the [worm-vault.ts](file:///e:/PTIT_THESIS_SAAS/lib/security/worm-vault.ts) cryptography module to automatically hash-link (SHA-256 Hash-chaining) all log lines, enabling automatic auditing of integrity and anti-tampering.
+    *   **Upgraded to v1.4.0:** Developed the [worm-vault.ts](file:///e:/TenantShield_THESIS_SAAS/lib/security/worm-vault.ts) cryptography module to automatically hash-link (SHA-256 Hash-chaining) all log lines, enabling automatic auditing of integrity and anti-tampering.
 
 ---
 
@@ -96,4 +96,4 @@ gantt
 ## 4. CONCLUSION
 The project's source code and documentation files have reached a state of **100% CONSISTENCY**. The DevSecOps patching process not only addressed the gaps but also elevated the project to **Enterprise Security Tier** standards (with WORM Vault encryption, Supavisor connection limits, and SOAR Auto-suspend).
 
-The graduation thesis project is now fully ready for any experimental scenario, ensuring scientific integrity and confidence in achieving **EXCELLENT** grades before the PTIT Graduation Thesis Examination Board.
+The enterprise compliance system is now fully ready for any experimental scenario, ensuring scientific integrity and confidence in achieving **EXCELLENT** grades before the TenantShield Enterprise Security Board.

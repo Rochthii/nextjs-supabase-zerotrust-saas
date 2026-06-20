@@ -1,6 +1,6 @@
 # GUIDE TO DEFENDING THESIS: 3 OPTIMIZATION PINS FOR DATABASE AND INTERROGATION SCRIPTS
 > **Thesis Topic:** Research and Design of Secure Multi-tenant SaaS Architecture  
-> **Author:** Cham Roch Thi (PTIT)  
+> **Author:** TenantShield Security Team  
 > **Supporting Module:** Database-side Security & Performance Optimization  
 
 ---
@@ -14,7 +14,7 @@ These are 3 core database optimization solutions that have been implemented in t
 *   **Real-World Problem (If no index):** 
     When the data size of the platform expands to hundreds of thousands or millions of rows, if the foreign key column `tenant_id` has no index, the Row Level Security (RLS) policies when executed force PostgreSQL to run **Sequential Scan (Seq Scan - Sequential Scan)** to scan through all physical rows of the table on the disk to find compatible data. This will immediately cause the Database CPU to jump to 100%, causing connection congestion and crashing the entire system (connection lock timeout).
 *   **Solution Design in the Project:** 
-    All 9 core business tables (`media`, `categories`, `pages`, `about_sections`, `hero_slides`, `dharma_talks`, `event_registrations`, `contact_messages`, `transaction_projects`) have been indexed with a **B-Tree Index** specifically named `idx_[table_name]_tenant` on the `tenant_id` field (Details in file [20260228095500_phase45_global_tenant_isolation.sql](file:///e:/PTIT_THESIS_SAAS/supabase/migrations/20260228095500_phase45_global_tenant_isolation.sql#L38-L54)).
+    All 9 core business tables (`media`, `categories`, `pages`, `about_sections`, `hero_slides`, `dharma_talks`, `event_registrations`, `contact_messages`, `transaction_projects`) have been indexed with a **B-Tree Index** specifically named `idx_[table_name]_tenant` on the `tenant_id` field (Details in file [20260228095500_phase45_global_tenant_isolation.sql](file:///e:/TenantShield_THESIS_SAAS/supabase/migrations/20260228095500_phase45_global_tenant_isolation.sql#L38-L54)).
 *   **Outstanding Effect:** 
     Shorten the query time from linear $O(N)$ to the minimum complexity **$O(\log N_{\text{tenant}})$** (B-Tree Index Scan). The Database only needs to perform 3 to 4 comparison operations on the binary index tree to point directly to the data partition of that Tenant, helping the system handle loads **thousands of times** without consuming resources.
 

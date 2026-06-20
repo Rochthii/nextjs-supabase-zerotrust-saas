@@ -38,7 +38,7 @@ export default function MobileManagementPage() {
                         <MapIcon className="w-4 h-4" /> GIS Monitor
                     </TabsTrigger>
                     <TabsTrigger value="push" className="gap-2 rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm">
-                        <Bell className="w-4 h-4" /> Push Noti
+                        <Bell className="w-4 h-4 opacity-50" /> Push Noti (Disabled)
                     </TabsTrigger>
                     <TabsTrigger value="analytics" className="gap-2 rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm">
                         <BarChart3 className="w-4 h-4" /> Analytics
@@ -84,13 +84,17 @@ export default function MobileManagementPage() {
                 <TabsContent value="push" className="mt-6">
                     <Card>
                         <CardHeader>
-                            <CardTitle className="flex items-center gap-2">
-                                <Bell className="w-5 h-5 text-orange-500" />
-                                Push Notification (FCM)
+                            <CardTitle className="flex items-center gap-2 text-gray-400">
+                                <Bell className="w-5 h-5 text-gray-400" />
+                                Push Notification (Firebase FCM)
                             </CardTitle>
                         </CardHeader>
-                        <CardContent>
-                            <p className="text-sm text-gray-400 py-8 text-center">Send notification to all app users...</p>
+                        <CardContent className="py-12 text-center space-y-2">
+                            <p className="text-lg font-bold text-gray-300">Push Notifications are Disabled</p>
+                            <p className="text-sm text-gray-500 max-w-md mx-auto">
+                                Firebase FCM integration is disabled in this build to reduce external dependencies and simplify deployment. 
+                                Set up custom push notification gateways in your client build as needed.
+                            </p>
                         </CardContent>
                     </Card>
                 </TabsContent>

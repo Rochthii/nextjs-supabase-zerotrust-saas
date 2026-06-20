@@ -1,6 +1,6 @@
 # 07 — Database, Migrations & RLS Playbook
 
-> **Standard Data and DB Security Documentation — PTIT Graduation Project**  
+> **Standard Data and DB Security Documentation — TenantShield Enterprise Core**  
 > **Topic:** Secure Multi-tenant SaaS: Applying RLS and Audit Log in Risk Management.  
 > **Updated:** 2026-05-16
 

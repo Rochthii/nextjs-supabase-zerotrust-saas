@@ -1,6 +1,6 @@
-# 🎨 NextSecure Marketing Assets & Video Script Guide
+# 🎨 TenantShield Marketing Assets & Video Script Guide
 
-This guide details how to construct high-converting visual assets and write/record a professional promo video for NextSecure to publish on CodeCanyon or Codester.
+This guide details how to construct high-converting visual assets and write/record a professional promo video for TenantShield to publish on CodeCanyon or Codester.
 
 ---
 
@@ -10,7 +10,7 @@ The **Cover Image** (Thumbnail) is the first element developers see when browsin
 * **Marketplace Requirement:** `590 × 300 px` (PNG or JPG format).
 * **Color Palette Theme:** Dark Slate Background (`#0f172a`), with glowing gradients of Indigo (`#6366f1`), Violet (`#a855f7`), and Emerald (`#10b981`).
 * **Visual Hierarchy:**
-  1. **Main Title (40% space):** "NextSecure" in large white bold font, next to a security shield icon.
+  1. **Main Title (40% space):** "TenantShield" in large white bold font, next to a security shield icon.
   2. **Core Subtitle (20% space):** "Enterprise-Grade Next.js 16 + Supabase Boilerplate"
   3. **3 Glowing Badge Keywords (40% space):**
      * 🔒 `FORCE RLS Tenancy` (Purple Glow)
@@ -42,12 +42,12 @@ A 60-second video demo showing rapid actions, sleek screen transitions, and a cl
 ### ⏱️ Time-by-Time Breakdown:
 
 #### [0:00 - 0:08] Hook: The Tenancy Security Problem
-* **Screen:** Start on a dark slide: *"Most Next.js starters leak tenant data due to simple API bugs."* Transition to the NextSecure homepage.
-* **Voiceover:** *"Most SaaS boilerplates leave multi-tenant database security entirely up to you, risking massive data leaks. Welcome to NextSecure."*
+* **Screen:** Start on a dark slide: *"Most Next.js starters leak tenant data due to simple API bugs."* Transition to the TenantShield homepage.
+* **Voiceover:** *"Most SaaS boilerplates leave multi-tenant database security entirely up to you, risking massive data leaks. Welcome to TenantShield."*
 
 #### [0:08 - 0:20] Feature 1: Database-Level Isolation (FORCE RLS)
 * **Screen:** Split-screen showing two browser windows (Tenant A and Tenant B). Try to query Tenant A's private data from Tenant B's session. Show PostgreSQL returning empty rows.
-* **Voiceover:** *"NextSecure enforces strict multi-tenancy at the database engine level using PostgreSQL Row-Level Security. No application bugs can ever bypass it."*
+* **Voiceover:** *"TenantShield enforces strict multi-tenancy at the database engine level using PostgreSQL Row-Level Security. No application bugs can ever bypass it."*
 
 #### [0:20 - 0:35] Feature 2: Immutable WORM Audit Logs & SOC
 * **Screen:** Click into the `/admin/security-center` and show the SOC dashboard. Go to the Database console, try to run `DELETE FROM audit_logs`. Show the database throwing a red error: *"Audit logs are WORM and cannot be deleted."*
@@ -62,13 +62,14 @@ A 60-second video demo showing rapid actions, sleek screen transitions, and a cl
 * **Voiceover:** *"Includes 9 structured migration files, strict TypeScript, and a responsive glassmorphism UI. Fully built for Next.js 16."*
 
 #### [0:55 - 1:00] Call To Action (CTA)
-* **Screen:** End slide with the logo: *"NextSecure — Launch Your Compliant B2B SaaS Today. Get it now on CodeCanyon."*
-* **Voiceover:** *"Save 3 months of security engineering. Get NextSecure on CodeCanyon today."*
+* **Screen:** End slide with the logo: *"TenantShield — Launch Your Compliant B2B SaaS Today. Get it now on CodeCanyon."*
+* **Voiceover:** *"Save 3 months of security engineering. Get TenantShield on CodeCanyon today."*
 
 ---
 
 ## 📣 4. TRAFFIC STRATEGY AFTER PUBLISHING
 Once approved by CodeCanyon / Codester:
-1. **Show HN (Hacker News):** Post a title like `Show HN: NextSecure – Next.js SaaS Boilerplate with DB-level FORCE RLS`. Focus on the architectural compliance aspect.
+1. **Show HN (Hacker News):** Post a title like `Show HN: TenantShield – Next.js SaaS Boilerplate with DB-level FORCE RLS`. Focus on the architectural compliance aspect.
 2. **Subreddits:** Share in `/r/nextjs`, `/r/supabase`, and `/r/reactjs`. Ask developers for feedback on your database RLS triggers.
 3. **Twitter/X:** Post the 60-second video with tags like `#nextjs`, `#supabase`, `#saas`. Focus on the WORM log delete bypass error video clip — it gets high developer engagement.
+

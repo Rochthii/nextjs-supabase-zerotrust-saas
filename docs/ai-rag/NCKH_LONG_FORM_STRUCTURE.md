@@ -1,6 +1,6 @@
 # 📑 NCKH-02: Thesis Structure for Graduation Project / Research Paper (Extended Version)
 ## Topic: Designing a Multi-Departmental Security Policy Auditing System in SaaS Platforms based on GraphRAG Architecture
-### Expected Scope: 60 - 80 pages | Excellent Graduation Thesis for PTIT Engineering System
+### Expected Scope: 60 - 80 pages | Excellent Graduation Thesis for TenantShield Enterprise Architecture
 
 ---
 
@@ -65,4 +65,4 @@
 3. **ISO 27017 Compliance Mapping Table:** Presenting a detailed table mapping each cloud security control clause to the implemented source code evidence within the project.
 
 ---
-*Thesis outline structure for an excellent graduation thesis — PTIT 2026*
+*Thesis outline structure for an excellent graduation thesis — TenantShield 2026*

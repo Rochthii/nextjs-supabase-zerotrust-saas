@@ -1,5 +1,5 @@
 import { createAdminClient } from '@/lib/supabase/server';
-import { sendNotification as sendFCM } from '@/lib/fcm-edge';
+// import { sendNotification as sendFCM } from '@/lib/fcm-edge';
 
 /**
  * Get FCM tokens filtered by tenant_id.
@@ -65,7 +65,9 @@ export async function notifyTenantAdmins(
             return;
         }
 
-        await sendFCM({ title, body, tokens, url });
+        // Push notifications disabled in this build
+        console.info('[Notifications] FCM push bypassed (FCM disabled):', { title, body, tokenCount: tokens.length, url });
+        // await sendFCM({ title, body, tokens, url });
     } catch (error) {
         console.error('[Notifications] notifyTenantAdmins error:', error);
     }
@@ -118,7 +120,9 @@ export async function notifyGlobalAdmins(
 
         if (tokens.length === 0) return;
 
-        await sendFCM({ title, body, tokens, url });
+        // Push notifications disabled in this build
+        console.info('[Notifications] FCM global push bypassed (FCM disabled):', { title, body, tokenCount: tokens.length, url });
+        // await sendFCM({ title, body, tokens, url });
     } catch (error) {
         console.error('[Notifications] notifyGlobalAdmins error:', error);
     }

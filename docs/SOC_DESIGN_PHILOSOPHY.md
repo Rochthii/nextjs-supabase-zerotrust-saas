@@ -1,6 +1,6 @@
 # Cyber SOC Dashboard Design Philosophy (SOC UX Design Philosophy)
 
-This document records all the design principles, grid layouts, and visual hierarchies applied in the Security Operations Center (SOC) management page. This document serves as a scientific proof of optimizing user experience (UX) in specialized information security monitoring systems, directly serving the reporting and defense of the PTIT graduation project.
+This document records all the design principles, grid layouts, and visual hierarchies applied in the Security Operations Center (SOC) management page. This document serves as a scientific proof of optimizing user experience (UX) in specialized information security monitoring systems, directly serving the reporting and defense of the TenantShield platform.
 
 ---
 
@@ -38,7 +38,7 @@ The system completely eliminates unnecessary color gradients or chaotic color sc
 
 ---
 
-## 2. Demo Scenario for PTIT Graduation Project Presentation
+## 2. Demo Scenario for TenantShield Enterprise Core Presentation
 
 This interface layout is specially optimized to help you fully control the demo time and scenario:
 
@@ -56,4 +56,4 @@ graph TD
 4. **Step 4 (Discussion):** Open **Tab 4** when instructors ask about data isolation algorithms. You can click on the corresponding security layer to display the PostgreSQL RLS, JWT, and ABAC trigger code cleanly on the screen.
 
 ---
-*Cyber SOC Dashboard Design Philosophy Report - PTIT Graduation Project*
+*Cyber SOC Dashboard Design Philosophy Report - TenantShield Enterprise Core*

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NextSecure SaaS Starter Kit — Documentation</title>
+    <title>TenantShield SaaS Starter Kit — Documentation</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -297,7 +297,7 @@
     <aside>
         <div class="logo-area">
             <div class="logo-icon">NS</div>
-            <div class="logo-text">NextSecure</div>
+            <div class="logo-text">TenantShield</div>
         </div>
 
         <h3 class="menu-title">Getting Started</h3>
@@ -328,18 +328,18 @@
     <main>
         <header>
             <span class="badge">V1.0.0 Production Release</span>
-            <h1>NextSecure SaaS Starter Kit Documentation</h1>
-            <p class="subtitle">Complete guide to deploy NextSecure: Next.js 16 + Supabase RLS + WORM Audits + Edge Defense.</p>
+            <h1>TenantShield SaaS Starter Kit Documentation</h1>
+            <p class="subtitle">Complete guide to deploy TenantShield: Next.js 16 + Supabase RLS + WORM Audits + Edge Defense.</p>
         </header>
 
         <!-- Introduction Section -->
         <section id="introduction">
             <h2>🔒 Introduction</h2>
-            <p>Welcome to <strong>NextSecure</strong> — the only Next.js SaaS boilerplate built with strict database-level tenant isolation, compliance audit logs, and edge-native active threat blocking.</p>
-            <p>Most SaaS kits handle tenancy at the API/application layer. A single forgotten <code>WHERE tenant_id</code> filter can result in a critical data leak. NextSecure enforces security at the **PostgreSQL engine level (FORCE RLS)**, making it virtually impossible to leak cross-tenant data, even if your API code is faulty.</p>
+            <p>Welcome to <strong>TenantShield</strong> — the only Next.js SaaS boilerplate built with strict database-level tenant isolation, compliance audit logs, and edge-native active threat blocking.</p>
+            <p>Most SaaS kits handle tenancy at the API/application layer. A single forgotten <code>WHERE tenant_id</code> filter can result in a critical data leak. TenantShield enforces security at the **PostgreSQL engine level (FORCE RLS)**, making it virtually impossible to leak cross-tenant data, even if your API code is faulty.</p>
             
             <div class="callout success">
-                <div class="callout-title">💡 Why NextSecure is different</div>
+                <div class="callout-title">💡 Why TenantShield is different</div>
                 <p>Designed for compliance-heavy sectors (healthcare, law, finance) requiring SOC2, ISO 27001, or GDPR controls out of the box. Saves 3+ months of security engineering.</p>
             </div>
         </section>
@@ -360,7 +360,7 @@
         <!-- Database Setup -->
         <section id="db-setup">
             <h2>1. Database Provisioning (Supabase)</h2>
-            <p>NextSecure relies heavily on PostgreSQL schemas, functions, policies, and triggers.</p>
+            <p>TenantShield relies heavily on PostgreSQL schemas, functions, policies, and triggers.</p>
             <ol>
                 <li>Create a new project in the <a href="https://supabase.com/" target="_blank" style="color: var(--accent-color);">Supabase Console</a>.</li>
                 <li>Select a region closest to your target audience. Save the database password securely.</li>
@@ -378,12 +378,12 @@
         <!-- Redis Setup -->
         <section id="redis-setup">
             <h2>2. Provisioning Edge Cache (Upstash Redis)</h2>
-            <p>To support dynamic subdomain checks and threat mitigation at the CDN edge in under 4ms, NextSecure uses Upstash Redis serverless database.</p>
+            <p>To support dynamic subdomain checks and threat mitigation at the CDN edge in under 4ms, TenantShield uses Upstash Redis serverless database.</p>
             <ol>
                 <li>Log in to the <a href="https://upstash.com/" target="_blank" style="color: var(--accent-color);">Upstash Console</a>.</li>
                 <li>Create a new Redis database:
                     <ul>
-                        <li><strong>Name:</strong> <code>nextsecure-limiter</code></li>
+                        <li><strong>Name:</strong> <code>TenantShield-limiter</code></li>
                         <li><strong>Region:</strong> Matching your Supabase database region (e.g. AWS ap-southeast-1 for Singapore).</li>
                         <li><strong>Eviction:</strong> Enabled.</li>
                     </ul>
@@ -407,7 +407,7 @@
         <!-- Local env -->
         <section id="local-env">
             <h2>4. Local Setup & Environment Variables</h2>
-            <p>To run NextSecure locally on your machine:</p>
+            <p>To run TenantShield locally on your machine:</p>
             <ol>
                 <li>Install dependencies:
                     <pre><code>npm install --legacy-peer-deps</code></pre>
@@ -464,8 +464,8 @@ TELEGRAM_CHAT_ID=[your-telegram-chat-id]</code></pre>
         <!-- FORCE RLS -->
         <section id="architecture-rls">
             <h2>🔒 Row-Level Security (FORCE RLS)</h2>
-            <p>NextSecure uses PostgreSQL RLS to isolate tenant datasets. This occurs directly inside PostgreSQL, completely bypassing any risk of application-level bugs exposing other clients' data.</p>
-            <pre><code>-- Example of NextSecure FORCE RLS Policy
+            <p>TenantShield uses PostgreSQL RLS to isolate tenant datasets. This occurs directly inside PostgreSQL, completely bypassing any risk of application-level bugs exposing other clients' data.</p>
+            <pre><code>-- Example of TenantShield FORCE RLS Policy
 ALTER TABLE public.settings FORCE ROW LEVEL SECURITY;
 
 CREATE POLICY tenant_isolation_policy ON public.settings
@@ -478,7 +478,7 @@ CREATE POLICY tenant_isolation_policy ON public.settings
         <section id="architecture-worm">
             <h2>🛡️ WORM (Write Once, Read Many) Immutable Logs</h2>
             <p>To fulfill regulatory audits (SOC2 compliance), logs must never be tampered with or deleted by anyone — including administrators.</p>
-            <p>NextSecure binds an immutable trigger to the <code>audit_logs</code> table. Any update or delete attempt throws a database exception:</p>
+            <p>TenantShield binds an immutable trigger to the <code>audit_logs</code> table. Any update or delete attempt throws a database exception:</p>
             <pre><code>CREATE OR REPLACE FUNCTION public.prevent_audit_log_tampering()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -490,7 +490,7 @@ $$ LANGUAGE plpgsql;</code></pre>
         <!-- Edge Active Defense -->
         <section id="architecture-edge">
             <h2>⚡ Edge Active Defense & Rate Limiting</h2>
-            <p>Traditional server security filters threats late in the request pipeline. NextSecure blocks threats before they hit your app using Vercel Edge Middleware and Upstash Redis caching.</p>
+            <p>Traditional server security filters threats late in the request pipeline. TenantShield blocks threats before they hit your app using Vercel Edge Middleware and Upstash Redis caching.</p>
             <ul>
                 <li><strong>IP Rate Limiter:</strong> Tracks requests per second. Suspicious spikes trigger an automatic edge block.</li>
                 <li><strong>Tenant Isolation Enforcer:</strong> Suspended tenants are instantly blocked at the edge, returning a <code>403 Forbidden</code> within 4ms without database roundtrips.</li>
@@ -544,3 +544,4 @@ $$ LANGUAGE plpgsql;</code></pre>
     </script>
 </body>
 </html>
+

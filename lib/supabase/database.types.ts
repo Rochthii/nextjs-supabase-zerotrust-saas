@@ -891,33 +891,6 @@ export interface Database {
         }
         Relationships: []
       }
-      role_permissions: {
-        Row: {
-          role: string
-          resource: string
-          can_create: boolean
-          can_read: boolean
-          can_update: boolean
-          can_delete: boolean
-        }
-        Insert: {
-          role: string
-          resource: string
-          can_create?: boolean
-          can_read?: boolean
-          can_update?: boolean
-          can_delete?: boolean
-        }
-        Update: {
-          role?: string
-          resource?: string
-          can_create?: boolean
-          can_read?: boolean
-          can_update?: boolean
-          can_delete?: boolean
-        }
-        Relationships: []
-      }
       content_revisions: {
         Row: {
           id: string
@@ -1425,6 +1398,300 @@ export interface Database {
           old_data?: Json | null
           new_data?: Json | null
           tenant_id?: string | null
+        }
+        Relationships: []
+      }
+      tenants: {
+        Row: {
+          id: string
+          domain: string
+          name: string
+          subdomain: string | null
+          layout_style: string | null
+          theme_colors: Json | null
+          logo_url: string | null
+          contact_info: Json | null
+          created_at: string
+          layout_blocks: Json | null
+          modules_config: Json | null
+          has_web_frontend: boolean
+          latitude: number | null
+          longitude: number | null
+          geog: any | null
+          parent_id: string | null
+          centralized_finance: boolean
+          nav_visibility: Json | null
+          tenant_type: string
+          plan_type: string
+          lifecycle_status: string
+        }
+        Insert: {
+          id?: string
+          domain: string
+          name: string
+          subdomain?: string | null
+          layout_style?: string | null
+          theme_colors?: Json | null
+          logo_url?: string | null
+          contact_info?: Json | null
+          created_at?: string
+          layout_blocks?: Json | null
+          modules_config?: Json | null
+          has_web_frontend?: boolean
+          latitude?: number | null
+          longitude?: number | null
+          geog?: any | null
+          parent_id?: string | null
+          centralized_finance?: boolean
+          nav_visibility?: Json | null
+          tenant_type?: string
+          plan_type?: string
+          lifecycle_status?: string
+        }
+        Update: {
+          id?: string
+          domain?: string
+          name?: string
+          subdomain?: string | null
+          layout_style?: string | null
+          theme_colors?: Json | null
+          logo_url?: string | null
+          contact_info?: Json | null
+          created_at?: string
+          layout_blocks?: Json | null
+          modules_config?: Json | null
+          has_web_frontend?: boolean
+          latitude?: number | null
+          longitude?: number | null
+          geog?: any | null
+          parent_id?: string | null
+          centralized_finance?: boolean
+          nav_visibility?: Json | null
+          tenant_type?: string
+          plan_type?: string
+          lifecycle_status?: string
+        }
+        Relationships: []
+      }
+      user_profiles: {
+        Row: {
+          id: string
+          full_name: string | null
+          avatar_url: string | null
+          phone: string | null
+          preferred_tenant_id: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id: string
+          full_name?: string | null
+          avatar_url?: string | null
+          phone?: string | null
+          preferred_tenant_id?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          full_name?: string | null
+          avatar_url?: string | null
+          phone?: string | null
+          preferred_tenant_id?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      roles: {
+        Row: {
+          id: string
+          name: string
+          description: string | null
+        }
+        Insert: {
+          id: string
+          name: string
+          description?: string | null
+        }
+        Update: {
+          id?: string
+          name?: string
+          description?: string | null
+        }
+        Relationships: []
+      }
+      tenant_members: {
+        Row: {
+          id: string
+          user_id: string
+          tenant_id: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          tenant_id?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          tenant_id?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      tenant_member_roles: {
+        Row: {
+          member_id: string
+          role_id: string
+          created_at: string
+        }
+        Insert: {
+          member_id: string
+          role_id: string
+          created_at?: string
+        }
+        Update: {
+          member_id?: string
+          role_id?: string
+          created_at?: string
+        }
+        Relationships: []
+      }
+      role_permissions: {
+        Row: {
+          role_id: string
+          resource: string
+          can_create: boolean
+          can_read: boolean
+          can_update: boolean
+          can_delete: boolean
+        }
+        Insert: {
+          role_id: string
+          resource: string
+          can_create?: boolean
+          can_read?: boolean
+          can_update?: boolean
+          can_delete?: boolean
+        }
+        Update: {
+          role_id?: string
+          resource?: string
+          can_create?: boolean
+          can_read?: boolean
+          can_update?: boolean
+          can_delete?: boolean
+        }
+        Relationships: []
+      }
+      blocked_ips: {
+        Row: {
+          id: string
+          ip: string
+          tenant_id: string | null
+          blocked_until: string
+          reason: string | null
+          created_at: string
+          created_by: string | null
+        }
+        Insert: {
+          id?: string
+          ip: string
+          tenant_id?: string | null
+          blocked_until: string
+          reason?: string | null
+          created_at?: string
+          created_by?: string | null
+        }
+        Update: {
+          id?: string
+          ip?: string
+          tenant_id?: string | null
+          blocked_until?: string
+          reason?: string | null
+          created_at?: string
+          created_by?: string | null
+        }
+        Relationships: []
+      }
+      rate_limit_hits: {
+        Row: {
+          ip_address: string
+          action_type: string
+          hit_count: number
+          last_hit: string
+          tenant_id: string | null
+          identifier: string
+          action: string
+        }
+        Insert: {
+          ip_address: string
+          action_type: string
+          hit_count?: number
+          last_hit?: string
+          tenant_id?: string | null
+          identifier: string
+          action: string
+        }
+        Update: {
+          ip_address?: string
+          action_type?: string
+          hit_count?: number
+          last_hit?: string
+          tenant_id?: string | null
+          identifier?: string
+          action?: string
+        }
+        Relationships: []
+      }
+      active_visitors: {
+        Row: {
+          id: string
+          session_hash: string
+          path: string
+          last_active_at: string
+        }
+        Insert: {
+          id?: string
+          session_hash: string
+          path: string
+          last_active_at?: string
+        }
+        Update: {
+          id?: string
+          session_hash?: string
+          path?: string
+          last_active_at?: string
+        }
+        Relationships: []
+      }
+      user_activity_baselines: {
+        Row: {
+          id: string
+          user_email: string
+          avg_hourly_actions: number
+          stddev_hourly_actions: number
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_email: string
+          avg_hourly_actions?: number
+          stddev_hourly_actions?: number
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_email?: string
+          avg_hourly_actions?: number
+          stddev_hourly_actions?: number
+          updated_at?: string
         }
         Relationships: []
       }

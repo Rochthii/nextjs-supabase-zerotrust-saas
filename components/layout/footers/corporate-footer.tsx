@@ -115,7 +115,7 @@ export function CorporateFooter({ settings = {} }: { settings?: Record<string, s
                 {/* Bottom section */}
                 <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-[12px] text-slate-500">
                     <div>
-                        &copy; {currentYear} {siteName}. All rights reserved. Powered by PTIT Thesis SaaS.
+                        &copy; {currentYear} {siteName}. All rights reserved. Powered by TenantShield.
                     </div>
                     <div className="flex items-center gap-6">
                         <span className="flex items-center gap-1.5">

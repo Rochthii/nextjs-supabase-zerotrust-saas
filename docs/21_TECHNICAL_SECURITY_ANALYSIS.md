@@ -1,6 +1,6 @@
 # TECHNICAL ANALYSIS AND PROOF OF CONCEPT REPORT FOR SAAS HIGH SECURITY
 
-> **Author:** Cham Roch Thi  
+> **Author:** TenantShield Core  
 > **Topic:** Research and design of secure software architecture for multi-tenant platform (Secure Multi-tenant SaaS)  
 > **Objective:** Provide experimental evidence and in-depth technical reasoning to serve Chapters 3, 4, and 5 of the Graduation Thesis and answer the questions of the Council.
 

@@ -1,5 +1,5 @@
 # Appendix: Performance vs Security Trade-off Matrix
-*Experimental Research Document for PTIT Graduation Project Defense*
+*Experimental Research Document for TenantShield Security Audit*
 *Project Title: Secure Multi-tenant SaaS Platform*
 
 ---

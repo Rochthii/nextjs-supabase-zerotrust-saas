@@ -1,6 +1,6 @@
 # Decoupling Enterprise Security Policy Copilot for Standalone Implementation
 
-This plan outlines the technical steps to logically isolate the **Enterprise Security Policy & IT Audit Copilot RAG AI** system from the core multi-tenant SaaS admin panel. This modular separation defines the distinct boundaries of the security subsystem, proving high-quality software engineering principles (loose coupling, single responsibility) for Cham Roch Thi's PTIT Graduation Thesis.
+This plan outlines the technical steps to logically isolate the **Enterprise Security Policy & IT Audit Copilot RAG AI** system from the core multi-tenant SaaS admin panel. This modular separation defines the distinct boundaries of the security subsystem, proving high-quality software engineering principles (loose coupling, single responsibility) for TenantShield Core's TenantShield Compliance Stack.
 
 ## Core Decoupling Strategy
 
@@ -64,4 +64,4 @@ Generate database execution plans (`EXPLAIN ANALYZE`) comparing:
 2. Optimized RLS scanning with JWT Custom Claims ($O(1)$ lookup complexity): **Flat line latency** even when scaling datasets from 1,000 to 100,000 rows.
 
 ---
-*Technical Architecture Document — PTIT 2026 — Enterprise Security Copilot*
+*Technical Architecture Document — TenantShield 2026 — Enterprise Security Copilot*

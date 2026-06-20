@@ -1,6 +1,6 @@
 # 11 — SEV-1 Scenarios & Communication Templates
 
-> **Incident Scenario Documentation — PTIT Graduation Project**  
+> **Incident Scenario Documentation — TenantShield Enterprise Core**  
 > **Topic:** Secure Multi-tenant SaaS: Applying RLS and Audit Log in Information Risk Management.  
 > **Updated:** 2026-05-16  
 > **Objective:** Provide SEV-1 handling scenarios in a real-world format + notification templates + postmortem templates to fill in quickly. Meet the Incident Management requirements of ISO/IEC 27017.

@@ -1,17 +1,17 @@
-# 🏛️ NextSecure – Zero Trust Multi-Tenant SaaS Framework
+# 🏛️ TenantShield – Zero Trust Multi-Tenant SaaS Framework
 > **Next.js 16 + Supabase FORCE RLS + WORM Audit Logs + Edge Active Defense**  
 > *Save 3+ months of complex engineering. Launch a secure B2B SaaS in weeks, not months.*
 
 ---
 
-## 💡 WHY CHOOSE NEXTSECURE?
+## 💡 WHY CHOOSE TenantShield?
 
 Most SaaS starter kits on the internet are simple wrappers around Stripe and ChatGPT APIs. They solve the easy problems but leave the hardest, most critical part of B2B SaaS to you: **multi-tenant data security, compliance logs, and edge defense.** 
 
-Building these from scratch is an "infrastructure tax" that costs months of development and exposes you to critical security risks. NextSecure provides a production-grade backend and frontend architecture out of the box, saving you hundreds of hours.
+Building these from scratch is an "infrastructure tax" that costs months of development and exposes you to critical security risks. TenantShield provides a production-grade backend and frontend architecture out of the box, saving you hundreds of hours.
 
 ### ⏱️ Time Saved Breakdown
-| Core Module | Manual Development Time | NextSecure Out-of-the-Box | Time Saved |
+| Core Module | Manual Development Time | TenantShield Out-of-the-Box | Time Saved |
 | :--- | :---: | :---: | :---: |
 | **Multi-Tenant RLS & Auth** | 4 Weeks | Pre-configured DB Policies & Claims | **4 Weeks** |
 | **WORM Compliance Audit Logs** | 2 Weeks | Immutable Postgres Triggers | **2 Weeks** |
@@ -23,7 +23,7 @@ Building these from scratch is an "infrastructure tax" that costs months of deve
 ---
 
 ## 📊 DATABASE METRICS & SCALE
-NextSecure's database is built using raw, high-performance PostgreSQL on Supabase. Here are the core metrics of the schema you will receive:
+TenantShield's database is built using raw, high-performance PostgreSQL on Supabase. Here are the core metrics of the schema you will receive:
 
 * 🗄️ **Tables**: **42+** (Core settings, Tenancy config, User Memberships and Roles (RBAC v2), CMS, Finance Ledger, Active Defense, and AI RAG tables).
 * 🛡️ **RLS Policies**: **35+** (Enforcing strict tenant isolation directly at the database engine level).
@@ -117,7 +117,7 @@ erDiagram
 ## 🚀 PRODUCT CORE CAPABILITIES
 
 ### 1. Database-Level Multi-Tenancy (Row-Level Security)
-Instead of applying fragile application-level checks (`WHERE tenant_id = ?`) in Next.js code, NextSecure uses **Supabase Row-Level Security (RLS)**.
+Instead of applying fragile application-level checks (`WHERE tenant_id = ?`) in Next.js code, TenantShield uses **Supabase Row-Level Security (RLS)**.
 * **How it works**: When a user logs in, custom claims contain their `tenant_id`. Database queries automatically filter out data belonging to other tenants. Even if a developer writes an API query without a tenant filter, the database will never leak data.
 
 ### 2. WORM (Write Once, Read Many) Immutable Security Ledger
@@ -168,4 +168,5 @@ Reduce OpenAI/Gemini API billing by avoiding repetitive queries.
 5. **Pre-configured Testing Suite**: Vitest for unit tests, Playwright for E2E scenarios.
 
 ---
-*Ready to accelerate your launch? Read the [Step-by-Step Installation Guide](file:///e:/Projects/Project_TN/_distribution_saas_core/docs/INSTALLATION_GUIDE.md) to deploy NextSecure in 15 minutes.*
+*Ready to accelerate your launch? Read the [Step-by-Step Installation Guide](file:///e:/Projects/Project_TN/_distribution_saas_core/docs/INSTALLATION_GUIDE.md) to deploy TenantShield in 15 minutes.*
+

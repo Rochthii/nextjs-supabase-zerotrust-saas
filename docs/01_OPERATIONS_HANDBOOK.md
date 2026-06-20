@@ -1,6 +1,6 @@
 # 01 — Operations Handbook
 
-> **Standard Operations Document — PTIT Graduation Project**  
+> **Standard Operations Document — TenantShield Enterprise Core**  
 > **Topic:** Secure Multi-tenant SaaS: Applying RLS and Audit Log in Information Risk Management.  
 > **Updated:** 2026-05-16
 

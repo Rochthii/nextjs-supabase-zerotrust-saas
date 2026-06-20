@@ -66,28 +66,34 @@ When threat indicators are triggered (e.g., cross-tenant queries, request floodi
      ```
    - Open `.env.local` and populate it with the credentials gathered from the previous steps:
      ```env
-     # SUPABASE CONFIG
-     NEXT_PUBLIC_SUPABASE_URL=https://[your-project-id].supabase.co
-     NEXT_PUBLIC_SUPABASE_ANON_KEY=[your-supabase-anon-key]
-     SUPABASE_SERVICE_ROLE_KEY=[your-supabase-service-role-key]
+      # BRANDING & MAIN SETTINGS
+      NEXT_PUBLIC_APP_NAME=TenantShield
+      NEXT_PUBLIC_SITE_URL=http://localhost:3000
 
-     # REDIS LIMITER & EDGE CACHE
-     UPSTASH_REDIS_REST_URL=https://[your-redis-url].upstash.io
-     UPSTASH_REDIS_REST_TOKEN=[your-redis-token]
+      # SUPABASE CONFIG
+      NEXT_PUBLIC_SUPABASE_URL=https://[your-project-id].supabase.co
+      NEXT_PUBLIC_SUPABASE_ANON_KEY=[your-supabase-anon-key]
+      SUPABASE_SERVICE_ROLE_KEY=[your-supabase-service-role-key]
 
-     # SECURITY SECRETS (Generate random 32-character strings)
-     NEXTAUTH_SECRET=a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6
-     CRON_SECRET=cron_secure_secret_token_key_99
-     REVALIDATE_SECRET=revalidate_secure_token_key_99
+      # UPSTASH REDIS CONNECTION
+      REDIS_URL=redis://default:[password]@[your-redis-host]:6379
 
-     # ACTIVE DEFENSE TELEGRAM NOTIFIER
-     TELEGRAM_BOT_TOKEN=[your-telegram-token]
-     TELEGRAM_CHAT_ID=[your-telegram-chat-id]
+      # EMAIL INTEGRATION (RESEND)
+      RESEND_API_KEY=re_[your-resend-key]
 
-     # VERCEL DEPLOYMENT CONFIG (Leave blank in local development)
-     VERCEL_PROJECT_ID=
-     VERCEL_AUTH_TOKEN=
-     VERCEL_TEAM_ID=
+      # SECURITY SECRETS (Generate random 32-character strings)
+      NEXTAUTH_SECRET=a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6
+      CRON_SECRET=cron_secure_secret_token_key_99
+      REVALIDATE_SECRET=revalidate_secure_token_key_99
+
+      # ACTIVE DEFENSE TELEGRAM NOTIFIER
+      TELEGRAM_BOT_TOKEN=[your-telegram-token]
+      TELEGRAM_CHAT_ID=[your-telegram-chat-id]
+
+      # VERCEL DEPLOYMENT CONFIG (Leave blank in local development)
+      VERCEL_PROJECT_ID=
+      VERCEL_AUTH_TOKEN=
+      VERCEL_TEAM_ID=
      ```
 4. Start the local development server:
    ```bash
@@ -122,10 +128,10 @@ To support dynamic multi-tenant routing (e.g., `tenant1.yourdomain.com`), host o
 
 Test the system role structure using the seeded accounts:
 
-| Account | Role | Features to Test |
+| Email | Role | Features to Test |
 | :--- | :--- | :--- |
-| **Email:** `superadmin@saas.core`<br>**Password:** `SaaS12345678@` | **SuperAdmin** | Full access to the system. Navigate to `/admin/security-center` to view the Real-Time SOC dashboard, test the threat simulator, and check RLS database coverage. |
-| **Email:** `tenantadmin@nexus.corp`<br>**Password:** `SaaS12345678@` | **TenantAdmin** (Nexus Corp) | Isolated access. Navigate to the Nexus tenant domain at `nexus.yourdomain.com` (or `http://localhost:3000?tenant=nexus` on local) to manage tenant-specific settings, users, and audit logs. |
+| **Email:** `superadmin@tenantshield.dev`<br>**Password:** `SuperAdmin@123` | **SuperAdmin** | Full access to the system. Navigate to `/admin/security-center` to view the Real-Time SOC dashboard, test the threat simulator, and check RLS database coverage. |
+| **Email:** `member@acme.tenantshield.dev`<br>**Password:** `Member@123` | **TenantAdmin** (Acme Corp) | Isolated access. Navigate to the Acme tenant domain at `acme.yourdomain.com` (or `http://localhost:3000?tenant=acme` on local) to manage tenant-specific settings, users, and audit logs. |
 
 ---
 
@@ -143,7 +149,7 @@ Test the system role structure using the seeded accounts:
 ### 7.2 Subdomain routing not resolving locally
 * **Issue**: Local desktop environments cannot route `tenant.localhost` automatically.
 * **Resolution**:
-  - Force tenant context by appending the query string: `http://localhost:3000?tenant=nexus` to bypass domain rewrites during local UI testing.
+  - Force tenant context by appending the query string: `http://localhost:3000?tenant=acme` to bypass domain rewrites during local UI testing.
 
 ---
 *For advanced issues, please contact the repository system maintainer.*

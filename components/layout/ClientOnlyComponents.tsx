@@ -26,18 +26,11 @@ const Toaster = dynamic(
     { ssr: false }
 );
 
-const PushNotificationManager = dynamic(
-    () => import('@/components/common/PushNotificationManager').then(m => ({ default: m.PushNotificationManager })),
-    { ssr: false }
-);
-
 export function ClientOnlyComponents() {
     return (
         <Suspense fallback={null}>
             <PageTracker />
             <ScrollToTop />
-
-            <PushNotificationManager />
 
             <Toaster position="top-center" richColors />
         </Suspense>

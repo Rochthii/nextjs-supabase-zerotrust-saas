@@ -110,7 +110,7 @@ export function SettingsForm({ initialSettings, contextTenantId, isCompany }: { 
                 {isCompany && (
                 <Card>
                     <CardHeader>
-                        <CardTitle>Bank Information (VietQR)</CardTitle>
+                        <CardTitle>Direct Bank Transfer (QR Payment)</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <div className="grid grid-cols-2 gap-4">
@@ -120,18 +120,18 @@ export function SettingsForm({ initialSettings, contextTenantId, isCompany }: { 
                                     id="bank_name"
                                     name="bank.name"
                                     defaultValue={initialSettings['bank.name'] || ''}
-                                    placeholder="Bank ACB"
+                                    placeholder="e.g. Chase, HSBC"
                                 />
                             </div>
                             <div>
-                                <Label htmlFor="bank_id">System Code (Bin ID)</Label>
+                                <Label htmlFor="bank_id">System Code (Bin / Sort Code)</Label>
                                 <Input
                                     id="bank_id"
                                     name="bank.id"
                                     defaultValue={initialSettings['bank.id'] || ''}
-                                    placeholder="e.g. 970416 (ACB)"
+                                    placeholder="e.g. 970416"
                                 />
-                                <p className="text-xs text-gray-500 mt-1">Lookup at vietqr.io (e.g. VCB=970436, ACB=970416)</p>
+                                <p className="text-xs text-gray-500 mt-1">Lookup bank BIN or Swift code for QR generation</p>
                             </div>
                         </div>
 

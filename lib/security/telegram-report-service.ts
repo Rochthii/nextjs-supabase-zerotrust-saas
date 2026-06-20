@@ -3,6 +3,8 @@ import autoTable from 'jspdf-autotable';
 import { createAdminClient } from '@/lib/supabase/server';
 import { getSecurityStats } from '@/lib/audit/security-stats';
 
+const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME || 'TenantShield';
+
 // Global in-memory cache for fonts to optimize performance and prevent rate limiting
 let cachedRegularFontBase64: string | null = null;
 let cachedBoldFontBase64: string | null = null;
@@ -94,7 +96,7 @@ function renderMarkdownToPdf(doc: jsPDF, markdown: string, startY: number, hasFo
                     doc.setFont(fontName, "normal");
                     doc.setFontSize(8);
                     doc.setTextColor(128, 128, 128);
-                    doc.text(pdfText("SOC HEALTH REPORT - PTIT THESIS SAAS"), 15, 10);
+                    doc.text(pdfText(`SOC HEALTH REPORT - ${APP_NAME.toUpperCase()}`), 15, 10);
                     doc.line(15, 12, 195, 12);
                     doc.text(pdfText("Page " + doc.getNumberOfPages()), 180, 292);
                     y = 22;
@@ -140,7 +142,7 @@ function renderMarkdownToPdf(doc: jsPDF, markdown: string, startY: number, hasFo
                 doc.setFont(fontName, "normal");
                 doc.setFontSize(8);
                 doc.setTextColor(128, 128, 128);
-                doc.text(pdfText("SOC HEALTH REPORT - PTIT THESIS SAAS"), 15, 10);
+                doc.text(pdfText(`SOC HEALTH REPORT - ${APP_NAME.toUpperCase()}`), 15, 10);
                 doc.line(15, 12, 195, 12);
                 doc.text(pdfText("Page " + doc.getNumberOfPages()), 180, 292);
                 y = 22;
@@ -598,7 +600,7 @@ Note: DO NOT create markdown data tables in your response because we have alread
     doc.setFont(fontName, "normal");
     doc.setFontSize(8);
     doc.setTextColor(128, 128, 128);
-    doc.text(pdfText(`SOC HEALTH REPORT - ${reportPeriodText} - PTIT THESIS SAAS`), 15, 10);
+    doc.text(pdfText(`SOC HEALTH REPORT - ${reportPeriodText} - ${APP_NAME.toUpperCase()}`), 15, 10);
     doc.line(15, 12, 195, 12);
     doc.text(pdfText("Page " + doc.getNumberOfPages()), 180, 292);
 
@@ -620,7 +622,7 @@ Note: DO NOT create markdown data tables in your response because we have alread
     );
     formData.append(
         'caption', 
-        `📊 *SOC HEALTH REPORT ${reportPeriodText} (PDF)*\n🏢 *Organization:* ${tenantName}\n🛡️ *System:* PTIT Thesis Secure SAAS\n🚀 *Mode:* Automatic periodic audit scan (${reportType.toUpperCase()})\n📅 *Time:* ${new Date().toLocaleString('en-US')}\n💾 _The automated PDF report is attached below!_`
+        `📊 *SOC HEALTH REPORT ${reportPeriodText} (PDF)*\n🏢 *Organization:* ${tenantName}\n🛡️ *System:* ${APP_NAME} Secure SaaS\n🚀 *Mode:* Automatic periodic audit scan (${reportType.toUpperCase()})\n📅 *Time:* ${new Date().toLocaleString('en-US')}\n💾 _The automated PDF report is attached below!_`
     );
     formData.append('parse_mode', 'Markdown');
 

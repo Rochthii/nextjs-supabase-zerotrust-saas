@@ -19,7 +19,6 @@ CREATE TABLE IF NOT EXISTS public.tenants (
     has_web_frontend BOOLEAN DEFAULT TRUE NOT NULL,
     latitude DOUBLE PRECISION,
     longitude DOUBLE PRECISION,
-    address_vi TEXT,
     geog extensions.geography(Point, 4326),
     parent_id UUID REFERENCES public.tenants(id) ON DELETE CASCADE,
     centralized_finance BOOLEAN DEFAULT FALSE NOT NULL,

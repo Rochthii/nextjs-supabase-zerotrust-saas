@@ -1,6 +1,6 @@
 # 05 — Admin Features Specification
 
-> **Standard Admin Functional Documentation — PTIT Graduation Project**  
+> **Standard Admin Functional Documentation — TenantShield Enterprise Core**  
 > **Topic:** Secure Multi-tenant SaaS: Applying RLS and Audit Log in Information Risk Management.  
 > **Updated:** 2026-05-23
 

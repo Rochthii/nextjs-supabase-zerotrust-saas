@@ -10,11 +10,11 @@ const intlMiddleware = createMiddleware(routing);
 const ROOT_ROUTES = ['/login', '/admin', '/collaborator', '/auth', '/forgot-password', '/update-password', '/council'];
 
 const HOSTNAME_MAP: Record<string, string> = {
-    'nexus': 'nexus-corp-ptit.vercel.app',  // Technology enterprise tenant — B2B SaaS demo
+    'acme': 'acme-corp.tenantshield.dev',  // Demo B2B Enterprise Tenant
 };
 
 // Tenant whitelist allowed for switching via ?tenant= in production
-const DEMO_TENANT_WHITELIST = new Set(['nexus']);
+const DEMO_TENANT_WHITELIST = new Set(['acme']);
 
 /**
  * Multi-tenant Middleware - "Ultra Lean" Edition (Target < 4ms)

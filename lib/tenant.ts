@@ -30,9 +30,9 @@ export const getTenantConfig = async (domain: string): Promise<TenantConfig | nu
                 // Standardize hostname (e.g. chuaphuly.localhost:3000 -> localhost:3000)
                 let lookupDomain = domain.includes('localhost') ? 'localhost:3000' : domain;
 
-                // If running locally, automatically map to Alpha Group (currently domain nexus-corp-ptit.vercel.app) as default
+                // If running locally, automatically map to Acme Corp (acme-corp.tenantshield.dev) as default fallback
                 if (lookupDomain === 'localhost:3000') {
-                    lookupDomain = 'nexus-corp-ptit.vercel.app';
+                    lookupDomain = 'acme-corp.tenantshield.dev';
                 }
 
                 // 1. Prioritize finding exact match by Domain

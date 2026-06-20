@@ -1,6 +1,6 @@
 # INTELLECTUAL PROPERTY CONFIRMATION DOCUMENT: ENTERPRISE SECURITY & COMPLIANCE COPILOT RAG ENGINE
 
-This document defines the technical architecture boundaries and ownership of the **Enterprise Security Policy & IT Audit Copilot RAG** artificial intelligence system, developed as a separate advanced security subsystem with a logical structure distinct from the basic business structure of the multi-tenant SaaS platform. This is an important academic proof demonstrating the ability of technological autonomy in the PTIT graduation project.
+This document defines the technical architecture boundaries and ownership of the **Enterprise Security Policy & IT Audit Copilot RAG** artificial intelligence system, developed as a separate advanced security subsystem with a logical structure distinct from the basic business structure of the multi-tenant SaaS platform. This is an important academic proof demonstrating the ability of technological autonomy in the TenantShield platform.
 
 ## 1. Components of the AI RAG Subsystem (Core AI Assets)
 
@@ -35,4 +35,4 @@ To ensure the AI subsystem can be easily embedded or transferred without affecti
 - **Database Isolation:** All knowledge data is managed separately through Row Level Security (RLS) at the database level, automatically filtered by `tenant_id` to prevent cross-tenant data leakage between enterprise customers.
 
 ---
-*Intellectual Property Confirmation Document — PTIT 2026 Graduation Project*
+*Intellectual Property Confirmation Document — TenantShield 2026 Graduation Project*

@@ -1,6 +1,6 @@
 # 03 — Security & Permissions
 
-> **Standard Security/Permission Documentation — PTIT Graduation Project**  
+> **Standard Security/Permission Documentation — TenantShield Enterprise Core**  
 > **Topic:** Secure Multi-tenant SaaS: Applying RLS and Audit Log in Risk Management.  
 > **Updated:** 2026-05-23  
 > **Reference:** ISO/IEC 27017 §CLD.9.5.1 — Privileged Access Control

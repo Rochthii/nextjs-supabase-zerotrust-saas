@@ -50,7 +50,7 @@ const getCachedUserContext = cache(async (): Promise<UserContext | null> => {
     if (!user) return null;
 
     // Get preferred tenant
-    const { data: profile } = await (supabase as any)
+    const { data: profile } = await supabase
         .from('user_profiles')
         .select('preferred_tenant_id')
         .eq('id', user.id)
@@ -71,7 +71,7 @@ const getCachedUserContext = cache(async (): Promise<UserContext | null> => {
     }
 
     // Get all memberships and roles for this user
-    const { data: memberships } = await (supabase as any)
+    const { data: memberships } = await supabase
         .from('tenant_members')
         .select(`
             id,
@@ -83,7 +83,7 @@ const getCachedUserContext = cache(async (): Promise<UserContext | null> => {
                 role_id
             )
         `)
-        .eq('user_id', user.id);
+        .eq('user_id', user.id) as any;
 
     let activeMembership = null;
     if (memberships && memberships.length > 0) {
@@ -139,7 +139,7 @@ const getCachedUserContext = cache(async (): Promise<UserContext | null> => {
         if (activeMembership.tenant_id) {
             tenantName = (activeMembership.tenants as any)?.name ?? null;
         } else if (resolvedTenantId) {
-            const { data: tenant } = await (supabase as any)
+            const { data: tenant } = await supabase
                 .from('tenants')
                 .select('name')
                 .eq('id', resolvedTenantId)
@@ -227,7 +227,7 @@ export async function enforceTenantScopeForRecord(tableName: string, recordId: s
     if (!scope) return; // Global admins can edit anything
 
     const supabase = await createClient();
-    const { data, error } = await (supabase as any).from(tableName).select('tenant_id').eq('id', recordId).maybeSingle();
+    const { data, error } = await supabase.from(tableName as any).select('tenant_id').eq('id', recordId).maybeSingle() as any;
     if (error || !data) {
         throw new Error("Record not found");
     }
@@ -361,7 +361,7 @@ export async function getBasePermissionsByRole(role: Role): Promise<Record<Resou
             basePermissions = basePermissionsCache.get(role)!;
         } else {
             const supabase = await createClient();
-            const { data } = await (supabase as any).from('role_permissions').select('*').eq('role_id', role);
+            const { data } = await supabase.from('role_permissions').select('*').eq('role_id', role);
             basePermissions = Object.fromEntries((data || []).map((p: any) => [p.resource, p])) as Record<Resource, Permission>;
             if (Object.keys(basePermissions).length > 0) {
                 basePermissionsCache.set(role, basePermissions);
