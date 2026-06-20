@@ -58,11 +58,11 @@ export async function uploadImage(formData: FormData, tenantIdProp?: string) {
 
         const file = formData.get('file') as File;
         if (!file) {
-            return { success: false, error: 'None file nào được cung cấp' };
+            return { success: false, error: 'No file was provided' };
         }
 
-        // FIXED: Validate file size và MIME type
-        const validation = validateFile(file, ALLOWED_IMAGE_TYPES, MAX_IMAGE_SIZE, 'ảnh');
+        // FIXED: Validate file size and MIME type
+        const validation = validateFile(file, ALLOWED_IMAGE_TYPES, MAX_IMAGE_SIZE, 'image');
         if (!validation.valid) {
             return { success: false, error: validation.error };
         }
@@ -119,8 +119,8 @@ export async function uploadImage(formData: FormData, tenantIdProp?: string) {
         if (error.name === 'UnauthorizedError') return { success: false, error: error.message, unauthorized: true };
         console.error('Upload error:', error);
 
-        // Return error details hơn nếu có
-        const errorMessage = error?.message || 'Error unknown';
+        // Return more error details if available
+        const errorMessage = error?.message || 'Unknown error';
         return {
             success: false,
             error: `Upload failed: ${errorMessage}`
@@ -141,10 +141,10 @@ export async function uploadMedia(formData: FormData, tenantIdProp?: string) {
         let titles: string[] = [];
         try {
             if (titlesJson) titles = JSON.parse(titlesJson);
-        } catch (e) { console.error('Error parse titles:', e); }
+        } catch (e) { console.error('Error parsing titles:', e); }
 
         if (!files || files.length === 0) {
-            return { success: false, error: 'Chưa select file nào' };
+            return { success: false, error: 'No files selected' };
         }
 
         const uploadedFiles = [];
@@ -194,7 +194,7 @@ export async function uploadMedia(formData: FormData, tenantIdProp?: string) {
                 });
             } catch (uploadError: any) {
                 console.error('Cloudinary upload error:', uploadError);
-                errors.push(`"${file.name}": Error upload Cloudinary`);
+                errors.push(`"${file.name}": Cloudinary upload error`);
                 continue;
             }
 
@@ -268,7 +268,7 @@ export async function uploadMedia(formData: FormData, tenantIdProp?: string) {
                 success: false,
                 error: errors.length > 0
                     ? errors.join('; ')
-                    : 'Không upload được file nào. Check Supabase Storage bucket "media".',
+                    : 'No files were uploaded. Please check Supabase Storage bucket "media".',
                 uploaded: 0,
                 total: files.length,
             };
@@ -278,14 +278,14 @@ export async function uploadMedia(formData: FormData, tenantIdProp?: string) {
             success: true,
             uploaded: uploadedFiles.length,
             total: files.length,
-            // Báo error từng section nếu có file không upload được
+            // Report error per file if any failed
             partialErrors: errors.length > 0 ? errors : undefined,
         };
     } catch (error: any) {
         if (error.name === 'UnauthorizedError') return { success: false, error: error.message, unauthorized: true };
         console.error('Upload media error:', error);
 
-        const errorMessage = error?.message || 'Error unknown';
+        const errorMessage = error?.message || 'Unknown error';
         return {
             success: false,
             error: `Upload failed: ${errorMessage}`

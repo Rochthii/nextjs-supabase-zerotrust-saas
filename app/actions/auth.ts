@@ -10,32 +10,32 @@ export async function updatePassword(formData: FormData) {
     const confirmPassword = formData.get('confirm_password') as string;
 
     if (!newPassword || !confirmPassword) {
-        return { success: false, error: 'Please nhập complete thông tin' };
+        return { success: false, error: 'Please enter all required information' };
     }
 
     if (newPassword !== confirmPassword) {
-        return { success: false, error: 'Password confirm không khớp' };
+        return { success: false, error: 'Password confirmation does not match' };
     }
 
     // Strong password policy
     if (newPassword.length < 8) {
-        return { success: false, error: 'Password phải có ít nhất 8 characters' };
+        return { success: false, error: 'Password must be at least 8 characters long' };
     }
     if (!/[A-Z]/.test(newPassword)) {
-        return { success: false, error: 'Password phải có ít nhất 1 chữ hoa' };
+        return { success: false, error: 'Password must contain at least 1 uppercase letter' };
     }
     if (!/[a-z]/.test(newPassword)) {
-        return { success: false, error: 'Password phải có ít nhất 1 chữ thường' };
+        return { success: false, error: 'Password must contain at least 1 lowercase letter' };
     }
     if (!/[0-9]/.test(newPassword)) {
-        return { success: false, error: 'Password phải có ít nhất 1 số' };
+        return { success: false, error: 'Password must contain at least 1 number' };
     }
 
     try {
         const { data: { user } } = await supabase.auth.getUser();
 
         if (!user) {
-            return { success: false, error: 'Not found user' };
+            return { success: false, error: 'User not found' };
         }
 
         const { error } = await supabase.auth.updateUser({
@@ -55,7 +55,7 @@ export async function updatePassword(formData: FormData) {
             newData: { action: 'change_password', success: true }
         });
 
-        return { success: true, message: 'Đổi password successfully' };
+        return { success: true, message: 'Password updated successfully' };
     } catch (error: any) {
         return { success: false, error: error.message || 'An error occurred' };
     }

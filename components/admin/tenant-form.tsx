@@ -62,7 +62,7 @@ export function TenantForm({ mode, tenant, role, formMode }: TenantFormProps) {
             icon: Layers, 
             border: 'border-violet-600', 
             text: 'text-violet-400', 
-            desc: 'Phong cách SaaS công nghệ cao, hiện đại và đột phá.' 
+            desc: 'High-tech SaaS style, modern and groundbreaking.' 
         },
         { 
             id: 'corp_navy', 
@@ -70,7 +70,7 @@ export function TenantForm({ mode, tenant, role, formMode }: TenantFormProps) {
             icon: Shield, 
             border: 'border-blue-600', 
             text: 'text-blue-400', 
-            desc: 'Xanh Navy truyền thống, uy tín và chuyên nghiệp cho tập đoàn.' 
+            desc: 'Traditional Navy Blue, reputable and professional for corporations.' 
         },
         { 
             id: 'modern_tech', 
@@ -78,7 +78,7 @@ export function TenantForm({ mode, tenant, role, formMode }: TenantFormProps) {
             icon: Zap, 
             border: 'border-cyan-500', 
             text: 'text-cyan-400', 
-            desc: 'Thiết kế Neon Cyan công nghệ cao, tối giản và đột phá cho sản phẩm SaaS.' 
+            desc: 'Neon Cyan high-tech design, minimalist and breakthrough for SaaS products.' 
         },
         { 
             id: 'charity_green', 
@@ -86,7 +86,7 @@ export function TenantForm({ mode, tenant, role, formMode }: TenantFormProps) {
             icon: Leaf, 
             border: 'border-emerald-600', 
             text: 'text-emerald-400', 
-            desc: 'Thân thiện, tối ưu cho các organization xã hội, NGO bền vững.' 
+            desc: 'Friendly, optimized for social organizations and sustainable NGOs.' 
         },
         { 
             id: 'creative_amber', 
@@ -94,7 +94,7 @@ export function TenantForm({ mode, tenant, role, formMode }: TenantFormProps) {
             icon: Sunrise, 
             border: 'border-amber-600', 
             text: 'text-amber-400', 
-            desc: 'Tone màu ấm cúng, phù hợp cho doanh nghiệp dịch vụ và sáng tạo.' 
+            desc: 'Warm color tone, suitable for service and creative businesses.' 
         },
         { 
             id: 'minimal_white', 
@@ -102,7 +102,7 @@ export function TenantForm({ mode, tenant, role, formMode }: TenantFormProps) {
             icon: Eye, 
             border: 'border-slate-800', 
             text: 'text-slate-900', 
-            desc: 'Trắng/Đen tối giản maximum, centralized vào performance và content.' 
+            desc: 'Maximum black and white minimalist design, centralized on performance and content.' 
         },
     ];
 
@@ -134,10 +134,10 @@ export function TenantForm({ mode, tenant, role, formMode }: TenantFormProps) {
                 // @ts-ignore
                 toast.warning(result.warning, {
                     duration: 10000,
-                    description: 'Thông tin Workspace đã được save, nhưng section ánh xạ Edge Vercel cần được liên kết thủ công.'
+                    description: 'Workspace information has been saved, but the Edge Vercel mapping section needs to be linked manually.'
                 });
             } else {
-                toast.success(mode === 'create' ? 'Đã initialize Workspace mới successfully!' : 'Đã update thông tin Workspace!');
+                toast.success(mode === 'create' ? 'Initialized new Workspace successfully!' : 'Updated Workspace information successfully!');
             }
             router.push('/admin/tenants');
             router.refresh();
@@ -153,7 +153,7 @@ export function TenantForm({ mode, tenant, role, formMode }: TenantFormProps) {
                 <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-white">
                         <Building2 className="w-5 h-5 text-violet-400" />
-                        {mode === 'create' ? 'Registration Workspace mới' : 'Configuration SaaS Control Center'}
+                        {mode === 'create' ? 'Register New Workspace' : 'Configure SaaS Control Center'}
                     </CardTitle>
                 </CardHeader>
                 <CardContent className="text-slate-300">
@@ -164,7 +164,7 @@ export function TenantForm({ mode, tenant, role, formMode }: TenantFormProps) {
                                 className="flex items-center justify-center gap-2 py-2.5 text-xs md:text-sm font-bold rounded-lg data-[state=active]:bg-violet-600 data-[state=active]:text-white transition-all text-slate-400"
                             >
                                 <Building2 className="w-4 h-4" />
-                                <span>1. Cơ bản</span>
+                                <span>1. Basic</span>
                             </TabsTrigger>
                             <TabsTrigger 
                                 value="design" 
@@ -178,7 +178,7 @@ export function TenantForm({ mode, tenant, role, formMode }: TenantFormProps) {
                                 className="flex items-center justify-center gap-2 py-2.5 text-xs md:text-sm font-bold rounded-lg data-[state=active]:bg-violet-600 data-[state=active]:text-white transition-all text-slate-400"
                             >
                                 <Settings className="w-4 h-4" />
-                                <span>3. SaaS & Gói</span>
+                                <span>3. SaaS & Plans</span>
                             </TabsTrigger>
                             <TabsTrigger 
                                 value="security" 
@@ -190,14 +190,14 @@ export function TenantForm({ mode, tenant, role, formMode }: TenantFormProps) {
                         </TabsList>
 
                         {/* ======================================================
-                            TAB 1: THÔNG TIN CƠ BẢN
+                            TAB 1: BASIC INFORMATION
                            ====================================================== */}
                         <TabsContent value="basic" className="space-y-4 outline-none">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {/* Name Workspace */}
                                 <div className="space-y-1.5">
                                     <Label htmlFor="name" className="text-slate-200 font-bold">
-                                        Name Workspace / Enterprise <span className="text-red-500">*</span>
+                                        Workspace / Enterprise Name <span className="text-red-500">*</span>
                                     </Label>
                                     <div className="relative">
                                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
@@ -207,17 +207,17 @@ export function TenantForm({ mode, tenant, role, formMode }: TenantFormProps) {
                                             id="name"
                                             name="name"
                                             defaultValue={tenant?.name || ''}
-                                            placeholder="VD: Acme Corporation"
+                                            placeholder="e.g. Acme Corporation"
                                             required
                                             className="pl-9 bg-slate-950/50 border-white/10 text-white focus:ring-violet-500 placeholder:text-slate-600"
                                         />
                                     </div>
                                 </div>
 
-                                {/* Mô hình Active */}
+                                {/* Active Model */}
                                 <div className="space-y-1.5">
                                     <Label htmlFor="tenant_type" className="text-slate-200 font-bold">
-                                        Mô hình Active <span className="text-red-500">*</span>
+                                        Active Model <span className="text-red-500">*</span>
                                     </Label>
                                     <select
                                         id="tenant_type"
@@ -227,9 +227,9 @@ export function TenantForm({ mode, tenant, role, formMode }: TenantFormProps) {
                                         className="flex h-10 w-full rounded-md border border-white/10 bg-slate-950/50 px-3 py-2 text-sm text-white focus:ring-2 focus:ring-violet-500 focus:outline-none"
                                         required
                                     >
-                                        <option value="company" className="bg-slate-900">Enterprise / Công ty (SaaS B2B)</option>
-                                        <option value="ngo" className="bg-slate-900">Organization Phi lợi nhuận (NGO) / Cộng đồng</option>
-                                        <option value="tenant" className="bg-slate-900">Unit Tâm linh / Phật giáo branch</option>
+                                        <option value="company" className="bg-slate-900">Enterprise (SaaS B2B)</option>
+                                        <option value="ngo" className="bg-slate-900">Non-Profit Organization (NGO) / Community</option>
+                                        <option value="tenant" className="bg-slate-900">Monastic / Buddhist Branch</option>
                                     </select>
                                 </div>
                             </div>
@@ -237,7 +237,7 @@ export function TenantForm({ mode, tenant, role, formMode }: TenantFormProps) {
                             {/* Domain */}
                             <div className="space-y-1.5">
                                 <Label htmlFor="domain" className="text-slate-200 font-bold">
-                                    Name miền định danh (Domain) <span className="text-red-500">*</span>
+                                    Identifier Domain <span className="text-red-500">*</span>
                                 </Label>
                                 <div className="relative">
                                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
@@ -248,13 +248,13 @@ export function TenantForm({ mode, tenant, role, formMode }: TenantFormProps) {
                                         name="domain"
                                         defaultValue={tenant?.domain || ''}
                                         onChange={(e) => setDomainValue(e.target.value)}
-                                        placeholder="VD: acme.com hoặc localhost:3000"
+                                        placeholder="e.g. acme.com or localhost:3000"
                                         required
                                         className="pl-9 bg-slate-950/50 border-white/10 text-white focus:ring-violet-500 placeholder:text-slate-600"
                                     />
                                 </div>
                                 <p className="text-xs text-slate-500">
-                                    System phân giải đa name miền (Multi-domain Router) tự động nhận diện đúng branch dựa vào name miền này.
+                                    The multi-domain router automatically identifies the correct branch based on this domain.
                                 </p>
 
                                 {/* DNS Guidance */}
@@ -262,10 +262,10 @@ export function TenantForm({ mode, tenant, role, formMode }: TenantFormProps) {
                                     <Alert className="bg-violet-950/40 border-violet-500/30 text-violet-200 mt-2">
                                         <Info className="h-4 w-4 text-violet-400" />
                                         <AlertTitle className="text-violet-300 text-sm font-bold">
-                                            Configuration DNS cho Name miền riêng
+                                            Configure DNS for Custom Domain
                                         </AlertTitle>
                                         <AlertDescription className="text-violet-400/90 text-xs mt-1 space-y-2">
-                                            <p>Configuration records DNS của bạn để trỏ về cụm Server Edge SaaS:</p>
+                                            <p>Configure your DNS records to point to the Edge SaaS Server cluster:</p>
                                             <div className="bg-slate-950/60 p-3 rounded border border-white/10 font-mono text-[10px] space-y-1 text-slate-300">
                                                 <div className="flex justify-between items-center">
                                                     <span>Type: <strong>A</strong></span>
@@ -276,7 +276,7 @@ export function TenantForm({ mode, tenant, role, formMode }: TenantFormProps) {
                                                     <span>Value: <strong>cname.vercel-dns.com</strong></span>
                                                 </div>
                                             </div>
-                                            <p className="italic opacity-80">* System SaaS tự động cấp phát và gia hạn chứng chỉ SSL Let's Encrypt sau khi liên kết DNS hoàn tất.</p>
+                                            <p className="italic opacity-80">* The SaaS system automatically issues and renews Let's Encrypt SSL certificates after DNS linking is complete.</p>
                                         </AlertDescription>
                                     </Alert>
                                 )}
@@ -285,7 +285,7 @@ export function TenantForm({ mode, tenant, role, formMode }: TenantFormProps) {
                             {/* Subdomain */}
                             <div className="space-y-1.5">
                                 <Label htmlFor="subdomain" className="text-slate-200 font-bold">
-                                    Name miền phụ (Subdomain)
+                                    Subdomain
                                 </Label>
                                 <div className="relative">
                                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
@@ -295,7 +295,7 @@ export function TenantForm({ mode, tenant, role, formMode }: TenantFormProps) {
                                         id="subdomain"
                                         name="subdomain"
                                         defaultValue={tenant?.subdomain || ''}
-                                        placeholder="VD: acme"
+                                        placeholder="e.g. acme"
                                         className="pl-9 bg-slate-950/50 border-white/10 text-white focus:ring-violet-500 placeholder:text-slate-600"
                                     />
                                 </div>
@@ -309,14 +309,14 @@ export function TenantForm({ mode, tenant, role, formMode }: TenantFormProps) {
                                              <Globe className="w-4 h-4 text-violet-400" />
                                          </div>
                                          <Label className="text-base font-bold text-violet-300">
-                                             Tích hợp Định vị & Người Đại diện (Super Admin Only)
+                                             Location & Representative Integration (Super Admin Only)
                                          </Label>
                                      </div>
 
                                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                         <div className="space-y-1.5">
                                             <Label htmlFor="latitude" className="text-xs font-semibold text-slate-300">
-                                                Vĩ độ (Latitude)
+                                                Latitude
                                             </Label>
                                             <Input
                                                 id="latitude"
@@ -324,13 +324,13 @@ export function TenantForm({ mode, tenant, role, formMode }: TenantFormProps) {
                                                 type="number"
                                                 step="any"
                                                 defaultValue={tenant?.latitude || ''}
-                                                placeholder="VD: 10.7769"
+                                                placeholder="e.g. 10.7769"
                                                 className="bg-slate-950/50 border-white/10 text-white focus:ring-violet-500"
                                             />
                                         </div>
                                         <div className="space-y-1.5">
                                             <Label htmlFor="longitude" className="text-xs font-semibold text-slate-300">
-                                                Kinh độ (Longitude)
+                                                Longitude
                                             </Label>
                                             <Input
                                                 id="longitude"
@@ -338,7 +338,7 @@ export function TenantForm({ mode, tenant, role, formMode }: TenantFormProps) {
                                                 type="number"
                                                 step="any"
                                                 defaultValue={tenant?.longitude || ''}
-                                                placeholder="VD: 106.7009"
+                                                placeholder="e.g. 106.7009"
                                                 className="bg-slate-950/50 border-white/10 text-white focus:ring-violet-500"
                                             />
                                         </div>
@@ -348,26 +348,26 @@ export function TenantForm({ mode, tenant, role, formMode }: TenantFormProps) {
                                         <div className="space-y-1.5">
                                             <Label htmlFor="abbot" className="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
                                                 <User className="w-3.5 h-3.5 text-violet-400" />
-                                                Người đại diện / CEO điều hành
+                                                Representative / Executive CEO
                                             </Label>
                                             <Input
                                                 id="abbot"
                                                 name="abbot"
                                                 defaultValue={tenant?.contact_info?.abbot || ''}
-                                                placeholder="VD: Nguyễn Văn A"
+                                                placeholder="e.g. John Doe"
                                                 className="bg-slate-950/50 border-white/10 text-white focus:ring-violet-500"
                                             />
                                         </div>
                                         <div className="space-y-1.5">
                                             <Label htmlFor="history" className="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
                                                 <ScrollText className="w-3.5 h-3.5 text-violet-400" />
-                                                About tóm disable hoạt động
+                                                About / Operations History
                                             </Label>
                                             <Textarea
                                                 id="history"
                                                 name="history"
                                                 defaultValue={tenant?.contact_info?.history || ''}
-                                                placeholder="VD: Được thành lập với goal cung cấp giải pháp chuyển đổi số toàn diện..."
+                                                placeholder="e.g. Established to provide comprehensive digital transformation solutions..."
                                                 className="bg-slate-950/50 border-white/10 text-white focus:ring-violet-500 min-h-[80px] placeholder:text-slate-600"
                                             />
                                         </div>
@@ -377,16 +377,16 @@ export function TenantForm({ mode, tenant, role, formMode }: TenantFormProps) {
                         </TabsContent>
 
                         {/* ======================================================
-                            TAB 2: THIẾT KẾ & GIAO DIỆN
+                            TAB 2: DESIGN & INTERFACE
                            ====================================================== */}
                         <TabsContent value="design" className="space-y-5 outline-none">
                             <div className="space-y-1.5">
                                 <Label className="text-base font-bold flex items-center gap-2 text-white">
                                     <LayoutTemplate className="w-5 h-5 text-violet-400" />
-                                    Select Phong cách Thiết kế & Interface
+                                    Select Design Style & Interface
                                 </Label>
                                 <p className="text-xs text-slate-500">
-                                    System SaaS sẽ tự động điều chỉnh toàn bộ tông màu, CSS Variables và structure block (blocks) tương ứng.
+                                    The SaaS system will automatically adjust all color tones, CSS variables, and layout block structures accordingly.
                                 </p>
                             </div>
 
@@ -435,10 +435,10 @@ export function TenantForm({ mode, tenant, role, formMode }: TenantFormProps) {
                                     <div className="flex flex-col gap-1">
                                         <span className="text-sm font-bold text-violet-300 flex items-center gap-1.5">
                                             <Sliders className="w-4 h-4 text-violet-400" />
-                                            Reset layout Blocks default cho phong cách này
+                                            Reset layout to default blocks for this style
                                         </span>
                                         <span className="text-xs text-slate-400 leading-relaxed">
-                                            Chú ý: Tích select tùy select này sẽ **ghi đè và thiết lập lại toàn bộ layout blocks** trong database của branch thành bộ block template standard (ví dụ: `DEFAULT_TECH_BLOCKS` cho Cyberpunk Tech). Điều này giúp page web thay đổi sync ngay cả trong Visual Page Builder.
+                                            Note: Checking this option will **overwrite and reset all layout blocks** in the branch database to the template standards (e.g., `DEFAULT_TECH_BLOCKS` for Cyberpunk Tech). This updates the webpage structure immediately, even in the Visual Page Builder.
                                         </span>
                                     </div>
                                 </label>
@@ -446,17 +446,17 @@ export function TenantForm({ mode, tenant, role, formMode }: TenantFormProps) {
                         </TabsContent>
 
                         {/* ======================================================
-                            TAB 3: QUẢN TRỊ SAAS & GÓI DỊCH VỤ
+                            TAB 3: SAAS ADMINISTRATION & SERVICE PLANS
                            ====================================================== */}
                         <TabsContent value="saas" className="space-y-6 outline-none">
-                            {/* Gói Dịch vụ */}
+                            {/* Service Plans */}
                             <div className="space-y-3">
                                 <Label className="text-base font-bold flex items-center gap-2 text-white">
                                     <Zap className="w-5 h-5 text-violet-400" />
-                                    Gói Dịch vụ SaaS (Service Plans)
+                                    SaaS Service Plans
                                 </Label>
                                 <p className="text-xs text-slate-500">
-                                    Hạn mức tài nguyên và các quyền lợi đặc quyền của organization trên nền tảng.
+                                    Resource limits and platform privileges for the organization.
                                 </p>
 
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -471,10 +471,10 @@ export function TenantForm({ mode, tenant, role, formMode }: TenantFormProps) {
                                             }`}
                                     >
                                         <div className="flex items-center justify-between w-full">
-                                            <span className="font-bold text-white text-sm">Gói Cơ Bản (Free)</span>
+                                            <span className="font-bold text-white text-sm">Basic Plan (Free)</span>
                                             <Badge className="bg-slate-700 text-slate-200">Free</Badge>
                                         </div>
-                                        <p className="text-[11px] text-slate-400">Thích hợp thử nghiệm, bị giới hạn một số tính năng payment nâng cao.</p>
+                                        <p className="text-[11px] text-slate-400">Suitable for testing, restricted from advanced payment features.</p>
                                     </button>
 
                                     {/* Pro Plan */}
@@ -488,10 +488,10 @@ export function TenantForm({ mode, tenant, role, formMode }: TenantFormProps) {
                                             }`}
                                     >
                                         <div className="flex items-center justify-between w-full">
-                                            <span className="font-bold text-white text-sm">Gói Chuyên Nghiệp (Pro)</span>
+                                            <span className="font-bold text-white text-sm">Professional Plan (Pro)</span>
                                             <Badge className="bg-blue-600 text-white">Pro</Badge>
                                         </div>
-                                        <p className="text-[11px] text-slate-400">Đầy đủ tính năng, open khóa module finance và tuyển dụng.</p>
+                                        <p className="text-[11px] text-slate-400">Full features, unlocks finance and recruitment modules.</p>
                                     </button>
 
                                     {/* Enterprise Plan */}
@@ -505,27 +505,27 @@ export function TenantForm({ mode, tenant, role, formMode }: TenantFormProps) {
                                             }`}
                                     >
                                         <div className="flex items-center justify-between w-full">
-                                            <span className="font-bold text-white text-sm">Enterprise (Enterprise)</span>
+                                            <span className="font-bold text-white text-sm">Enterprise</span>
                                             <Badge className="bg-amber-500 text-slate-950 font-bold">Enterprise</Badge>
                                         </div>
-                                        <p className="text-[11px] text-slate-400">Toàn quyền sử dụng, activate warning SOC security dồn dập SOAR.</p>
+                                        <p className="text-[11px] text-slate-400">Full access, activates high-frequency SOAR SOC security alerts.</p>
                                     </button>
                                 </div>
                             </div>
 
-                            {/* Enable Disable Các Phân Hệ Module */}
+                            {/* Enable/Disable Modules */}
                             <div className="space-y-4 pt-2">
                                 <Label className="text-base font-bold flex items-center gap-2 text-white">
                                     <Sliders className="w-5 h-5 text-violet-400" />
-                                    Configuration Module & Phân hệ Tính năng
+                                    Module & Feature Configuration
                                 </Label>
 
                                 <div className="space-y-3">
                                     {/* Module News */}
                                     <div className="flex items-center justify-between p-3.5 bg-slate-950/40 rounded-xl border border-white/5">
                                         <div className="flex flex-col gap-1 pr-4">
-                                            <span className="text-sm font-bold text-white">1. Module News & Truyền thông</span>
-                                            <span className="text-xs text-slate-400">Cho phép đăng tải thông cáo, news hoạt động internally.</span>
+                                            <span className="text-sm font-bold text-white">1. News & Communications Module</span>
+                                            <span className="text-xs text-slate-400">Allows posting announcements and internal news.</span>
                                         </div>
                                         <Switch checked={moduleNews} onCheckedChange={setModuleNews} className="data-[state=checked]:bg-violet-600" />
                                     </div>
@@ -533,17 +533,17 @@ export function TenantForm({ mode, tenant, role, formMode }: TenantFormProps) {
                                     {/* Module Event */}
                                     <div className="flex items-center justify-between p-3.5 bg-slate-950/40 rounded-xl border border-white/5">
                                         <div className="flex flex-col gap-1 pr-4">
-                                            <span className="text-sm font-bold text-white">2. Module Event & Lịch hoạt động</span>
-                                            <span className="text-xs text-slate-400">Quản lý các event lớn, lịch hội thảo, lễ hội hoặc đào tạo internally.</span>
+                                            <span className="text-sm font-bold text-white">2. Events & Calendar Module</span>
+                                            <span className="text-xs text-slate-400">Manage major events, seminars, festivals, or internal training schedules.</span>
                                         </div>
                                         <Switch checked={moduleEvents} onCheckedChange={setModuleEvents} className="data-[state=checked]:bg-violet-600" />
                                     </div>
 
-                                    {/* Module Thư viện document */}
+                                    {/* Document Library Module */}
                                     <div className="flex items-center justify-between p-3.5 bg-slate-950/40 rounded-xl border border-white/5">
                                         <div className="flex flex-col gap-1 pr-4">
-                                            <span className="text-sm font-bold text-white">3. Module Thư viện Document & SOP</span>
-                                            <span className="text-xs text-slate-400">Quản lý và save trữ document hướng dẫn, quy trình SOP standard hóa.</span>
+                                            <span className="text-sm font-bold text-white">3. Document Library & SOP Module</span>
+                                            <span className="text-xs text-slate-400">Manage and store guidelines and standardized SOP processes.</span>
                                         </div>
                                         <Switch checked={moduleLibrary} onCheckedChange={setModuleLibrary} className="data-[state=checked]:bg-violet-600" />
                                     </div>
@@ -552,10 +552,10 @@ export function TenantForm({ mode, tenant, role, formMode }: TenantFormProps) {
                                     <div className="flex items-center justify-between p-3.5 bg-slate-950/40 rounded-xl border border-white/5">
                                         <div className="flex flex-col gap-1 pr-4">
                                             <span className="text-sm font-bold text-white flex items-center gap-1.5">
-                                                4. Module Finance & Transaction trực tuyến
+                                                4. Finance & Online Transactions Module
                                                 {planType === 'free' && <Badge variant="outline" className="text-[9px] border-amber-500/40 text-amber-500 bg-amber-500/5">Pro/Ent Only</Badge>}
                                             </span>
-                                            <span className="text-xs text-slate-400">Tích hợp cổng donation, payment hóa đơn hoặc dịch vụ.</span>
+                                            <span className="text-xs text-slate-400">Integrates donation gateway, bill payment, or services.</span>
                                         </div>
                                         <Switch 
                                             checked={moduleTransactions} 
@@ -565,14 +565,14 @@ export function TenantForm({ mode, tenant, role, formMode }: TenantFormProps) {
                                         />
                                     </div>
 
-                                    {/* Module Tuyển dụng */}
+                                    {/* Recruitment Module */}
                                     <div className="flex items-center justify-between p-3.5 bg-slate-950/40 rounded-xl border border-white/5">
                                         <div className="flex flex-col gap-1 pr-4">
                                             <span className="text-sm font-bold text-white flex items-center gap-1.5">
-                                                5. Phân hệ Tuyển dụng & Nhân sự (Jobs)
+                                                5. Recruitment & HR Module (Jobs)
                                                 {planType === 'free' && <Badge variant="outline" className="text-[9px] border-amber-500/40 text-amber-500 bg-amber-500/5">Pro/Ent Only</Badge>}
                                             </span>
-                                            <span className="text-xs text-slate-400">Open cổng đăng tuyển dụng và quản lý hồ sơ ứng viên directly.</span>
+                                            <span className="text-xs text-slate-400">Opens recruitment gateway and directly manages candidate profiles.</span>
                                         </div>
                                         <Switch 
                                             checked={moduleJobs} 
@@ -586,23 +586,23 @@ export function TenantForm({ mode, tenant, role, formMode }: TenantFormProps) {
                         </TabsContent>
 
                         {/* ======================================================
-                            TAB 4: BẢO MẬT & CẢNH BÁO SOC
+                            TAB 4: SECURITY & SOC ALERTS
                            ====================================================== */}
                         <TabsContent value="security" className="space-y-6 outline-none">
-                            {/* Status vòng đời */}
+                            {/* Lifecycle Status */}
                             <div className="space-y-3">
                                 <Label className="text-base font-bold flex items-center gap-2 text-white">
                                     <Shield className="w-5 h-5 text-violet-400" />
-                                    Status Active & Vòng đời Branch
+                                    Active Status & Branch Lifecycle
                                 </Label>
                                 <p className="text-xs text-slate-500">
-                                    Admin high-level có thể activate đình chỉ (suspend) toàn diện branch vi phạm security hoặc điều khoản.
+                                    High-level administrators can suspend any branch that violates security or terms of service.
                                 </p>
 
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div className="space-y-1.5">
                                         <Label htmlFor="lifecycle_status" className="text-xs font-semibold text-slate-300">
-                                            Select Status Vòng đời
+                                            Select Lifecycle Status
                                         </Label>
                                         <select
                                             id="lifecycle_status"
@@ -612,10 +612,10 @@ export function TenantForm({ mode, tenant, role, formMode }: TenantFormProps) {
                                             className="flex h-10 w-full rounded-md border border-white/10 bg-slate-950/50 px-3 py-2 text-sm text-white focus:ring-2 focus:ring-violet-500 focus:outline-none"
                                             required
                                         >
-                                            <option value="active" className="bg-slate-900">🟢 Active (Active bình thường)</option>
-                                            <option value="suspended" className="bg-slate-900">🔴 Suspended (Đình chỉ / Close băng)</option>
-                                            <option value="offboarding" className="bg-slate-900">🟡 Offboarding (Đang tháo gỡ)</option>
-                                            <option value="terminated" className="bg-slate-900">⚫ Terminated (Đã delete vĩnh viễn)</option>
+                                            <option value="active" className="bg-slate-900">Active (Normal Operations)</option>
+                                            <option value="suspended" className="bg-slate-900">Suspended (Locked / Frozen)</option>
+                                            <option value="offboarding" className="bg-slate-900">Offboarding (Removing)</option>
+                                            <option value="terminated" className="bg-slate-900">Terminated (Permanently Deleted)</option>
                                         </select>
                                     </div>
 
@@ -623,9 +623,9 @@ export function TenantForm({ mode, tenant, role, formMode }: TenantFormProps) {
                                         {lifecycleStatus === 'suspended' && (
                                             <Alert className="bg-red-950/40 border-red-500/30 text-red-200">
                                                 <AlertTriangle className="h-4 w-4 text-red-400" />
-                                                <AlertTitle className="text-red-300 text-xs font-bold uppercase tracking-wider">Warning Close băng</AlertTitle>
+                                                <AlertTitle className="text-red-300 text-xs font-bold uppercase tracking-wider">Suspension Warning</AlertTitle>
                                                 <AlertDescription className="text-red-400/90 text-[10px] leading-relaxed mt-1">
-                                                    Khi bị **Suspended**, toàn bộ cổng quản trị lẫn interface website public sẽ lập tức bị khóa. User truy cập sẽ nhận màn hình warning phong tỏa SOC Security.
+                                                    When **Suspended**, both the admin panel and public web interface will be locked immediately. Users will see a SOC Security block screen.
                                                 </AlertDescription>
                                             </Alert>
                                         )}
@@ -637,26 +637,26 @@ export function TenantForm({ mode, tenant, role, formMode }: TenantFormProps) {
                             <div className="space-y-4 pt-2 border-t border-white/5">
                                 <Label className="text-base font-bold flex items-center gap-2 text-white">
                                     <Bell className="w-5 h-5 text-violet-400" />
-                                    System Warning Security SOC (SOAR Link)
+                                    SOC Security Alerting System (SOAR Link)
                                 </Label>
                                 <p className="text-xs text-slate-500">
-                                    Tích hợp động Telegram Chat ID của branch. SOAR Active Defense Engine của system sẽ tự động submit warning xâm nhập và mã độc time thực về Telegram này.
+                                    Dynamically integrate the branch\'s Telegram Chat ID. The system\'s SOAR Active Defense Engine will automatically send real-time intrusion and malware alerts to this Telegram chat.
                                 </p>
 
                                 <div className="space-y-3">
                                     <div className="space-y-1.5">
                                         <Label htmlFor="telegram_chat_id" className="text-xs font-semibold text-slate-300">
-                                            Telegram Chat ID Chi Nhánh
+                                            Branch Telegram Chat ID
                                         </Label>
                                         <Input
                                             id="telegram_chat_id"
                                             value={telegramChatId}
                                             onChange={(e) => setTelegramChatId(e.target.value)}
-                                            placeholder="VD: 8617200830"
+                                            placeholder="e.g. 8617200830"
                                             className="bg-slate-950/50 border-white/10 text-white focus:ring-violet-500 placeholder:text-slate-600"
                                         />
                                         <p className="text-[10px] text-slate-500 italic">
-                                            * Để trống sẽ default submit về Telegram của Super Super Admin.
+                                            * Leave blank to default alerts to the Super Admin Telegram.
                                         </p>
                                     </div>
 
@@ -664,7 +664,7 @@ export function TenantForm({ mode, tenant, role, formMode }: TenantFormProps) {
                                         <Shield className="h-4 w-4 text-violet-400" />
                                         <AlertTitle className="text-slate-300 text-xs font-bold">SOAR Active Defense Engine</AlertTitle>
                                         <AlertDescription className="text-[11px] leading-relaxed">
-                                            Khi phát hiện hành vi xâm nhập trái phép (như SQL Injection, Cross-tenant violation) dồn dập từ một address IP (từ 3 lần/phút trở lên), SOAR sẽ tự động chuyển status branch sang **Suspended** và warning ngay lập tức về Telegram.
+                                            When detecting high-frequency unauthorized intrusion behavior (such as SQL Injection, Cross-tenant violation) from a single IP address (3+ times/minute), SOAR will automatically change the branch status to **Suspended** and issue an immediate Telegram alert.
                                         </AlertDescription>
                                     </Alert>
                                 </div>
@@ -676,7 +676,7 @@ export function TenantForm({ mode, tenant, role, formMode }: TenantFormProps) {
                     <div className="pt-6 flex gap-3 border-t border-white/5 mt-6">
                         <Button type="submit" disabled={loading} className="gap-2 bg-violet-600 hover:bg-violet-500 text-white font-bold px-6">
                             {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-                            {mode === 'create' ? 'Initialize Workspace' : 'Save configuration SaaS'}
+                            {mode === 'create' ? 'Initialize Workspace' : 'Save SaaS Configuration'}
                         </Button>
                         <Button
                             type="button"
@@ -696,28 +696,28 @@ export function TenantForm({ mode, tenant, role, formMode }: TenantFormProps) {
                 <CardHeader className="py-4">
                     <CardTitle className="text-sm font-bold flex items-center gap-2 text-violet-300">
                         <Bell className="w-4 h-4 text-violet-400" />
-                        Sync Dữ liệu Toàn system
+                        System-wide Data Sync
                     </CardTitle>
                 </CardHeader>
                 <CardContent className="py-2 pb-5 space-y-4 text-slate-400">
                     <p className="text-xs leading-relaxed italic text-slate-500">
-                        Save ý: Activate tùy select này để tự động update và nhân bản các notification chiến lược, văn bản đào tạo chung từ Tổng công ty sang branch mới lập.
+                        Note: Enable this option to automatically copy and sync strategic notices and general training documents from Headquarters to the newly created branch.
                     </p>
                     
                     <div className="flex flex-col gap-3">
                         <label className="flex items-center gap-3 p-3 bg-slate-950/30 rounded-lg border border-white/5 cursor-pointer hover:bg-white/5 transition-colors">
                             <input type="checkbox" name="sync_news" value="true" className="w-4 h-4 accent-violet-500 rounded cursor-pointer" />
                             <div className="flex flex-col">
-                                <span className="text-sm font-semibold text-slate-200">Sync News & Thông cáo chung toàn system</span>
-                                <span className="text-[10px] text-slate-500 italic">Tự động sao chép các news thuộc category được đánh dấu chia sẻ.</span>
+                                <span className="text-sm font-semibold text-slate-200">Sync System-wide News & Announcements</span>
+                                <span className="text-[10px] text-slate-500 italic">Automatically copy news marked as shared.</span>
                             </div>
                         </label>
 
                         <label className="flex items-center gap-3 p-3 bg-slate-950/30 rounded-lg border border-white/5 cursor-pointer hover:bg-white/5 transition-colors">
                             <input type="checkbox" name="sync_dharma" value="true" className="w-4 h-4 accent-violet-500 rounded cursor-pointer" />
                             <div className="flex flex-col">
-                                <span className="text-sm font-semibold text-slate-200">Sync Quy trình SOP & Hướng dẫn Nghiệp vụ</span>
-                                <span className="text-[10px] text-slate-500 italic">Áp dụng cho các document và quy standard hoạt động được sync tự động.</span>
+                                <span className="text-sm font-semibold text-slate-200">Sync SOP Procedures & Operational Guidelines</span>
+                                <span className="text-[10px] text-slate-500 italic">Applies to documents and operational standards that are automatically synced.</span>
                             </div>
                         </label>
                     </div>

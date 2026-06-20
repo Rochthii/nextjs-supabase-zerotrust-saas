@@ -40,7 +40,7 @@ export default async function TenantFeaturesPage({ params }: { params: Promise<{
                 <div>
                     <h1 className="text-3xl font-bold text-white tracking-tight flex items-center gap-2">
                         <Settings2 className="w-7 h-7 text-emerald-400" />
-                        Quản lý Module (Feature Toggles)
+                        Module Management (Feature Toggles)
                     </h1>
                     <p className="text-slate-400 mt-1 text-sm">{tenant.name}</p>
                 </div>
@@ -48,7 +48,7 @@ export default async function TenantFeaturesPage({ params }: { params: Promise<{
 
             <div className="bg-emerald-950/20 border border-emerald-500/20 rounded-xl p-4 flex gap-3 text-sm text-emerald-200">
                 <Settings2 className="w-5 h-5 shrink-0 text-emerald-400" />
-                <p>Tính năng này (Incident Response / Feature Toggles) allowed SOC và Administrator system <strong>enable/disable nóng</strong> các phân hệ chức năng cho từng tenant. Việc disable phân hệ sẽ hidden nó khỏi interface user và block các API related ngay lập tức.</p>
+                <p>This feature (Incident Response / Feature Toggles) allows SOC and system Administrators to <strong>hot enable/disable</strong> functional modules for each tenant. Disabling a module hides it from the user interface and immediately blocks all related APIs.</p>
             </div>
 
             <FeatureTogglesClient tenantId={id} initialConfig={modulesConfig} />

@@ -25,7 +25,7 @@ export default function PreviewSync({
 
     useEffect(() => {
         const handleMessage = (event: MessageEvent) => {
-            // Đảm bảo message đến từ cùng origin (hoặc check cụ thể nếu cần)
+            // Ensure the message comes from the same origin (or check specifically if needed)
             if (event.data?.type === 'LAYOUT_UPDATE') {
                 if (event.data.blocks) {
                     setBlocks(event.data.blocks);
@@ -38,13 +38,13 @@ export default function PreviewSync({
 
         window.addEventListener('message', handleMessage);
 
-        // Submit tín hiệu 'READY' cho parent biết iframe đã sẵn sàng nhận sync
+        // Submit 'READY' signal to let parent know the iframe is ready to receive sync
         window.parent.postMessage({ type: 'PREVIEW_READY' }, '*');
 
         return () => window.removeEventListener('message', handleMessage);
     }, []);
 
-    // Tính toán CSS Variables cho Theme (giống DynamicPageBuilder)
+    // Calculate CSS Variables for Theme (similar to DynamicPageBuilder)
     const tColors = themeColors || {};
     const settings = dataContext.settings || {};
 
@@ -101,14 +101,14 @@ export default function PreviewSync({
 
                 const Component = registryEntry.component;
 
-                // Nếu Component là một function bình thường (không phải memo/forwardRef phức tạp)
-                // Ta truyền toàn bộ dataContext vào
+                // If Component is a normal function (not a complex memo/forwardRef)
+                // We pass the entire dataContext in
                 return (
                     <Suspense key={block.id} fallback={<div className="animate-pulse bg-gray-100 w-full h-48" />}>
                         <Component
                             {...dataContext}
                             {...(block.settings || {})}
-                            isPreview={true} // Báo hiệu cho component biết đang ở chế độ view trước
+                            isPreview={true} // Signal to the component that it is in preview mode
                         />
                     </Suspense>
                 );

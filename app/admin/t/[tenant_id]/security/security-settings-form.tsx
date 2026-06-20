@@ -35,12 +35,12 @@ export function SecuritySettingsForm({ tenantId, initialConfig }: Props) {
             });
 
             if (result.success) {
-                toast.success('Đã save configuration security successfully');
+                toast.success('Security configurations saved successfully');
             } else {
-                toast.error(result.error || 'Error khi save configuration');
+                toast.error(result.error || 'Error saving security configurations');
             }
         } catch (error: any) {
-            toast.error(error.message || 'Error unknown');
+            toast.error(error.message || 'Unknown error occurred');
         } finally {
             setLoading(false);
         }
@@ -50,10 +50,10 @@ export function SecuritySettingsForm({ tenantId, initialConfig }: Props) {
         <Card className="bg-white/80 dark:bg-slate-900/60 backdrop-blur-xl border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden">
             <CardHeader className="bg-indigo-500/5 dark:bg-indigo-950/10 border-b border-indigo-100/50 dark:border-indigo-900/20 pb-4">
                 <CardTitle className="text-base font-bold flex items-center gap-2 text-indigo-700 dark:text-indigo-400">
-                    <Lock className="w-5 h-5" /> Settings Chính sách Security (Tenant Policy)
+                    <Lock className="w-5 h-5" /> Security Policy Settings (Tenant Policy)
                 </CardTitle>
                 <CardDescription className="text-slate-500 dark:text-slate-400 text-xs">
-                    Kiểm soát truy cập và validate security cho branch của bạn.
+                    Control access and security verification for your branch.
                 </CardDescription>
             </CardHeader>
             <CardContent className="p-6 space-y-8">
@@ -65,10 +65,10 @@ export function SecuritySettingsForm({ tenantId, initialConfig }: Props) {
                         </div>
                         <div>
                             <Label htmlFor="require-2fa" className="text-sm font-bold text-slate-800 dark:text-slate-200">
-                                Bắt buộc Validate 2 bước (2FA)
+                                Enforce Two-Factor Authentication (2FA)
                             </Label>
                             <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-md">
-                                Yêu cầu toàn bộ nhân sự phải thiết lập 2FA (TOTP/SMS) trước khi được phép truy cập vào page quản trị của branch.
+                                Enforce all staff to configure 2FA (TOTP/SMS) before gaining access to the branch administration panel.
                             </p>
                         </div>
                     </div>
@@ -90,14 +90,14 @@ export function SecuritySettingsForm({ tenantId, initialConfig }: Props) {
                         </div>
                         <div className="flex-1">
                             <Label htmlFor="ip-whitelist" className="text-sm font-bold text-slate-800 dark:text-slate-200">
-                                Giới hạn IP truy cập (IP Whitelist)
+                                Access IP Whitelist
                             </Label>
                             <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 mb-3 max-w-md">
-                                Chỉ allowed sign in từ danh sách address IP này (cách nhau bởi dấu phẩy). Bỏ trống để allowed all.
+                                Only allow sign-ins from this list of IP addresses (separated by commas). Leave empty to allow all.
                             </p>
                             <Input
                                 id="ip-whitelist"
-                                placeholder="Ví dụ: 192.168.1.1, 203.113.120.4"
+                                placeholder="e.g. 192.168.1.1, 203.113.120.4"
                                 value={ipWhitelist}
                                 onChange={(e) => setIpWhitelist(e.target.value)}
                                 className="font-mono text-sm bg-white dark:bg-slate-950"
@@ -114,14 +114,14 @@ export function SecuritySettingsForm({ tenantId, initialConfig }: Props) {
                         </div>
                         <div className="flex-1">
                             <Label htmlFor="telegram-chat-id" className="text-sm font-bold text-slate-800 dark:text-slate-200">
-                                Telegram Chat ID (Warning SOC Khhidden cấp)
+                                Telegram Chat ID (Emergency SOC Alerts)
                             </Label>
                             <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 mb-3 max-w-md">
-                                System SOC sẽ submit warning an ninh time thực và mã validate security khhidden cấp đến Chat ID này khi phát hiện incident.
+                                The SOC system will submit real-time security alerts and emergency validation codes to this Chat ID when incidents are detected.
                             </p>
                             <Input
                                 id="telegram-chat-id"
-                                placeholder="Ví dụ: -1002187654321 hoặc 540987654"
+                                placeholder="e.g. -1002187654321 or 540987654"
                                 value={telegramChatId}
                                 onChange={(e) => setTelegramChatId(e.target.value)}
                                 className="font-mono text-sm bg-white dark:bg-slate-950"
@@ -138,7 +138,7 @@ export function SecuritySettingsForm({ tenantId, initialConfig }: Props) {
                         className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-md shadow-indigo-500/20"
                     >
                         {loading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
-                        Save configuration
+                        Save Configuration
                     </Button>
                 </div>
             </CardContent>

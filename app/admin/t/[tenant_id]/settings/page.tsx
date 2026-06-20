@@ -14,7 +14,7 @@ export default async function SettingsPage({ params }: { params: Promise<{ tenan
 
     return (
         <div className="max-w-3xl">
-            <h1 className="text-3xl font-playfair font-bold mb-8">Settings system</h1>
+            <h1 className="text-3xl font-playfair font-bold mb-8">System Settings</h1>
 
             <SettingsForm initialSettings={settings} contextTenantId={tenant_id} isCompany={tenantConfig?.tenant_type !== 'tenant'} />
         </div>

@@ -27,7 +27,7 @@ export function SecurityReportButton({ tenantId = null }: SecurityReportButtonPr
             
             if (res.ok && data.success) {
                 setSuccess(true);
-                toast.success(data.message || 'Đã submit report qua Telegram successfully!');
+                toast.success(data.message || 'Security report submitted to Telegram successfully!');
                 // Reset status successfully sau 4s
                 setTimeout(() => setSuccess(false), 4000);
             } else {
@@ -35,7 +35,7 @@ export function SecurityReportButton({ tenantId = null }: SecurityReportButtonPr
             }
         } catch (err: any) {
             console.error('Failed to send telegram report:', err);
-            toast.error(`Error xuất report: ${err.message}`);
+            toast.error(`Error exporting report: ${err.message}`);
         } finally {
             setLoading(false);
         }
@@ -54,18 +54,18 @@ export function SecurityReportButton({ tenantId = null }: SecurityReportButtonPr
             {loading ? (
                 <>
                     <Loader2 className="w-4 h-4 animate-spin text-amber-400" />
-                    <span>Đang tạo report AI SOC...</span>
+                    <span>Generating AI SOC report...</span>
                 </>
             ) : success ? (
                 <>
                     <CheckCircle2 className="w-4 h-4 text-slate-950 animate-bounce" />
-                    <span>Đã submit qua Telegram!</span>
+                    <span>Submitted to Telegram!</span>
                 </>
             ) : (
                 <>
                     <FileText className="w-4 h-4 text-amber-400 group-hover:scale-110 transition-transform" />
                     <Send className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-                    <span>Xuất & Submit Report qua Telegram</span>
+                    <span>Export & Submit SOC Report to Telegram</span>
                 </>
             )}
         </button>

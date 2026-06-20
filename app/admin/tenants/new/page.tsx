@@ -21,8 +21,8 @@ export default async function NewTenantPage({ searchParams }: { searchParams: Pr
                     </Button>
                 </Link>
                 <div>
-                    <h1 className="text-3xl font-bold text-white tracking-tight">Initialize Workspace mới</h1>
-                    <p className="text-slate-400 mt-1 text-sm">Registration doanh nghiệp hoặc unit member mới vào system</p>
+                    <h1 className="text-3xl font-bold text-white tracking-tight">Create New Workspace</h1>
+                    <p className="text-slate-400 mt-1 text-sm">Register a new enterprise or organization workspace into the system</p>
                 </div>
             </div>
 

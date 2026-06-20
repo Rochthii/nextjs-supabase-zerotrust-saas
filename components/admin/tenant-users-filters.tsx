@@ -71,7 +71,7 @@ export function TenantUsersFilters({
             <div className="relative w-full md:w-96">
                 <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
                 <Input
-                    placeholder="Tìm theo name hoặc email..."
+                    placeholder="Search by name or email..."
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     className="pl-10 bg-slate-950/40 border-white/[0.08] text-white placeholder-slate-500 rounded-xl focus-visible:ring-amber-500/50 focus-visible:border-amber-500/50"
@@ -90,10 +90,10 @@ export function TenantUsersFilters({
                         }}
                     >
                         <SelectTrigger className="bg-slate-950/40 border-white/[0.08] text-slate-300 rounded-xl">
-                            <SelectValue placeholder="All cấp bậc" />
+                            <SelectValue placeholder="All Roles" />
                         </SelectTrigger>
                         <SelectContent className="bg-slate-950 border-white/[0.08] text-slate-300 rounded-xl">
-                            <SelectItem value="all">All cấp bậc</SelectItem>
+                            <SelectItem value="all">All Roles</SelectItem>
                             {roles.map((r) => (
                                 <SelectItem key={r.value} value={r.value}>
                                     {r.label}
@@ -119,7 +119,7 @@ export function TenantUsersFilters({
                         <SelectContent className="bg-slate-950 border-white/[0.08] text-slate-300 rounded-xl">
                             <SelectItem value="all">All status</SelectItem>
                             <SelectItem value="active">Active</SelectItem>
-                            <SelectItem value="banned">Bị khóa</SelectItem>
+                            <SelectItem value="banned">Banned</SelectItem>
                         </SelectContent>
                     </Select>
                 </div>
@@ -131,7 +131,7 @@ export function TenantUsersFilters({
                         className="text-slate-400 hover:text-white gap-1.5 px-3 rounded-xl hover:bg-white/5 h-10 w-full sm:w-auto shrink-0"
                     >
                         <X className="w-4 h-4" />
-                        Delete filter
+                        Clear Filters
                     </Button>
                 )}
             </div>

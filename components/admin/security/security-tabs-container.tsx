@@ -33,7 +33,7 @@ export function SecurityTabsContainer({
                     }`}
                 >
                     <Eye className="w-4 h-4" />
-                    <span>Giám sát SOC</span>
+                    <span>SOC Monitoring</span>
                 </button>
 
                 <button
@@ -45,7 +45,7 @@ export function SecurityTabsContainer({
                     }`}
                 >
                     <ShieldAlert className="w-4 h-4" />
-                    <span>Sự kiện An ninh</span>
+                    <span>Security Events</span>
                 </button>
                 
                 <button
@@ -57,7 +57,7 @@ export function SecurityTabsContainer({
                     }`}
                 >
                     <Lock className="w-4 h-4" />
-                    <span>Sổ cái WORM</span>
+                    <span>WORM Ledger</span>
                 </button>
 
                 <button
@@ -69,7 +69,7 @@ export function SecurityTabsContainer({
                     }`}
                 >
                     <BookOpen className="w-4 h-4" />
-                    <span>Tuân thủ SOC2/ISO</span>
+                    <span>SOC2/ISO Compliance</span>
                 </button>
                 
                 <button
@@ -81,7 +81,7 @@ export function SecurityTabsContainer({
                     }`}
                 >
                     <FlaskConical className="w-4 h-4" />
-                    <span>Giả lập Tấn công</span>
+                    <span>Attack Simulator</span>
                 </button>
             </div>
 

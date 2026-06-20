@@ -68,15 +68,15 @@ export default async function TenantAuditLogsPage({
                         <div>
                             <div className="flex items-center gap-3">
                                 <h1 className="text-3xl md:text-4xl font-black bg-gradient-to-r from-violet-200 via-violet-400 to-indigo-200 bg-clip-text text-transparent tracking-tight">
-                                    Nhật ký hoạt động
+                                    Activity Logs
                                 </h1>
                                 <span className="px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest bg-violet-500/10 border border-violet-500/20 text-violet-300">
-                                    Cô lập an toàn
+                                    Secure Isolation
                                 </span>
                             </div>
                             <p className="text-slate-400 mt-1.5 text-sm flex items-center gap-2">
                                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                                Giám sát time thực cho <strong>{tenantName}</strong> — Total: <strong className="text-violet-400 font-bold">{count}</strong> records
+                                Real-time monitoring for <strong>{tenantName}</strong> — Total: <strong className="text-violet-400 font-bold">{count}</strong> records
                             </p>
                         </div>
                     </div>
@@ -94,7 +94,7 @@ export default async function TenantAuditLogsPage({
                 <Card className="bg-slate-900/60 backdrop-blur-xl border border-slate-800 shadow-lg rounded-2xl">
                     <CardHeader className="pb-2">
                         <CardTitle className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
-                            Records found
+                            Records Found
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
@@ -104,7 +104,7 @@ export default async function TenantAuditLogsPage({
                 <Card className="bg-slate-900/60 backdrop-blur-xl border border-slate-800 shadow-lg rounded-2xl">
                     <CardHeader className="pb-2">
                         <CardTitle className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
-                            Page current
+                            Current Page
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
@@ -118,7 +118,7 @@ export default async function TenantAuditLogsPage({
                     <CardHeader className="pb-2 relative z-10">
                         <CardTitle className="text-[10px] font-bold text-emerald-500 uppercase tracking-wider flex items-center gap-1.5">
                             <History className="w-3.5 h-3.5" />
-                            Ghi nhận mới (CREATE)
+                            New Records (CREATE)
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="relative z-10">
@@ -132,7 +132,7 @@ export default async function TenantAuditLogsPage({
                     <CardHeader className="pb-2 relative z-10">
                         <CardTitle className="text-[10px] font-bold text-rose-500 uppercase tracking-wider flex items-center gap-1.5">
                             <ShieldAlert className="w-3.5 h-3.5" />
-                            Actions delete (DELETE)
+                            Deleted Actions (DELETE)
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="relative z-10">
@@ -151,22 +151,22 @@ export default async function TenantAuditLogsPage({
                             <thead className="bg-slate-950/50 border-b border-slate-800">
                                 <tr>
                                     <th className="px-5 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">
-                                        Time
+                                        Timestamp
                                     </th>
                                     <th className="px-5 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">
-                                        Định danh (User)
+                                        Identity (User)
                                     </th>
                                     <th className="px-5 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">
-                                        Hành động
+                                        Action
                                     </th>
                                     <th className="px-5 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">
-                                        Tài nguyên
+                                        Resource
                                     </th>
                                     <th className="px-5 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">
-                                        Dấu vết (IP/Agent)
+                                        Trace (IP/Agent)
                                     </th>
                                     <th className="px-5 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">
-                                        Details thay đổi
+                                        Change Details
                                     </th>
                                 </tr>
                             </thead>
@@ -177,7 +177,7 @@ export default async function TenantAuditLogsPage({
                                         return (
                                         <tr key={log.id} className={`hover:bg-slate-800/50 transition-colors ${isDelete ? 'bg-rose-950/20' : ''}`}>
                                             <td className="px-5 py-4 text-xs text-slate-400 font-mono">
-                                                {new Date(log.created_at).toLocaleString('vi-VN', {
+                                                {new Date(log.created_at).toLocaleString('en-US', {
                                                     timeZone: 'Asia/Ho_Chi_Minh',
                                                     day: '2-digit', month: '2-digit', year: 'numeric',
                                                     hour: '2-digit', minute: '2-digit', second: '2-digit'
@@ -200,7 +200,7 @@ export default async function TenantAuditLogsPage({
                                                     {log.action}
                                                 </span>
                                             </td>
-                                            <td className="px-5 py-4 text-sm text-slate-350 font-medium">
+                                            <td className="px-5 py-4 text-sm text-slate-355 font-medium">
                                                 <div>{getResourceLabel(log.resource)}</div>
                                                 <div className="text-[10px] text-slate-500 font-normal mt-1 flex items-center gap-1">
                                                     <span>🏢</span>
@@ -226,7 +226,7 @@ export default async function TenantAuditLogsPage({
                                 ) : (
                                     <tr>
                                         <td colSpan={6} className="px-5 py-12 text-center text-slate-450">
-                                            Not found dấu vết hoạt động nào.
+                                            No activity traces found.
                                         </td>
                                     </tr>
                                 )}
@@ -240,9 +240,9 @@ export default async function TenantAuditLogsPage({
             {totalPages > 1 && (
                 <div className="flex items-center justify-between bg-slate-900/60 backdrop-blur-xl px-5 py-4 rounded-2xl border border-slate-800 shadow-lg relative z-10">
                     <div className="text-sm text-slate-400 font-mono">
-                        Display từ <span className="font-bold text-white">{(page - 1) * limit + 1}</span> đến{' '}
-                        <span className="font-bold text-white">{Math.min(page * limit, count)}</span> trong total{' '}
-                        <span className="font-bold text-white">{count}</span> records
+                        Showing <span className="font-bold text-white">{(page - 1) * limit + 1}</span> to{' '}
+                        <span className="font-bold text-white">{Math.min(page * limit, count)}</span> of{' '}
+                        <span className="font-bold text-white">{count}</span> total records
                     </div>
                     <div className="flex gap-2 items-center">
                         <Link
@@ -255,7 +255,7 @@ export default async function TenantAuditLogsPage({
                             <ChevronLeft className="h-5 w-5" />
                         </Link>
                         <div className="flex items-center px-4 text-sm font-bold text-violet-400 font-mono">
-                            TRANG {page} / {totalPages}
+                            PAGE {page} / {totalPages}
                         </div>
                         <Link
                             href={{

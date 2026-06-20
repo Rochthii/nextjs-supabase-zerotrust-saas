@@ -7,12 +7,12 @@ import { getTenantConfig } from '@/lib/tenant';
 /**
  * /admin — Smart Router
  *
- * Đây là page HUB trung tâm của toàn bộ system admin.
- * None content — chỉ đọc role và redirect về đúng page:
+ * This is the central HUB page for the entire system administration.
+ * No content — only reads user role and redirects to the correct page:
  *
- * 1. Nếu domain current khớp với một branch và user có quyền -> vào luôn branch đó.
+ * 1. If the current domain matches a tenant and the user has permission -> enters that tenant directly.
  * 2. super_admin / admin / company_editor → /admin/select-tenant
- * 3. tenant_admin / tenant_editor / ... → /admin/t/[tenantId]/dashboard (page branch của last name)
+ * 3. tenant_admin / tenant_editor / ... → /admin/t/[tenantId]/dashboard (their tenant dashboard)
  * 4. volunteer → /collaborator/news-manager
  * 5. Not authenticated → /login
  */
@@ -34,7 +34,7 @@ export default async function AdminRootPage() {
     const currentTenant = await getTenantConfig(host);
 
     if (currentTenant) {
-        // Nếu là super_admin hoặc tenant_admin của đúng branch này
+        // If super_admin or tenant_admin of this tenant
         const isGlobal = role === 'super_admin' || role === 'admin' || role === 'company_editor';
         const isThisTenantAdmin = ctx?.tenantId === currentTenant.id;
 
@@ -48,14 +48,14 @@ export default async function AdminRootPage() {
         redirect('/admin/dashboard');
     }
 
-    // Tenant staff → vào thẳng page branch của last name
+    // Tenant staff -> enter tenant dashboard directly
     const tenantRoles = ['tenant_admin', 'tenant_editor', 'tenant_accountant', 'editor', 'moderator'];
     if (tenantRoles.includes(role) && ctx?.tenantId) {
         redirect(`/admin/t/${ctx.tenantId}/dashboard`);
     }
 
-    // Volunteer (Thực tập sinh/CTV) hoặc Viewer (Nhân viên) → Không được vào Admin
-    // Đẩy last name về page Web internally (Public site) để last name view document/news
+    // Volunteer or Viewer -> Not authorized to enter Admin
+    // Redirect them back to the internal web portal to view documents/news
     if (role === 'volunteer' || role === 'viewer') {
         if (currentTenant) {
             redirect('/');
@@ -66,6 +66,6 @@ export default async function AdminRootPage() {
         }
     }
 
-    // Fallback: not yet tenant được gán → về page select hoặc báo error
+    // Fallback: no tenant assigned yet -> redirect to select-tenant
     redirect('/admin/select-tenant');
 }

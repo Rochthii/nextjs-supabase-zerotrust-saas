@@ -27,7 +27,7 @@ export default async function EditTenantPage({ params }: { params: Promise<{ id:
                     </Button>
                 </Link>
                 <div>
-                    <h1 className="text-3xl font-bold text-white tracking-tight">Configuration Workspace</h1>
+                    <h1 className="text-3xl font-bold text-white tracking-tight">Workspace Configuration</h1>
                     <p className="text-slate-400 mt-1 text-sm">{tenant.name}</p>
                 </div>
             </div>
@@ -40,7 +40,7 @@ export default async function EditTenantPage({ params }: { params: Promise<{ id:
                     </div>
                     <div className="flex-1">
                         <p className="font-bold text-violet-200 text-sm">Settings Interface (Theme)</p>
-                        <p className="text-xs text-slate-400 mt-0.5">Tùy chỉnh hệ màu thương hiệu, hình nền và kiểu display cho cổng thông tin Web & App của unit</p>
+                        <p className="text-xs text-slate-400 mt-0.5">Customize brand color schemes, background images, and layout displays for the organization's Web & App portal</p>
                     </div>
                     <span className="text-violet-400 group-hover:translate-x-1.5 transition-transform font-bold font-mono">→</span>
                 </div>
@@ -53,8 +53,8 @@ export default async function EditTenantPage({ params }: { params: Promise<{ id:
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-emerald-400"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
                     </div>
                     <div className="flex-1">
-                        <p className="font-bold text-emerald-200 text-sm">Quản lý Modules (Feature Toggles)</p>
-                        <p className="text-xs text-slate-400 mt-0.5">Enable/disable nóng các phân hệ chức năng (News, Payment, Registration...) cho tenant này.</p>
+                        <p className="font-bold text-emerald-200 text-sm">Module Management (Feature Toggles)</p>
+                        <p className="text-xs text-slate-400 mt-0.5">Hot enable/disable functional modules (News, Payments, Registration...) for this tenant.</p>
                     </div>
                     <span className="text-emerald-400 group-hover:translate-x-1.5 transition-transform font-bold font-mono">→</span>
                 </div>
@@ -67,8 +67,8 @@ export default async function EditTenantPage({ params }: { params: Promise<{ id:
                         <HeartPulse className="h-5 w-5 text-rose-400" />
                     </div>
                     <div className="flex-1">
-                        <p className="font-bold text-rose-200 text-sm">Vòng đời &amp; Status</p>
-                        <p className="text-xs text-slate-400 mt-0.5">Đình chỉ hoặc activate lại workspace. Quản lý status hoạt động theo vòng đời tenant.</p>
+                        <p className="font-bold text-rose-200 text-sm">Lifecycle & Status</p>
+                        <p className="text-xs text-slate-400 mt-0.5">Suspend or reactivate workspace. Manage operational status along the tenant's lifecycle.</p>
                     </div>
                     <span className="text-rose-400 group-hover:translate-x-1.5 transition-transform font-bold font-mono">→</span>
                 </div>

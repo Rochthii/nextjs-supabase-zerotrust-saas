@@ -27,10 +27,10 @@ export function ThemeSettingsClient({ initialSettings, tenantId, tenantType }: T
                 if (result?.error) {
                     toast.error(result.error);
                 } else {
-                    toast.success('✅ Đã save interface successfully! Page web branch sẽ update ngay.');
+                    toast.success('Saved interface settings successfully! Branch web pages will update immediately.');
                 }
             } catch (error: any) {
-                toast.error(error.message || 'Đã xảy ra error unknown.');
+                toast.error(error.message || 'An unknown error occurred.');
             }
         });
     };
@@ -47,10 +47,10 @@ export function ThemeSettingsClient({ initialSettings, tenantId, tenantType }: T
                     disabled={isPending}
                     className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold px-8 h-11 border border-amber-500/20"
                 >
-                    {isPending ? '⏳ Đang save...' : '💾 Save interface'}
+                    {isPending ? 'Saving...' : 'Save Interface'}
                 </Button>
                 <p className="text-xs text-slate-400">
-                    Thay đổi sẽ có hiệu lực ngay sau khi save và cache được refresh.
+                    Changes will take effect immediately after saving and cache refresh.
                 </p>
             </div>
         </form>

@@ -32,17 +32,17 @@ export function ChangePasswordForm() {
             <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                     <Lock className="h-5 w-5" />
-                    Đổi password
+                    Change Password
                 </CardTitle>
                 <CardDescription>
-                    Đổi password sign in của bạn (Password mới phải có ít nhất 6 characters)
+                    Change your login password (new password must be at least 6 characters)
                 </CardDescription>
             </CardHeader>
             <CardContent>
                 <form id="change-password-form" action={handleSubmit} className="space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-2">
-                            <Label htmlFor="password">Password mới</Label>
+                            <Label htmlFor="password">New Password</Label>
                             <Input
                                 id="password"
                                 name="password"
@@ -53,7 +53,7 @@ export function ChangePasswordForm() {
                             />
                         </div>
                         <div className="space-y-2">
-                            <Label htmlFor="confirm_password">Confirm password</Label>
+                            <Label htmlFor="confirm_password">Confirm Password</Label>
                             <Input
                                 id="confirm_password"
                                 name="confirm_password"
@@ -69,10 +69,10 @@ export function ChangePasswordForm() {
                             {loading ? (
                                 <>
                                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                    Đang save...
+                                    Saving...
                                 </>
                             ) : (
-                                'Save password mới'
+                                'Save New Password'
                             )}
                         </Button>
                     </div>

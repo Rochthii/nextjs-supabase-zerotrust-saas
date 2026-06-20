@@ -70,7 +70,7 @@ export default async function AnalyticsPage() {
                         <div>
                             <h1 className="text-3xl md:text-4xl font-black bg-gradient-to-r from-indigo-200 via-indigo-400 to-indigo-200 bg-clip-text text-transparent tracking-tight">Security & Performance Analytics</h1>
                             <p className="text-slate-400 mt-2 text-xs italic">
-                                * Số liệu statistics on security events and tenant usage from system core.
+                                * Real-time metrics on security events and tenant usage from system core.
                             </p>
                         </div>
                     </div>

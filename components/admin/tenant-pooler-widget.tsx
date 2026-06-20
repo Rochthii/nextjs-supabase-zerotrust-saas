@@ -30,7 +30,7 @@ export function TenantPoolerWidget() {
                 const json = await res.json();
                 setData(json.stats || []);
             } else {
-                toast.error('Không thể tải dữ liệu Connection Pools');
+                toast.error('Failed to load Connection Pools data');
             }
         } catch (e) {
             toast.error('Error connect Connection Pooler API');
@@ -65,16 +65,16 @@ export function TenantPoolerWidget() {
                 const results = json.results;
                 if (results.blockedRequests > 0) {
                     toast.warning(
-                        `CHẶN THÀNH CÔNG! ${results.blockedRequests}/${results.totalRequests} truy vấn của Tenant bị block đứng. Tránh làm vắt kiệt connection pool chung.`
+                        `BLOCKED SUCCESSFUL! ${results.blockedRequests}/${results.totalRequests} tenant queries were throttled to prevent resource exhaustion of the shared connection pool.`
                     );
                 } else {
                     toast.success(
-                        `Đã submit ${results.successfulAcquires} truy vấn đồng thời. Tenant hoạt động bình thường trong hạn mức.`
+                        `Submitted ${results.successfulAcquires} concurrent queries. Tenant operates normally within limits.`
                     );
                 }
                 fetchPools();
             } else {
-                toast.error(json.error || 'Error giả lập flood');
+                toast.error(json.error || 'Failed to simulate connection flood');
             }
         } catch (e) {
             toast.error('Error connect API');
@@ -114,7 +114,7 @@ export function TenantPoolerWidget() {
                                 Tenant Connection Pooler (Supavisor Sandbox)
                             </CardTitle>
                             <CardDescription className="text-slate-400 text-xs">
-                                Ngăn ngừa vắt kiệt tài nguyên database dùng chung (Anti-Noisy Neighbor protection)
+                                Prevents shared database resource starvation (Anti-Noisy Neighbor protection)
                             </CardDescription>
                         </div>
                     </div>
@@ -127,7 +127,7 @@ export function TenantPoolerWidget() {
                         className="bg-slate-900 border-slate-800 hover:bg-slate-800 text-slate-300 gap-1.5"
                     >
                         <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
-                        Tải lại
+                        Refresh
                     </Button>
                 </div>
             </CardHeader>
@@ -137,7 +137,7 @@ export function TenantPoolerWidget() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {data.length === 0 ? (
                         <div className="col-span-full text-center py-6 text-slate-500 text-xs">
-                            Not found dữ liệu các branch active.
+                            No active tenant connections found.
                         </div>
                     ) : (
                         data.map((t) => {
@@ -203,7 +203,7 @@ export function TenantPoolerWidget() {
                                                 disabled={simulating}
                                                 className="text-slate-400 hover:text-slate-200 hover:bg-slate-800 text-[10px] h-7 flex-1 border border-slate-800 w-full"
                                             >
-                                                Truy vấn
+                                                Normal Query
                                             </Button>
                                             <Button 
                                                 size="sm" 
@@ -211,7 +211,7 @@ export function TenantPoolerWidget() {
                                                 disabled={simulating}
                                                 className="bg-rose-600 hover:bg-rose-500 text-white text-[10px] h-7 font-bold flex-1 border-none shadow w-full"
                                             >
-                                                Tấn công 429
+                                                Flood (Simulate 429)
                                             </Button>
                                         </div>
                                     </CardContent>
@@ -225,9 +225,9 @@ export function TenantPoolerWidget() {
                 <div className="p-4 bg-slate-900/60 rounded-2xl border border-slate-800/80 flex items-start gap-3">
                     <ShieldAlert className="w-5 h-5 text-amber-400 mt-0.5 shrink-0" />
                     <div>
-                        <h5 className="text-xs font-bold text-slate-300">Cơ chế tự động chống nghẽn tài nguyên chéo</h5>
+                        <h5 className="text-xs font-bold text-slate-300">Automatic Resource Contention Shield</h5>
                         <p className="text-[11px] text-slate-400 mt-1 leading-relaxed">
-                            Bằng cách áp dụng <strong>Tenant-scoped Connection Limits</strong>, system tự động giam lỏng lượng truy vấn của branch có lượng traffic đột biến (Noisy Neighbor) trong pool hạn mức riêng biệt (ví dụ: Free maximum 3 slots). Việc này cô lập hoàn toàn volume DB, đảm bảo các branch Pro/Enterprise luôn có sẵn Connection Pool trống để hoạt động trơn tru.
+                            By applying <strong>Tenant-scoped Connection Limits</strong>, the system automatically throttles concurrent queries from any tenant with excessive traffic (Noisy Neighbor) within their respective pool limits (e.g. Free plan max 3 slots). This prevents database resource exhaustion, ensuring Pro/Enterprise tenants retain stable, guaranteed pool access.
                         </p>
                     </div>
                 </div>

@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { ShieldAlert, Activity, Wifi, Shield } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
-import { vi } from 'date-fns/locale';
+import { enUS } from 'date-fns/locale';
 
 interface NoisyNeighborsWidgetProps {
     rateLimitHits: { ip_address: string; action_type: string; hit_count: number; last_hit: string }[];
@@ -18,7 +18,7 @@ export function NoisyNeighborsWidget({ rateLimitHits }: NoisyNeighborsWidgetProp
                     <Wifi className="w-5 h-5 text-amber-500" /> Noisy Neighbors (Rate Limits)
                 </CardTitle>
                 <CardDescription className="text-sm mt-1 text-slate-500">
-                    Top IP bị block/throttle nhiều nhất do spam API
+                    Top IP addresses blocked/throttled due to excessive API requests
                 </CardDescription>
             </CardHeader>
             
@@ -36,7 +36,7 @@ export function NoisyNeighborsWidget({ rateLimitHits }: NoisyNeighborsWidgetProp
                                         <div className="flex items-center gap-2 mt-1">
                                             <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 uppercase font-bold tracking-wider">{hit.action_type}</span>
                                             <span className="text-[10px] text-slate-400">
-                                                {formatDistanceToNow(new Date(hit.last_hit), { addSuffix: true, locale: vi })}
+                                                {formatDistanceToNow(new Date(hit.last_hit), { addSuffix: true, locale: enUS })}
                                             </span>
                                         </div>
                                     </div>
@@ -52,8 +52,8 @@ export function NoisyNeighborsWidget({ rateLimitHits }: NoisyNeighborsWidgetProp
                     ) : (
                         <div className="p-10 flex flex-col items-center justify-center text-slate-400">
                             <Shield className="w-12 h-12 mb-3 text-emerald-500/50" />
-                            <p className="text-sm font-bold text-slate-600 dark:text-slate-300">Không phát hiện Noisy Neighbor</p>
-                            <p className="text-xs mt-1 text-center">System active trong ngưỡng an toàn</p>
+                            <p className="text-sm font-bold text-slate-600 dark:text-slate-300">No Noisy Neighbors Detected</p>
+                            <p className="text-xs mt-1 text-center">The system is operating securely within safety limits</p>
                         </div>
                     )}
                 </div>

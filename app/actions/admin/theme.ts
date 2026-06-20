@@ -22,9 +22,9 @@ const THEME_KEYS = [
 ];
 
 /**
- * Update theme của một branch cụ thể.
- * SECURITY: Chỉ super_admin hoặc company_editor mới được gọi action này.
- * Branch Admin cụ thể KHÔNG có quyền thay đổi theme.
+ * Update theme of a specific branch.
+ * SECURITY: Only super_admin or company_editor can invoke this action.
+ * Specific branch admins do NOT have permission to change the theme.
  */
 export async function updateThemeSettings(formData: FormData) {
     try {
@@ -35,7 +35,7 @@ export async function updateThemeSettings(formData: FormData) {
         const role = await getUserRole();
         const allowedRoles = ['super_admin', 'company_editor'];
         if (!role || !allowedRoles.includes(role)) {
-            return { success: false, error: 'You are not authorized thay đổi interface (Theme). Only Super Admin mới được phép.' };
+            return { success: false, error: 'You are not authorized to modify the theme. Only Super Admin and Company Editor roles are allowed.' };
         }
 
         const tenant_id = formData.get('tenant_id') as string;
@@ -63,7 +63,7 @@ export async function updateThemeSettings(formData: FormData) {
                 .from('site_settings')
                 .upsert(settingsBatch, { onConflict: 'tenant_id,key' });
             if (batchError) {
-                return { success: false, error: `Error save theme: ${batchError.message}` };
+                return { success: false, error: `Error saving theme: ${batchError.message}` };
             }
         }
 
@@ -103,15 +103,15 @@ export async function updateThemeSettings(formData: FormData) {
             newData: { ...updates, _context: 'theme_update', tenant_id },
         });
 
-        // Invalidate cache của đúng tenant
-        // Bằng cách gọi revalidateTenantLayout, ta đảm bảo ADVANCED cache
-        // của mọi Domain và Subdomain của branch này đều bị dọn sạch.
+        // Invalidate cache for this tenant
+        // By calling revalidateTenantLayout, we clear ADVANCED cache
+        // for all domains and subdomains of this branch.
         await revalidateTenantLayout(tenant_id, ['site_settings']);
 
         return { success: true };
     } catch (error: any) {
         if (error.name === 'UnauthorizedError') {
-            return { success: false, error: 'Unauthorized truy cập.' };
+            return { success: false, error: 'Unauthorized access.' };
         }
         console.error('updateThemeSettings error:', error);
         return { success: false, error: error.message || 'An error occurred' };

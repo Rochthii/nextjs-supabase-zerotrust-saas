@@ -57,7 +57,7 @@ export async function getTenants(): Promise<{ tenants: Tenant[]; error?: string 
 
 export async function getTenant(id: string): Promise<{ tenant: Tenant | null; error?: string }> {
     // Only require read tenants permission OR the user is admin of this specific tenant
-    // However in admin context, if entering the page then middleware/requireTenantAccess has already block rồi
+    // However in admin context, if entering the page then middleware/requireTenantAccess has already blocked it
     const supabase = await createClient() as any;
 
     const { data, error } = await supabase
@@ -142,8 +142,8 @@ export async function createTenant(formData: FormData): Promise<{ success: boole
         const { data, error } = await supabase.from('tenants').insert(insertData).select().single();
 
         if (error) {
-            if (error.code === '23505') return { success: false, error: 'Name miền (domain) này already exists trên system.' };
-            return { success: false, error: 'Error tạo Workspace: ' + error.message };
+            if (error.code === '23505') return { success: false, error: 'This domain name already exists on the system.' };
+            return { success: false, error: 'Error creating Workspace: ' + error.message };
         }
 
         // --- CONTENT SYNC: MCAARON -> NEW TENANT ---
@@ -168,8 +168,8 @@ export async function createTenant(formData: FormData): Promise<{ success: boole
         // --- VERCEL API: AUTO MAP CUSTOM DOMAIN ---
         const vercelResult = await addDomainToVercel(data.domain);
         if (!vercelResult.success) {
-            console.warn(`[VercelAPI] Warning: Không thể tự động gắn domain lên Vercel: ${vercelResult.error}`);
-            warningMessage = `Name miền đã save vào database, nhưng không thể tự động configuration định tuyến Edge trên Vercel: ${vercelResult.error}. Bạn cần trỏ records DNS của name miền về Vercel để Edge có thể xác minh successfully.`;
+            console.warn(`[VercelAPI] Warning: Could not automatically map domain to Vercel: ${vercelResult.error}`);
+            warningMessage = `Domain name has been saved to the database, but edge routing could not be automatically configured on Vercel: ${vercelResult.error}. You need to point the domain's DNS records to Vercel for verification to succeed.`;
         }
 
         revalidatePath('/admin/tenants');
@@ -191,7 +191,7 @@ export async function updateTenant(id: string, formData: FormData): Promise<{ su
         if (isAiPortal) {
             const ctx = await getUserContext();
             if (ctx?.role !== 'super_admin') {
-                return { success: false, error: 'Only Super Admin mới có quyền thiết lập AI Portal.' };
+                return { success: false, error: 'Only Super Admin is authorized to configure an AI Portal.' };
             }
         }
 
@@ -258,8 +258,8 @@ export async function updateTenant(id: string, formData: FormData): Promise<{ su
             .eq('id', id);
 
         if (updateError) {
-            if (updateError.code === '23505') return { success: false, error: 'Name miền này đã is a duplicate.' };
-            return { success: false, error: 'Error update: ' + updateError.message };
+            if (updateError.code === '23505') return { success: false, error: 'This domain name is already a duplicate.' };
+            return { success: false, error: 'Error updating: ' + updateError.message };
         }
 
         // --- CONTENT SYNC: ON UPDATE ---
@@ -286,12 +286,12 @@ export async function updateTenant(id: string, formData: FormData): Promise<{ su
         if (oldData?.domain !== parsed.data.domain) {
             const vercelResult = await addDomainToVercel(parsed.data.domain);
             if (!vercelResult.success) {
-                console.warn(`[VercelAPI] Warning: Không thể tự động update domain mới lên Vercel: ${vercelResult.error}`);
-                warningMessage = `Name miền đã save vào database, nhưng không thể tự động configuration định tuyến Edge trên Vercel: ${vercelResult.error}. Hãy đảm bảo bạn đã configuration DNS trỏ về Vercel để system xác minh successfully.`;
+                console.warn(`[VercelAPI] Warning: Could not automatically update new domain on Vercel: ${vercelResult.error}`);
+                warningMessage = `Domain name saved to database, but edge routing could not be automatically configured on Vercel: ${vercelResult.error}. Please ensure you pointed the DNS to Vercel for verification to succeed.`;
             }
         }
 
-        // Revalidate tenant-config cache trên frontend cho cả domain cũ và mới
+        // Revalidate tenant-config cache on the frontend for both old and new domains
         if (oldData?.domain) {
             // @ts-ignore
             revalidateTag(CACHE_TAGS.system.tenantConfig(oldData.domain));
@@ -311,7 +311,7 @@ export async function updateTenant(id: string, formData: FormData): Promise<{ su
         revalidatePath('/admin/users');
         return { success: true, ...(warningMessage ? { warning: warningMessage } : {}) };
     } catch (err: any) {
-        return { success: false, error: err.message || 'Error server khi update Workspace' };
+        return { success: false, error: err.message || 'Server error updating Workspace' };
     }
 }
 
@@ -369,25 +369,25 @@ export async function syncGlobalContent(tenantId: string, modules: string[]): Pr
 // ------- DOMAIN MANAGEMENT -------
 
 export async function updateTenantDomain(tenantId: string, domain: string): Promise<{ success: boolean; error?: string }> {
-    // 1. Check quyền (phải là admin của tenant)
+    // 1. Check permissions (must be tenant admin)
     const { requireTenantAccess } = await import('@/lib/permissions');
     await requireTenantAccess(tenantId);
 
-    // 2. Validate domain format (bỏ http://, https://, trailing slashes)
+    // 2. Validate domain format (strip http://, https://, trailing slashes)
     let cleanDomain = domain.trim().toLowerCase();
     cleanDomain = cleanDomain.replace(/^(https?:\/\/)/, '');
-    cleanDomain = cleanDomain.replace(/\/.*$/, ''); // Bỏ các path phía sau
+    cleanDomain = cleanDomain.replace(/\/.*$/, ''); // Strip remaining path
 
     if (!cleanDomain) {
-        return { success: false, error: 'Name miền invalid.' };
+        return { success: false, error: 'Domain name is invalid.' };
     }
     if (cleanDomain.length < 3) {
-        return { success: false, error: 'Name miền quá ngắn.' };
+        return { success: false, error: 'Domain name is too short.' };
     }
 
     const supabase = await createClient() as any;
 
-    // 3. Check view domain này có is a duplicate với branch khác không
+    // 3. Check if this domain is duplicated with another branch
     const { data: existing } = await supabase
         .from('tenants')
         .select('id')
@@ -395,7 +395,7 @@ export async function updateTenantDomain(tenantId: string, domain: string): Prom
         .neq('id', tenantId);
 
     if (existing && existing.length > 0) {
-        return { success: false, error: 'Name miền này đã được sử dụng bởi một Workspace khác trên system.' };
+        return { success: false, error: 'This domain name is already used by another Workspace on the system.' };
     }
 
     const ctx = await getUserContext();
@@ -424,7 +424,7 @@ export async function updateTenantDomain(tenantId: string, domain: string): Prom
     // --- VERCEL API: AUTO MAP CUSTOM DOMAIN ---
     const vercelResult = await addDomainToVercel(cleanDomain);
     if (!vercelResult.success) {
-        console.warn(`[VercelAPI] Warning: Không thể tự động update domain mới lên Vercel: ${vercelResult.error}`);
+        console.warn(`[VercelAPI] Warning: Could not automatically update domain on Vercel: ${vercelResult.error}`);
     }
 
     revalidatePath('/admin/tenants');
@@ -462,7 +462,7 @@ export async function updateTenantTheme(
         if (error) return { success: false, error: error.message };
         if (count === 0) return { success: false, error: 'Unauthorized update (RLS)' };
 
-        // ── ĐỒNG BỘ SANG SITE_SETTINGS (Để tương thích ngược) ────────────────
+        // ── SYNC TO SITE_SETTINGS (For backward compatibility) ──────────────
         const settingsBatch = [
             { key: 'theme_color_primary', value: themeColors.primary, tenant_id: tenantId },
             { key: 'theme_color_secondary', value: themeColors.secondary, tenant_id: tenantId },
@@ -491,7 +491,7 @@ export async function updateTenantTheme(
             newData: { theme_colors: themeColors },
         });
 
-        // Revalidate các page related (Tiết kiệm CPU bằng targeted revalidation)
+        // Revalidate related pages (Save CPU using targeted revalidation)
         const { data: t } = await supabase.from('tenants').select('domain').eq('id', tenantId).single();
         if (t?.domain) {
             // @ts-ignore
@@ -565,9 +565,9 @@ export async function updateTenantLayoutStyle(
 }
 
 /**
- * Update configuration enable/disable từng mục menu Header (nav_visibility).
- * Mỗi key là name mục menu (home, about, news, dharma, documents, transaction, contact).
- * Value là boolean: true = display, false = hidden.
+ * Update configuration enabling/disabling header menu items (nav_visibility).
+ * Each key is a menu item name (home, about, news, dharma, documents, transaction, contact).
+ * Value is a boolean: true = display, false = hidden.
  */
 export async function updateNavVisibility(
     tenantId: string,
@@ -604,7 +604,7 @@ export async function updateNavVisibility(
             newData: { nav_visibility: navVisibility },
         });
 
-        // Revalidate tenant config cache để header update ngay
+        // Revalidate tenant config cache to update header immediately
         const { data: t } = await supabase.from('tenants').select('domain').eq('id', tenantId).single();
         if (t?.domain) {
             // @ts-ignore
@@ -616,7 +616,7 @@ export async function updateNavVisibility(
 
         return { success: true };
     } catch (err: any) {
-        return { success: false, error: err.message || 'Error server' };
+        return { success: false, error: err.message || 'Server error' };
     }
 }
 
@@ -628,7 +628,7 @@ export async function updateTenantConfig(formData: FormData): Promise<{ success:
         const id = formData.get('id') as string;
         const modulesConfigStr = formData.get('modules_config') as string;
         
-        if (!id || !modulesConfigStr) return { success: false, error: 'Thiếu dữ liệu' };
+        if (!id || !modulesConfigStr) return { success: false, error: 'Missing data' };
 
         await requireTenantAccess(id);
         const ctx = await getUserContext();
@@ -669,7 +669,7 @@ export async function updateTenantConfig(formData: FormData): Promise<{ success:
         
         return { success: true };
     } catch (err: any) {
-        return { success: false, error: err.message || 'Error server khi save modules config' };
+        return { success: false, error: err.message || 'Server error saving modules config' };
     }
 }
 
@@ -717,7 +717,7 @@ export async function suspendTenant(id: string): Promise<{ success: boolean; err
         revalidatePath(`/admin/tenants/${id}/lifecycle`);
         return { success: true };
     } catch (err: any) {
-        return { success: false, error: err.message || 'Error server khi đình chỉ tenant' };
+        return { success: false, error: err.message || 'Server error suspending tenant' };
     }
 }
 
@@ -763,19 +763,19 @@ export async function reactivateTenant(id: string): Promise<{ success: boolean; 
         revalidatePath(`/admin/tenants/${id}/lifecycle`);
         return { success: true };
     } catch (err: any) {
-        return { success: false, error: err.message || 'Error server khi activate lại tenant' };
+        return { success: false, error: err.message || 'Server error reactivating tenant' };
     }
 }
 
 /**
- * Update configuration security (2FA, IP Whitelist) của riêng một Tenant
+ * Update security configuration (2FA, IP Whitelist) of a specific Tenant
  */
 export async function updateTenantSecuritySettings(
     tenantId: string,
     settings: { require_2fa: boolean; ip_whitelist?: string; telegram_chat_id?: string }
 ): Promise<{ success: boolean; error?: string }> {
     try {
-        // Chốt block security cô lập đa tenant
+        // Enforce tenant isolation check
         await requireTenantAccess(tenantId);
 
         const ctx = await getUserContext();
@@ -795,7 +795,7 @@ export async function updateTenantSecuritySettings(
 
         const existingConfig = oldData?.modules_config || {};
         
-        // Update trường security_settings trong modules_config JSON
+        // Update the security_settings field inside the modules_config JSON
         const securitySettings = {
             require_2fa: settings.require_2fa,
             ip_whitelist: settings.ip_whitelist || '',
@@ -809,7 +809,7 @@ export async function updateTenantSecuritySettings(
             security_settings: securitySettings
         };
 
-        // Ghi xuống database
+        // Write to database
         const { error } = await supabase
             .from('tenants')
             .update({ modules_config: newConfig })
@@ -817,7 +817,7 @@ export async function updateTenantSecuritySettings(
 
         if (error) return { success: false, error: error.message };
 
-        // Ghi nhận log audit thay đổi configuration security
+        // Record audit log for security configuration change
         await createAuditLog({
             user,
             action: 'update',
@@ -827,11 +827,11 @@ export async function updateTenantSecuritySettings(
             newData: { modules_config: newConfig, security_action: 'update_settings' },
         });
 
-        // Delete cache và làm tươi page an ninh
+        // Clear cache and refresh the security page
         revalidatePath(`/admin/t/${tenantId}/security`);
         return { success: true };
     } catch (err: any) {
-        return { success: false, error: err.message || 'Error server khi update configuration security' };
+        return { success: false, error: err.message || 'Server error updating security settings' };
     }
 }
 

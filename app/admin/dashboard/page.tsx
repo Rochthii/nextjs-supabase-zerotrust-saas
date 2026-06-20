@@ -60,13 +60,13 @@ export default async function GlobalDashboardPage() {
                             <h1 className="text-3xl md:text-4xl font-black bg-gradient-to-r from-slate-100 via-indigo-100 to-slate-100 bg-clip-text text-transparent tracking-tight">Ecosystem Control Center</h1>
                         </div>
                         <p className="text-slate-400 max-w-2xl text-sm md:text-base leading-relaxed">
-                            Trung tâm giám sát toàn diện và điều phối tài nguyên time thực của nền tảng SaaS đa tenant (Multi-tenant). Chào mừng Super Admin!
+                            Comprehensive monitoring and real-time resource orchestration center for the multi-tenant SaaS platform. Welcome, Super Admin!
                         </p>
                     </div>
                     
                     <div className="flex items-center gap-3 bg-white/5 backdrop-blur-md px-6 py-3.5 rounded-2xl border border-white/10 shadow-inner">
                         <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
-                        <span className="text-xs font-black text-emerald-400 uppercase tracking-widest">HỆ THỐNG AN TOÀN & ỔN ĐỊNH</span>
+                        <span className="text-xs font-black text-emerald-400 uppercase tracking-widest">SYSTEM SECURE & STABLE</span>
                     </div>
                 </div>
             </div>
@@ -106,8 +106,8 @@ export default async function GlobalDashboardPage() {
                             <span className="px-2.5 py-1 rounded-full bg-emerald-500/10 text-[9px] text-emerald-500 font-bold uppercase tracking-wider">Secured</span>
                         </div>
                         <div>
-                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Cô lập database (RLS)</p>
-                            <h3 className="text-3xl font-black text-slate-900 dark:text-white mb-2">{securityStats.rlsCoverage?.percentage || 100}% an toàn</h3>
+                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Database Isolation (RLS)</p>
+                            <h3 className="text-3xl font-black text-slate-900 dark:text-white mb-2">{securityStats.rlsCoverage?.percentage || 100}% Secure</h3>
                             <p className="text-[10px] font-bold text-emerald-500 flex items-center gap-1">
                                 <CheckCircle2 className="w-3.5 h-3.5" /> ISO 27017 Compliant
                             </p>
@@ -123,13 +123,13 @@ export default async function GlobalDashboardPage() {
                             <div className="w-12 h-12 rounded-2xl bg-amber-500/10 flex items-center justify-center border border-amber-500/20 group-hover:scale-110 transition-transform">
                                 <Users className="w-6 h-6 text-amber-500 dark:text-amber-400" />
                             </div>
-                            <span className="px-2.5 py-1 rounded-full bg-slate-100 dark:bg-white/5 text-[9px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider">Nhân sự</span>
+                            <span className="px-2.5 py-1 rounded-full bg-slate-100 dark:bg-white/5 text-[9px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider">Team</span>
                         </div>
                         <div>
-                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Nhân sự mạng lưới</p>
-                            <h3 className="text-3xl font-black text-slate-900 dark:text-white mb-2">{stats.totalMembersCount} nhân sự</h3>
+                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Global Members</p>
+                            <h3 className="text-3xl font-black text-slate-900 dark:text-white mb-2">{stats.totalMembersCount} members</h3>
                             <div className="flex gap-2 text-[10px] font-bold text-slate-500 dark:text-slate-400">
-                                <span>Nhân viên & admin được cấp quyền</span>
+                                <span>Authorized staff & administrators</span>
                             </div>
                         </div>
                     </CardContent>
@@ -146,10 +146,10 @@ export default async function GlobalDashboardPage() {
                             <span className="px-2.5 py-1 rounded-full bg-rose-500/10 text-[9px] text-rose-500 font-bold uppercase tracking-wider">SOC Operations</span>
                         </div>
                         <div>
-                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Phiên hoạt động (24h)</p>
-                            <h3 className="text-3xl font-black text-slate-900 dark:text-white mb-2">{securityStats.last24hLogs} event</h3>
+                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Active Events (24h)</p>
+                            <h3 className="text-3xl font-black text-slate-900 dark:text-white mb-2">{securityStats.last24hLogs} events</h3>
                             <div className="flex gap-2 text-[10px] font-bold text-slate-500 dark:text-slate-400">
-                                <span>Tổng audit logs: {securityStats.totalAuditLogs}</span>
+                                <span>Total audit logs: {securityStats.totalAuditLogs}</span>
                             </div>
                         </div>
                     </CardContent>
@@ -176,9 +176,9 @@ export default async function GlobalDashboardPage() {
                             <div className="p-2 bg-indigo-500/20 text-indigo-500 rounded-xl shadow-[0_0_15px_rgba(99,102,241,0.2)] border border-indigo-500/30">
                                 <Building2 className="w-5 h-5" />
                             </div>
-                            Danh sách Workspace Mới khởi tạo
+                            Recently Provisioned Workspaces
                         </CardTitle>
-                        <CardDescription className="text-sm mt-1.5 text-slate-500 dark:text-slate-400">Danh sách các doanh nghiệp và chi nhánh được cấp phép gần nhất</CardDescription>
+                        <CardDescription className="text-sm mt-1.5 text-slate-500 dark:text-slate-400">List of recently created organizations and workspace branches</CardDescription>
                     </CardHeader>
                     <CardContent className="p-0 relative z-10">
                         <div className="overflow-x-auto">
@@ -186,8 +186,8 @@ export default async function GlobalDashboardPage() {
                                 <thead className="bg-slate-50/80 dark:bg-slate-900/80 text-slate-500 dark:text-slate-400 font-bold border-b border-slate-100 dark:border-slate-800 text-[11px] uppercase tracking-wider">
                                     <tr>
                                         <th className="px-8 py-5">Workspace</th>
-                                        <th className="px-8 py-5">Kiểu Web</th>
-                                        <th className="px-8 py-5 text-right">Plan / Trạng thái</th>
+                                        <th className="px-8 py-5">Template Type</th>
+                                        <th className="px-8 py-5 text-right">Plan / Status</th>
                                         <th className="px-8 py-5"></th>
                                     </tr>
                                 </thead>
@@ -225,14 +225,14 @@ export default async function GlobalDashboardPage() {
                                                     {tenant.tenant_type !== 'tenant' ? 'Enterprise SaaS' : 'Legacy Organization'}
                                                 </td>
                                                 <td className="px-8 py-5 text-right font-black text-indigo-600 dark:text-indigo-400 text-sm">
-                                                    Gói: {tenant.plan_type || 'Free'}
+                                                    Plan: {tenant.plan_type || 'Free'}
                                                 </td>
                                                 <td className="px-8 py-5 text-right">
                                                     <Link 
                                                         href={`/admin/t/${tenant.id}/dashboard`}
                                                         className="inline-flex items-center justify-center gap-2 text-xs text-indigo-600 dark:text-indigo-300 hover:text-white font-bold px-4 py-2.5 rounded-xl bg-indigo-500/10 hover:bg-indigo-600 transition-all border border-indigo-500/20 hover:shadow-[0_0_20px_rgba(99,102,241,0.4)] hover:border-indigo-500"
                                                     >
-                                                        Quản trị <ArrowRight className="w-4 h-4" />
+                                                        Manage <ArrowRight className="w-4 h-4" />
                                                     </Link>
                                                 </td>
                                             </tr>
@@ -244,7 +244,7 @@ export default async function GlobalDashboardPage() {
                         {stats.recentTenants.length === 0 && (
                             <div className="py-24 text-center text-slate-400">
                                 <Building2 className="w-16 h-16 mx-auto mb-4 opacity-20" />
-                                <p className="font-medium">Chưa có workspace nào được khởi tạo.</p>
+                                <p className="font-medium">No workspaces have been created yet.</p>
                             </div>
                         )}
                     </CardContent>
@@ -279,15 +279,15 @@ export default async function GlobalDashboardPage() {
                                 ) : (
                                     <div className="flex flex-col items-center justify-center py-10 text-center text-slate-500 dark:text-slate-400">
                                         <ShieldCheck className="w-12 h-12 text-emerald-500 mb-3 drop-shadow-[0_0_8px_rgba(16,185,129,0.4)]" />
-                                        <p className="text-sm font-bold text-emerald-500">Giám sát SOC An toàn</p>
-                                        <p className="text-[11px] text-slate-400 mt-1 max-w-[200px]">Không phát hiện hành vi xâm nhập hoặc bất thường trong 24h qua.</p>
+                                        <p className="text-sm font-bold text-emerald-500">SOC Monitoring Secure</p>
+                                        <p className="text-[11px] text-slate-400 mt-1 max-w-[200px]">No anomalous events or security violations detected in the past 24 hours.</p>
                                     </div>
                                 )}
 
                                 {/* Noisy Neighbors checking */}
                                 {securityStats.rateLimitHits && securityStats.rateLimitHits.length > 0 && (
                                     <div className="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800/80">
-                                        <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Giám sát Noisy Neighbors (Rate limits)</h4>
+                                        <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Noisy Neighbors Monitoring (Rate Limits)</h4>
                                         <div className="space-y-2">
                                             {securityStats.rateLimitHits.slice(0, 2).map((hit: any, index: number) => (
                                                 <div key={index} className="flex justify-between items-center text-xs p-2 rounded-lg bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-800">
@@ -310,7 +310,7 @@ export default async function GlobalDashboardPage() {
                          <div className="absolute -bottom-10 -right-10 w-48 h-48 bg-indigo-500/15 rounded-full blur-3xl pointer-events-none" />
                          <CardHeader className="p-8 pb-4 relative z-10">
                              <CardTitle className="text-xs font-black uppercase tracking-widest text-slate-400 flex items-center gap-2">
-                                <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" /> KIẾN TRÚC MẠNG LƯỚI SAAS
+                                <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" /> SAAS PLATFORM ARCHITECTURE
                              </CardTitle>
                          </CardHeader>
                          <CardContent className="p-8 pt-0 relative z-10">
@@ -318,10 +318,10 @@ export default async function GlobalDashboardPage() {
                                   <div className="flex justify-between items-end">
                                       <div>
                                           <p className="text-5xl font-black text-white">{stats.tenantsCount}</p>
-                                          <p className="text-sm font-medium text-slate-400 mt-1">Workspace Đa tenant</p>
+                                          <p className="text-sm font-medium text-slate-400 mt-1">Multi-tenant Workspaces</p>
                                       </div>
                                       <Link href="/admin/tenants" className="text-xs font-bold px-4 py-2.5 bg-white/10 hover:bg-white/20 rounded-xl transition-colors border border-white/10">
-                                          Configuration Workspace
+                                          Configure Workspaces
                                       </Link>
                                   </div>
                                   <div className="h-2.5 w-full bg-slate-800/80 rounded-full overflow-hidden shadow-inner border border-slate-800">
@@ -330,8 +330,8 @@ export default async function GlobalDashboardPage() {
                                       </div>
                                   </div>
                                   <div className="flex justify-between items-center text-[10px] text-slate-500 font-bold uppercase tracking-wider">
-                                     <span>Database RLS: Activate</span>
-                                     <span>Tenant Isolation: Cô lập 100%</span>
+                                     <span>Database RLS: Active</span>
+                                     <span>Tenant Isolation: 100% Isolated</span>
                                   </div>
                              </div>
                          </CardContent>

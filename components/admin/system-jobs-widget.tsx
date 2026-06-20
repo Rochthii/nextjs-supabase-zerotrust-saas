@@ -2,14 +2,13 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { createAdminClient } from '@/lib/supabase/server';
 import { formatDistanceToNow } from 'date-fns';
-import { vi } from 'date-fns/locale';
 import { CheckCircle2, XCircle, Clock, ServerCog } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export async function SystemJobsWidget() {
     const supabase = await createAdminClient();
     
-    // Lấy 5 lần chạy cron gần nhất
+    // Fetch the 5 most recent cron runs
     const { data: logs } = await (supabase as any)
         .from('cron_job_logs')
         .select('*')
@@ -22,10 +21,10 @@ export async function SystemJobsWidget() {
             
             <CardHeader className="p-7 pb-4 border-b border-slate-100 dark:border-slate-800 relative z-10">
                 <CardTitle className="text-lg font-black text-slate-900 dark:text-white flex items-center gap-2">
-                    Lịch sử Cron Jobs <ServerCog className="w-4 h-4 text-blue-500 dark:text-blue-400" />
+                    Cron Job History <ServerCog className="w-4 h-4 text-blue-500 dark:text-blue-400" />
                 </CardTitle>
                 <CardDescription className="text-sm mt-1 text-slate-500">
-                    Status các tác vụ nền tự động
+                    Status of automatic background tasks
                 </CardDescription>
             </CardHeader>
             <CardContent className="p-0 relative z-10">
@@ -47,7 +46,7 @@ export async function SystemJobsWidget() {
                                         {log.job_name}
                                     </p>
                                     <span className="text-[10px] text-slate-500 whitespace-nowrap">
-                                        {formatDistanceToNow(new Date(log.executed_at), { addSuffix: true, locale: vi })}
+                                        {formatDistanceToNow(new Date(log.executed_at), { addSuffix: true })}
                                     </span>
                                 </div>
                                 <p className={cn(
@@ -65,7 +64,7 @@ export async function SystemJobsWidget() {
                         </div>
                     )) : (
                         <div className="p-8 text-center text-slate-400">
-                            <p className="text-sm">No data yet cron job.</p>
+                            <p className="text-sm">No cron job logs found.</p>
                         </div>
                     )}
                 </div>

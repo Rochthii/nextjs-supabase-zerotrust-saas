@@ -5,8 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { formatDate } from 'date-fns';
-import { vi } from 'date-fns/locale';
-import { Users, UserPlus, Shield, ShieldAlert, ShieldCheck, UserX, Settings } from 'lucide-react';
+import { enUS } from 'date-fns/locale';
+import { Users, UserPlus, Shield, ShieldCheck, UserX, Settings } from 'lucide-react';
 import { TenantUsersFilters } from '@/components/admin/tenant-users-filters';
 
 interface TenantUsersPageProps {
@@ -17,15 +17,15 @@ interface TenantUsersPageProps {
 const ROLE_LABELS: Record<string, string> = {
     super_admin: 'System Admin',
     admin: 'IT Admin',
-    agency_admin: 'Đối tác Công nghệ',
-    company_editor: 'Trưởng phòng Truyền thông',
-    tenant_admin: 'Giám đốc Branch',
-    tenant_editor: 'Trưởng phòng Content',
-    tenant_accountant: 'Giám đốc Finance (CFO)',
-    moderator: 'Quản lý Cấp trung',
-    editor: 'Chuyên viên Content',
-    volunteer: 'Thực tập sinh / CTV',
-    viewer: 'Nhân viên (Staff)',
+    agency_admin: 'Technology Partner',
+    company_editor: 'Communications Manager',
+    tenant_admin: 'Branch Director',
+    tenant_editor: 'Content Manager',
+    tenant_accountant: 'Finance Director (CFO)',
+    moderator: 'Mid-level Manager',
+    editor: 'Content Specialist',
+    volunteer: 'Intern / Contributor',
+    viewer: 'Employee (Staff)',
 };
 
 // Role badge component
@@ -42,7 +42,7 @@ function StatusBadge({ isBanned }: { isBanned: boolean }) {
     if (isBanned) {
         return (
             <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-red-500/10 text-red-400 border border-red-500/25">
-                <UserX className="w-3.5 h-3.5" /> Bị khóa
+                <UserX className="w-3.5 h-3.5" /> Blocked
             </span>
         );
     }
@@ -61,7 +61,7 @@ export default async function TenantUsersPage(props: TenantUsersPageProps) {
     const roleFilter = (searchParams.role as string) || '';
     const statusFilter = (searchParams.status as string) || '';
 
-    // Check permission — tenant_admin hoặc admin mới được vào
+    // Check permission — tenant_admin or admin required
     await requirePermission('users', 'read');
     const ctx = await getUserContext();
 
@@ -76,7 +76,7 @@ export default async function TenantUsersPage(props: TenantUsersPageProps) {
         .single();
 
     if (!tenant) {
-        return <div className="p-8 text-red-500 font-bold">Not found organization.</div>;
+        return <div className="p-8 text-red-500 font-bold">Organization not found.</div>;
     }
 
     const isCompany = tenant.tenant_type !== 'tenant';
@@ -100,7 +100,7 @@ export default async function TenantUsersPage(props: TenantUsersPageProps) {
                     <div>
                         <h1 className="text-3xl font-bold text-white tracking-tight flex items-center gap-2">
                             <Users className="w-8 h-8 text-amber-400" />
-                            {isCompany ? 'Quản lý Nhân sự' : 'Quản lý Member'}
+                            {isCompany ? 'Personnel Management' : 'Member Management'}
                         </h1>
                         <p className="text-slate-400 mt-1 text-sm">{tenant.name}</p>
                     </div>
@@ -108,10 +108,10 @@ export default async function TenantUsersPage(props: TenantUsersPageProps) {
                 <Card className="border-white/[0.08] bg-slate-900/40 backdrop-blur-xl">
                     <CardContent className="p-12 text-center">
                         <Users className="w-16 h-16 text-slate-500 mx-auto mb-4" />
-                        <h3 className="text-lg font-bold text-white mb-2">Chưa có nhân sự nào</h3>
+                        <h3 className="text-lg font-bold text-white mb-2">No personnel registered yet</h3>
                         <p className="text-slate-400 text-sm max-w-md mx-auto">
-                            Organization này not yet account nhân viên nào được gán. 
-                            Contact administrator system để mời nhân sự vào organization.
+                            This organization does not have any assigned personnel accounts yet. 
+                            Contact the system administrator to invite staff members to the organization.
                         </p>
                     </CardContent>
                 </Card>
@@ -204,16 +204,16 @@ export default async function TenantUsersPage(props: TenantUsersPageProps) {
                 <div>
                     <h1 className="text-3xl font-bold text-white tracking-tight flex items-center gap-2">
                         <Users className="w-8 h-8 text-amber-400" />
-                        {isCompany ? 'Quản lý Nhân sự' : 'Quản lý Member'}
+                        {isCompany ? 'Personnel Management' : 'Member Management'}
                     </h1>
                     <p className="text-slate-400 mt-1 text-sm">
-                        {tenant.name} — Authorization RBAC theo role internally branch
+                        {tenant.name} — Internal RBAC authorization by branch role
                     </p>
                 </div>
                 <Button asChild className="bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-xl shadow-lg shadow-amber-900/20 px-5">
                     <Link href={`/admin/users/invite?tenant_id=${tenant_id}`}>
                         <UserPlus className="h-4 w-4 mr-2" />
-                        {isCompany ? 'Mời Nhân viên mới' : 'Add member'}
+                        {isCompany ? 'Invite New Employee' : 'Add Member'}
                     </Link>
                 </Button>
             </div>
@@ -223,7 +223,7 @@ export default async function TenantUsersPage(props: TenantUsersPageProps) {
                 <Card className="border-white/[0.08] bg-slate-900/40 backdrop-blur-xl rounded-2xl relative overflow-hidden">
                     <CardHeader className="pb-2">
                         <CardTitle className="text-[10px] font-black text-slate-500 uppercase tracking-widest">
-                            Tổng Nhân sự
+                            Total Personnel
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
@@ -246,7 +246,7 @@ export default async function TenantUsersPage(props: TenantUsersPageProps) {
                 <Card className="border-white/[0.08] bg-slate-900/40 backdrop-blur-xl rounded-2xl relative overflow-hidden">
                     <CardHeader className="pb-2">
                         <CardTitle className="text-[10px] font-black text-slate-500 uppercase tracking-widest">
-                            Biên tập & Content
+                            Editors & Content
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
@@ -258,7 +258,7 @@ export default async function TenantUsersPage(props: TenantUsersPageProps) {
                     <div className="absolute top-0 right-0 w-20 h-20 bg-red-500/10 rounded-full blur-2xl -mr-6 -mt-6" />
                     <CardHeader className="pb-2">
                         <CardTitle className="text-[10px] font-black text-red-400 uppercase tracking-widest">
-                            Account bị khóa
+                            Blocked Accounts
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
@@ -283,7 +283,7 @@ export default async function TenantUsersPage(props: TenantUsersPageProps) {
                             <thead>
                                 <tr className="border-b border-white/[0.08] bg-white/[0.02]">
                                     <th className="px-6 py-4 text-left text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-                                        {isCompany ? 'Nhân viên' : 'Member'}
+                                        {isCompany ? 'Employee' : 'Member'}
                                     </th>
                                     <th className="px-6 py-4 text-left text-[11px] font-bold text-slate-400 uppercase tracking-wider">
                                         Role (RBAC)
@@ -292,10 +292,10 @@ export default async function TenantUsersPage(props: TenantUsersPageProps) {
                                         Status
                                     </th>
                                     <th className="px-6 py-4 text-left text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-                                        Ngày tham gia
+                                        Join Date
                                     </th>
                                     <th className="px-6 py-4 text-left text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-                                        Sign in cuối
+                                        Last Sign In
                                     </th>
                                     <th className="px-6 py-4 text-right text-[11px] font-bold text-slate-400 uppercase tracking-wider">
                                         Actions
@@ -306,7 +306,7 @@ export default async function TenantUsersPage(props: TenantUsersPageProps) {
                                 {users.length === 0 ? (
                                     <tr>
                                         <td colSpan={6} className="px-6 py-12 text-center text-slate-500 italic">
-                                            Not found nhân sự phù hợp với bộ filter.
+                                            No personnel found matching the filters.
                                         </td>
                                     </tr>
                                 ) : (
@@ -319,7 +319,7 @@ export default async function TenantUsersPage(props: TenantUsersPageProps) {
                                                     </div>
                                                     <div>
                                                         <div className="text-sm font-bold text-white group-hover:text-amber-400 transition-colors">
-                                                            {user.full_name || 'Chưa đặt name'}
+                                                            {user.full_name || 'No name set'}
                                                         </div>
                                                         <div className="text-xs text-slate-500">{user.email}</div>
                                                     </div>
@@ -333,19 +333,19 @@ export default async function TenantUsersPage(props: TenantUsersPageProps) {
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-400 font-mono">
                                                 {user.created_at
-                                                    ? formatDate(new Date(user.created_at), 'dd/MM/yyyy', { locale: vi })
+                                                    ? formatDate(new Date(user.created_at), 'dd/MM/yyyy', { locale: enUS })
                                                     : '—'}
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-400 font-mono">
                                                 {user.last_sign_in_at
-                                                    ? formatDate(new Date(user.last_sign_in_at), 'dd/MM/yyyy HH:mm', { locale: vi })
+                                                    ? formatDate(new Date(user.last_sign_in_at), 'dd/MM/yyyy HH:mm', { locale: enUS })
                                                     : 'Not authenticated'}
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-right text-sm">
                                                 <Link href={`/admin/t/${tenant_id}/users/${user.id}`}>
                                                     <Button variant="outline" size="sm" className="border-white/10 text-slate-300 hover:bg-white/5 hover:text-white bg-slate-950/20 gap-1.5 rounded-xl">
                                                         <Settings className="w-3.5 h-3.5 text-amber-400" />
-                                                        Quản lý
+                                                        Manage
                                                     </Button>
                                                 </Link>
                                             </td>
@@ -363,10 +363,9 @@ export default async function TenantUsersPage(props: TenantUsersPageProps) {
                 <CardContent className="p-4 flex items-start gap-3">
                     <Shield className="w-5 h-5 text-amber-400 mt-0.5 shrink-0" />
                     <div className="text-sm text-amber-200/80 leading-relaxed">
-                        <span className="font-bold text-amber-400">Cơ chế authorization RBAC & Isolation:</span>{' '}
-                        Danh sách nhân sự display trên page này được cô lập hoàn toàn bởi Row-Level Security (RLS) ở tầng Database.
-                        Administrator của <strong>{tenant.name}</strong> chỉ có thể view và quản lý nhân viên thuộc organization mình,
-                        không thể truy cập nhân sự của các organization khác trên cùng nền tảng.
+                        <span className="font-bold text-amber-400">RBAC Authorization & Isolation:</span>{' '}
+                        The list of personnel displayed on this page is completely isolated using Row-Level Security (RLS) at the database layer.
+                        Administrators of <strong>{tenant.name}</strong> can only view and manage employees belonging to their own organization and cannot access the personnel of other organizations on the platform.
                     </div>
                 </CardContent>
             </Card>

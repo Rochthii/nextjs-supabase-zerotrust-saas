@@ -48,10 +48,10 @@ export function WormVaultWidget() {
                 const json = await res.json();
                 setData(json);
             } else {
-                toast.error('Không thể tải status WORM Vault');
+                toast.error('Failed to load WORM Vault status');
             }
         } catch (e) {
-            toast.error('Error connect WORM API');
+            toast.error('Error connecting to WORM API');
         } finally {
             setLoading(false);
         }
@@ -71,13 +71,13 @@ export function WormVaultWidget() {
             });
             const json = await res.json();
             if (res.ok) {
-                toast.success(`Sync successfully! Add mới ${json.syncedCount} records.`);
+                toast.success(`Sync completed! Added ${json.syncedCount} new records.`);
                 fetchStatus();
             } else {
-                toast.error(json.error || 'Error sync');
+                toast.error(json.error || 'Sync failed');
             }
         } catch (e) {
-            toast.error('Error sync WORM API');
+            toast.error('Error syncing WORM API');
         } finally {
             setSyncing(false);
         }
@@ -97,13 +97,13 @@ export function WormVaultWidget() {
             });
             const json = await res.json();
             if (res.ok) {
-                toast.warning(`Đã giả lập can thiệp Block #${index}! Please chạy lại check.`);
+                toast.warning(`Simulated tampering at Block #${index}! Please run audit verification.`);
                 fetchStatus();
             } else {
-                toast.error(json.error || 'Không thể can thiệp');
+                toast.error(json.error || 'Failed to simulate tampering');
             }
         } catch (e) {
-            toast.error('Error WORM API');
+            toast.error('Error simulating WORM API');
         } finally {
             setTampering(false);
         }
@@ -114,15 +114,15 @@ export function WormVaultWidget() {
         setIsAuditing(true);
         setAuditLog([]);
         
-        const timestamp = () => new Date().toLocaleTimeString('vi-VN');
+        const timestamp = () => new Date().toLocaleTimeString('en-US');
         
-        setAuditLog(prev => [...prev, `[${timestamp()}] 🚀 Bắt đầu thẩm định tính toàn vẹn chuỗi block WORM (ISO 27017)...`]);
+        setAuditLog(prev => [...prev, `[${timestamp()}] [START] Beginning WORM block chain cryptographic integrity audit (ISO 27017)...`]);
         await new Promise(r => setTimeout(r, 400));
         
-        setAuditLog(prev => [...prev, `[${timestamp()}] 📦 Phát hiện total: ${data.totalBlocks} block log audit.`]);
+        setAuditLog(prev => [...prev, `[${timestamp()}] [INFO] Detected total: ${data.totalBlocks} audited log blocks.`]);
         await new Promise(r => setTimeout(r, 300));
 
-        setAuditLog(prev => [...prev, `[${timestamp()}] 🔗 Đang nạp cơ chế đối chiếu mã băm SHA-256 liên kết...`]);
+        setAuditLog(prev => [...prev, `[${timestamp()}] [PROCESS] Loading SHA-256 cryptographic linkage verification...`]);
         await new Promise(r => setTimeout(r, 400));
 
         const scanBlocks = [...data.recentBlocks].reverse();
@@ -135,7 +135,7 @@ export function WormVaultWidget() {
             
             setAuditLog(prev => [
                 ...prev,
-                `[${timestamp()}] 🔍 Khảo sát Block #${block.index} [Hành động: ${block.action}]...`
+                `[${timestamp()}] [INSPECT] Scanning Block #${block.index} [Action: ${block.action}]...`
             ]);
             
             await new Promise(r => setTimeout(r, 120));
@@ -143,40 +143,40 @@ export function WormVaultWidget() {
             if (isBlockTampered) {
                 setAuditLog(prev => [
                     ...prev,
-                    `[${timestamp()}]   ❌ LỖI ĐỨT GÃY: prev_hash không khớp!`,
-                    `[${timestamp()}]   ⚠️ BLOCK HASH: ${block.hash.substring(0, 16)}...`,
-                    `[${timestamp()}]   🚨 Warning can thiệp vật lý tại Block #${block.index}!`
+                    `[${timestamp()}]   [FAIL] CRYPTOGRAPHIC LINK BROKEN: prev_hash mismatch!`,
+                    `[${timestamp()}]   [INFO] BLOCK HASH: ${block.hash.substring(0, 16)}...`,
+                    `[${timestamp()}]   [CRITICAL] Physical logs tampering alert at Block #${block.index}!`
                 ]);
                 setIsAuditing(false);
                 setAuditIndex(null);
-                toast.error(`Phát hiện xâm phạm system tại Block #${block.index}!`);
+                toast.error(`System tampering detected at Block #${block.index}!`);
                 return;
             } else {
                 setAuditLog(prev => [
                     ...prev,
-                    `[${timestamp()}]   ↳ Tính toán lại SHA-256: Khớp (Success)`,
-                    `[${timestamp()}]   ↳ prev_hash -> hash liên kết: Đạt (OK)`
+                    `[${timestamp()}]   ↳ SHA-256 Recomputation: Matched (Success)`,
+                    `[${timestamp()}]   ↳ prev_hash -> linked_hash: Verification Passed (OK)`
                 ]);
             }
         }
         
-        setAuditLog(prev => [...prev, `[${timestamp()}] 📊 Đang thực hiện check chéo (Cross-verification) với CSDL PostgreSQL...`]);
+        setAuditLog(prev => [...prev, `[${timestamp()}] [PROCESS] Performing database cross-verification with PostgreSQL...`]);
         await new Promise(r => setTimeout(r, 500));
         
         if (data.verification.mismatchedDbLogs.length > 0) {
             setAuditLog(prev => [
                 ...prev,
-                `[${timestamp()}]   ❌ THẤT BẠI: Phát hiện ${data.verification.mismatchedDbLogs.length} records bị mất hoặc edit đổi trái phép trong CSDL PostgreSQL!`,
-                `[${timestamp()}]   🚨 Mã định danh records bị ảnh hưởng: ${data.verification.mismatchedDbLogs.join(', ')}`
+                `[${timestamp()}]   [FAIL] Database mismatch: Detected ${data.verification.mismatchedDbLogs.length} missing or unauthorized modified records in PostgreSQL database!`,
+                `[${timestamp()}]   [WARNING] Affected log record identifiers: ${data.verification.mismatchedDbLogs.join(', ')}`
             ]);
-            toast.error('Phát hiện dấu vết log bị chỉnh edit trong CSDL!');
+            toast.error('Detected tampered log entries in PostgreSQL!');
         } else {
             setAuditLog(prev => [
                 ...prev,
-                `[${timestamp()}]   ↳ So khớp chéo 100% trường dữ liệu: Đạt (Consistent)`,
-                `[${timestamp()}] 🎉 HOÀN THÀNH: System sổ cái WORM an toàn tuyệt đối. Đạt tuân thủ ISO/IEC 27017!`
+                `[${timestamp()}]   ↳ 100% field cross-matching: Verified (Consistent)`,
+                `[${timestamp()}] [SUCCESS] WORM cryptographic ledger is secure. Fully compliant with ISO/IEC 27017 standards!`
             ]);
-            toast.success('Thẩm định hoàn tất: Sổ cái an toàn tuyệt đối!');
+            toast.success('Audit verification completed: Ledger is secure!');
         }
         
         setIsAuditing(false);
@@ -187,7 +187,7 @@ export function WormVaultWidget() {
         return (
             <Card className="bg-slate-900 border-slate-800 text-white animate-pulse">
                 <CardContent className="h-64 flex items-center justify-center">
-                    <div className="text-slate-400">Đang initialize WORM Vault Cryptographic Ledger...</div>
+                    <div className="text-slate-400">Initializing WORM Vault Cryptographic Ledger...</div>
                 </CardContent>
             </Card>
         );
@@ -212,7 +212,7 @@ export function WormVaultWidget() {
                                 WORM Cryptographic Vault (ISO 27017 CLD.12.4.1)
                             </CardTitle>
                             <CardDescription className="text-slate-400 text-xs">
-                                Save trữ Audit Log bất biến vật lý bằng Sổ cái Chuỗi mã hóa (Hash-Chained immutable ledger)
+                                Physically store immutable audit logs using a hash-chained ledger
                             </CardDescription>
                         </div>
                     </div>
@@ -226,7 +226,7 @@ export function WormVaultWidget() {
                             className="bg-slate-900 border-slate-800 hover:bg-slate-800 text-slate-300 gap-1.5"
                         >
                             <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
-                            Tải lại
+                            Reload
                         </Button>
                         <Button 
                             size="sm" 
@@ -244,7 +244,7 @@ export function WormVaultWidget() {
                             className="bg-amber-600 hover:bg-amber-500 text-white border-none shadow-md font-bold gap-1.5"
                         >
                             <Layers className={`w-3.5 h-3.5 ${isAuditing ? 'animate-pulse' : ''}`} />
-                            Thẩm định Sổ cái
+                            Audit Ledger
                         </Button>
                     </div>
                 </div>
@@ -290,17 +290,17 @@ export function WormVaultWidget() {
                             </div>
                             <h3 className="text-lg font-black mt-1">
                                 {isTampered 
-                                    ? 'PHÁT HIỆN SỰ CỐ XÂM PHẠM HỆ THỐNG!' 
+                                    ? 'CRITICAL SECURITY BREACH DETECTED!' 
                                     : isOutOfSync 
-                                        ? 'Cần sync với Database' 
-                                        : 'SỔ CÁI AN TOÀN TUYỆT ĐỐI'}
+                                        ? 'Database Sync Required' 
+                                        : 'LEDGER SECURE & INTEGRITY VERIFIED'}
                             </h3>
                             <p className="text-xs text-slate-400 mt-1">
                                 {isTampered 
-                                    ? `Mã hóa chuỗi bị đứt gãy tại Block Index: #${verification.tamperedBlockIndices.join(', #')}. Warning giả mạo log!`
+                                    ? `Cryptographic chain broken at Block Index: #${verification.tamperedBlockIndices.join(', #')}. Warning: Log tampering detected!`
                                     : isOutOfSync 
-                                        ? 'Database đang có audit logs mới chưa được save trữ vật lý vào WORM Sổ cái.'
-                                        : `All ${totalBlocks} block log đã được mã hóa chuỗi khóa, đối chiếu DB đạt khớp nối 100%.`}
+                                        ? 'Database contains new audit logs that have not yet been synchronized with the WORM ledger.'
+                                        : `All ${totalBlocks} log blocks are cryptographically chained and 100% synchronized with PostgreSQL.`}
                             </p>
                         </div>
                     </div>
@@ -311,11 +311,11 @@ export function WormVaultWidget() {
                             <div className="text-2xl font-black text-slate-100">{totalBlocks}</div>
                         </div>
                         <div>
-                            <div className="text-slate-500 font-bold uppercase tracking-wider text-[10px]">Sync cuối</div>
+                            <div className="text-slate-500 font-bold uppercase tracking-wider text-[10px]">Last Sync</div>
                             <div className="text-slate-200 mt-1 font-mono text-xs">
                                 {verification.lastSyncedAt 
-                                    ? new Date(verification.lastSyncedAt).toLocaleTimeString('vi-VN') 
-                                    : 'Chưa có'}
+                                    ? new Date(verification.lastSyncedAt).toLocaleTimeString('en-US') 
+                                    : 'Never'}
                             </div>
                         </div>
                     </div>
@@ -344,11 +344,11 @@ export function WormVaultWidget() {
                         <div className="space-y-1.5 max-h-[220px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-slate-800 scrollbar-track-transparent">
                             {auditLog.map((log, i) => {
                                 let logColor = 'text-amber-400/90';
-                                if (log.includes('❌') || log.includes('🚨') || log.includes('⚠️')) {
+                                if (log.includes('FAIL') || log.includes('CRITICAL') || log.includes('WARNING') || log.includes('broken')) {
                                     logColor = 'text-rose-400 font-bold';
-                                } else if (log.includes('🎉') || log.includes('Success') || log.includes('Consistent') || log.includes('OK')) {
+                                } else if (log.includes('SUCCESS') || log.includes('Success') || log.includes('Consistent') || log.includes('OK') || log.includes('Passed')) {
                                     logColor = 'text-emerald-400 font-bold';
-                                } else if (log.includes('🔍') || log.includes('🚀')) {
+                                } else if (log.includes('START') || log.includes('INFO') || log.includes('INSPECT') || log.includes('PROCESS')) {
                                     logColor = 'text-slate-200 font-bold';
                                 }
                                 return (
@@ -365,7 +365,7 @@ export function WormVaultWidget() {
                 <div>
                     <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-1.5">
                         <Layers className="w-3.5 h-3.5 text-slate-400" />
-                        Trực quan chuỗi mã hóa Blocks (15 dòng gần nhất)
+                        Cryptographic Block Chain Visualizer (Last 15 records)
                     </h4>
                     
                     <div className="space-y-3 max-h-80 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-slate-800 scrollbar-track-transparent">
@@ -398,7 +398,7 @@ export function WormVaultWidget() {
                                             <span className="text-slate-500 text-[10px]">•</span>
                                             <span className="text-slate-400 text-[10px] font-mono">{block.table_name || 'system'}</span>
                                             <span className="text-slate-500 text-[10px]">•</span>
-                                            <span className="text-slate-500 text-[10px]">{new Date(block.timestamp).toLocaleString('vi-VN')}</span>
+                                            <span className="text-slate-500 text-[10px]">{new Date(block.timestamp).toLocaleString('en-US')}</span>
                                         </div>
                                         
                                         {/* Cryptographic hashes */}
@@ -422,13 +422,13 @@ export function WormVaultWidget() {
                                         {blockTampered && (
                                             <div className="flex items-center gap-1 text-rose-400 text-xs font-bold bg-rose-500/10 px-2 py-1 rounded border border-rose-500/20 animate-pulse">
                                                 <AlertCircle className="w-3.5 h-3.5" />
-                                                Cancel liên kết
+                                                Chain Broken
                                             </div>
                                         )}
                                         {isBeingAudited && (
                                             <div className="flex items-center gap-1 text-amber-400 text-xs font-bold bg-amber-500/10 px-2.5 py-1 rounded border border-amber-500/20 animate-pulse">
                                                 <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-                                                Đang quét...
+                                                Scanning...
                                             </div>
                                         )}
                                         {!blockTampered && !isBeingAudited && (
@@ -439,7 +439,7 @@ export function WormVaultWidget() {
                                                 disabled={tampering || isAuditing}
                                                 className="text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 text-[10px] font-bold h-7 px-2.5 rounded-lg transition-all"
                                             >
-                                                Giả lập can thiệp
+                                                Simulate Tampering
                                             </Button>
                                         )}
                                     </div>
@@ -453,9 +453,9 @@ export function WormVaultWidget() {
                 <div className="p-4 bg-slate-900/60 rounded-2xl border border-slate-800/80 flex items-start gap-3">
                     <FileText className="w-5 h-5 text-emerald-400 mt-0.5 shrink-0" />
                     <div>
-                        <h5 className="text-xs font-bold text-slate-300">Tính năng An toàn & Ý nghĩa last namec thuật</h5>
+                        <h5 className="text-xs font-bold text-slate-300">Security Features & Academic Context</h5>
                         <p className="text-[11px] text-slate-400 mt-1 leading-relaxed">
-                            Bảo vệ tính bất biến bằng mật mã last namec (Cryptographic Hash-Chained ledger) kết hợp trigger chống chỉnh edit tại DB ngăn block maximum việc administrator tự chỉnh edit dấu vết. Cơ chế này đáp ứng nghiêm ngặt tiêu standard <strong>ISO/IEC 27017 CLD.12.4.1</strong> và chứng minh tính chống chối bỏ (Non-repudiation) cho Chương 4 của luận văn tốt nghiệp.
+                            Ensures immutability using a cryptographic hash-chained ledger integrated with database triggers to prevent even system administrators from modifying audit footprints. This mechanism strictly complies with the <strong>ISO/IEC 27017 CLD.12.4.1</strong> standard and demonstrates non-repudiation.
                         </p>
                     </div>
                 </div>

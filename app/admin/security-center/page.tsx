@@ -67,7 +67,7 @@ export default async function SecurityCenterPage({ searchParams }: { searchParam
         .limit(20);
 
     // ============================================================
-    // NODE 1: GIÁM SÁT SOC THỜI GIAN THỰC (REAL-TIME SOC)
+    // NODE 1: REAL-TIME SOC MONITORING (REAL-TIME SOC)
     // ============================================================
     const realtimeSocNode = (
         <div className="space-y-8">
@@ -77,7 +77,7 @@ export default async function SecurityCenterPage({ searchParams }: { searchParam
                     <CardContent className="p-6">
                         <div className="flex justify-between items-start">
                             <div>
-                                <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">Tổng truy cập (24h)</p>
+                                <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">Total Access (24h)</p>
                                 <h3 className="text-3xl font-black text-slate-800 dark:text-slate-100">{stats.last24hLogs}</h3>
                                 <p className="text-xs text-amber-600 dark:text-amber-400 mt-2 flex items-center font-semibold">
                                     <Activity className="w-3.5 h-3.5 mr-1" /> Logged actions
@@ -114,7 +114,7 @@ export default async function SecurityCenterPage({ searchParams }: { searchParam
                                 <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">Warning Anomaly</p>
                                 <h3 className="text-3xl font-black text-slate-800 dark:text-slate-100">{stats.anomalyAlerts.length}</h3>
                                 <p className="text-xs text-amber-600 dark:text-amber-400 mt-2 flex items-center font-semibold">
-                                    <AlertTriangle className="w-3.5 h-3.5 mr-1" /> Truy cập bất thường
+                                    <AlertTriangle className="w-3.5 h-3.5 mr-1" /> Anomalous Access
                                 </p>
                             </div>
                             <div className="w-12 h-12 rounded-2xl bg-amber-500/10 dark:bg-amber-500/20 border border-amber-500/20 flex items-center justify-center text-amber-600 dark:text-amber-400 group-hover:scale-110 transition-transform duration-300">
@@ -129,7 +129,7 @@ export default async function SecurityCenterPage({ searchParams }: { searchParam
                     <CardContent className="p-6 relative z-10">
                         <div className="flex justify-between items-start">
                             <div>
-                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Delete Dữ Liệu (24h)</p>
+                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Data Deletions (24h)</p>
                                 <h3 className="text-3xl font-black text-rose-400">{stats.deleteCount24h}</h3>
                                 <p className="text-xs text-slate-400 mt-2 flex items-center font-medium">
                                     <Lock className="w-3.5 h-3.5 mr-1 text-rose-400" /> High-risk actions
@@ -149,17 +149,17 @@ export default async function SecurityCenterPage({ searchParams }: { searchParam
                     <Card className="bg-white/80 dark:bg-slate-900/60 backdrop-blur-xl border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden">
                         <CardHeader className="bg-rose-500/5 dark:bg-rose-950/10 border-b border-rose-100/50 dark:border-rose-950/20 pb-4">
                             <CardTitle className="text-base font-bold flex items-center gap-2 text-rose-600 dark:text-rose-400">
-                                <ShieldAlert className="w-5 h-5 text-rose-500" /> Phát hiện truy cập bất thường
+                                <ShieldAlert className="w-5 h-5 text-rose-500" /> Anomalous Access Detection
                             </CardTitle>
                             <CardDescription className="text-slate-500 dark:text-slate-400 text-xs">
-                                Phát hiện hành vi rủi ro dựa trên chỉ số CRS time thực.
+                                Detect risk behaviors based on real-time CRS metrics.
                             </CardDescription>
                         </CardHeader>
                         <CardContent className="p-4">
                             {stats.anomalyAlerts.length === 0 ? (
                                 <div className="text-center py-8 text-emerald-600 dark:text-emerald-400 bg-emerald-500/5 dark:bg-emerald-950/10 rounded-xl border border-emerald-100 dark:border-emerald-900/20">
                                     <ShieldCheck className="w-10 h-10 mx-auto mb-2 opacity-50 text-emerald-500" />
-                                    <p className="font-semibold text-sm">Không phát hiện truy cập bất thường</p>
+                                    <p className="font-semibold text-sm">No anomalous access detected</p>
                                 </div>
                             ) : (
                                 <div className="space-y-3">
@@ -201,7 +201,7 @@ export default async function SecurityCenterPage({ searchParams }: { searchParam
                     <Card className="bg-white/80 dark:bg-slate-900/60 backdrop-blur-xl border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden">
                         <CardHeader className="pb-4 border-b border-slate-100 dark:border-slate-800">
                             <CardTitle className="text-base font-bold flex items-center gap-2 text-slate-850 dark:text-slate-100">
-                                <Users className="w-5 h-5 text-amber-500" /> Top User Hành vi (24h)
+                                <Users className="w-5 h-5 text-amber-500" /> Top Active Users (24h)
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="p-0">
@@ -239,9 +239,9 @@ export default async function SecurityCenterPage({ searchParams }: { searchParam
                             <div className="flex justify-between items-center gap-4">
                                 <div>
                                     <CardTitle className="text-base font-bold flex items-center gap-2 text-slate-850 dark:text-slate-100">
-                                        <Server className="w-5 h-5 text-amber-500" /> Theo dõi hành vi details
+                                        <Server className="w-5 h-5 text-amber-500" /> Behavior Tracking Details
                                     </CardTitle>
-                                    <CardDescription className="text-slate-500 dark:text-slate-400 text-xs">Truy xuất {count} records audit log không thể giả mạo (Immutable)</CardDescription>
+                                    <CardDescription className="text-slate-500 dark:text-slate-400 text-xs">Retrieve {count} immutable audit log records</CardDescription>
                                 </div>
                                 <Link href="/admin/audit-logs" className="text-xs text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 font-bold flex items-center gap-1 bg-amber-500/10 dark:bg-amber-500/20 border border-amber-500/20 px-3 py-1.5 rounded-xl transition-all shadow-sm">
                                     Full Logs <ArrowRight className="w-4 h-4 text-amber-500" />
@@ -258,17 +258,17 @@ export default async function SecurityCenterPage({ searchParams }: { searchParam
                                     <thead className="bg-slate-50/80 dark:bg-slate-900/40 text-slate-550 dark:text-slate-400 font-bold text-xs uppercase tracking-wider border-b border-slate-100 dark:border-slate-800">
                                         <tr>
                                             <th className="px-6 py-4">Time</th>
-                                            <th className="px-6 py-4">Nhân sự</th>
-                                            <th className="px-6 py-4">Hành động</th>
-                                            <th className="px-6 py-4">Bảng dữ liệu</th>
-                                            <th className="px-6 py-4">Rủi ro (CRS)</th>
+                                            <th className="px-6 py-4">User / Identity</th>
+                                            <th className="px-6 py-4">Action</th>
+                                            <th className="px-6 py-4">Data Table</th>
+                                            <th className="px-6 py-4">Risk (CRS)</th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60">
                                         {(logs || []).map((log: any) => (
                                             <tr key={log.id} className="hover:bg-slate-50/30 dark:hover:bg-slate-800/30 transition-colors">
                                                 <td className="px-6 py-3 whitespace-nowrap text-slate-500 dark:text-slate-450 font-mono text-[11px]">
-                                                    {new Date(log.created_at).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' })}
+                                                    {new Date(log.created_at).toLocaleString('en-US')}
                                                 </td>
                                                 <td className="px-6 py-3">
                                                     <div className="font-semibold text-slate-900 dark:text-slate-100 truncate max-w-[150px]">{log.user_email || 'System'}</div>
@@ -300,8 +300,8 @@ export default async function SecurityCenterPage({ searchParams }: { searchParam
                                         ))}
                                         {logs?.length === 0 && (
                                             <tr>
-                                                <td colSpan={4} className="px-6 py-12 text-center text-slate-400 dark:text-slate-500">
-                                                    Not found records nào khớp với điều kiện filter.
+                                                <td colSpan={5} className="px-6 py-12 text-center text-slate-400 dark:text-slate-500">
+                                                    No records found matching the filter criteria.
                                                 </td>
                                             </tr>
                                         )}
@@ -316,7 +316,7 @@ export default async function SecurityCenterPage({ searchParams }: { searchParam
     );
     
     // ============================================================
-    // NODE 1.5: SỰ KIỆN AN NINH (SECURITY EVENTS WIDGET)
+    // NODE 1.5: SECURITY EVENTS (SECURITY EVENTS WIDGET)
     // ============================================================
     const securityEventsNode = (
         <SecurityEventsWidget events={(highRiskLogs || []).map((x: any) => ({
@@ -333,7 +333,7 @@ export default async function SecurityCenterPage({ searchParams }: { searchParam
     );
 
     // ============================================================
-    // NODE 2: SỔ CÁI BẤT BIẾN (WORM VAULT)
+    // NODE 2: IMMUTABLE CRYPTOGRAPHIC LEDGER (WORM VAULT)
     // ============================================================
     const wormVaultNode = (
         <div className="animate-in fade-in duration-300">
@@ -342,7 +342,7 @@ export default async function SecurityCenterPage({ searchParams }: { searchParam
     );
 
     // ============================================================
-    // NODE 3: PHÒNG THÍ NGHIỆM GIẢ LẬP & SANDBOX
+    // NODE 3: SIMULATOR LABORATORY & SANDBOX
     // ============================================================
     const sandboxNode = (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -374,7 +374,7 @@ export default async function SecurityCenterPage({ searchParams }: { searchParam
                         <h1 className="text-3xl font-playfair font-black tracking-tight bg-gradient-to-r from-amber-200 via-amber-400 to-amber-200 bg-clip-text text-transparent">Security Operations Center</h1>
                     </div>
                     <p className="text-slate-400 max-w-2xl text-sm">
-                        Trung tâm Giám sát An toàn Thông tin (SOC). Cung cấp khả năng theo dõi hành vi, phát hiện truy cập bất thường và bảo vệ dữ liệu bằng RLS.
+                        Security Operations Center (SOC). Provides behavioral monitoring, anomalous access detection, and data protection via RLS.
                     </p>
                 </div>
                 <div className="relative z-10 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
@@ -390,7 +390,7 @@ export default async function SecurityCenterPage({ searchParams }: { searchParam
                             />
                         </div>
                         <div className="text-center">
-                            <div className="text-[9px] text-amber-400/70 font-bold uppercase tracking-widest">📱 Quét để tấn công</div>
+                            <div className="text-[9px] text-amber-400/70 font-bold uppercase tracking-widest">Scan to Attack</div>
                             <div className="text-[11px] font-black text-amber-400 leading-tight">Threat Simulator</div>
                             <div className="text-[8px] text-slate-500 font-mono mt-0.5">{host}/council</div>
                         </div>

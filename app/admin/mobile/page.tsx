@@ -13,26 +13,26 @@ export default function MobileManagementPage() {
         <div className="space-y-6">
             <div className="flex items-center justify-between">
                 <div>
-                    <h1 className="text-3xl font-playfair font-bold">Quản lý App Mobile</h1>
+                    <h1 className="text-3xl font-playfair font-bold">Mobile App Management</h1>
                     <p className="text-gray-500 mt-1">
-                        Configuration và tinh chỉnh các tính năng cốt lõi của ứng dụng di động
+                        Configure and tune the core features of the mobile application
                     </p>
                 </div>
             </div>
 
             <Alert className="bg-blue-50 border-blue-200">
                 <Info className="h-4 w-4 text-blue-600" />
-                <AlertTitle className="text-blue-800">Notification từ Kiến trúc sư</AlertTitle>
+                <AlertTitle className="text-blue-800">Message from the Architect</AlertTitle>
                 <AlertDescription className="text-blue-700">
-                    Khu vực này được tách biệt hoàn toàn để bảo vệ bản quyền dữ liệu Mobile App. 
-                    Mọi thay đổi tại đây không ảnh hưởng đến system Web của đối tác.
+                    This area is completely isolated to protect Mobile App data copyright. 
+                    Any changes made here will not affect the partner's Web systems.
                 </AlertDescription>
             </Alert>
 
             <Tabs defaultValue="quiz" className="w-full">
                 <TabsList className="grid grid-cols-5 bg-slate-100 p-1 rounded-xl h-12">
                     <TabsTrigger value="quiz" className="gap-2 rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm">
-                        <PenBox className="w-4 h-4" /> Trắc Nghiệm
+                        <PenBox className="w-4 h-4" /> Quiz
                     </TabsTrigger>
                     <TabsTrigger value="gis" className="gap-2 rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm">
                         <MapIcon className="w-4 h-4" /> GIS Monitor
@@ -53,7 +53,7 @@ export default function MobileManagementPage() {
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2">
                                 <PenBox className="w-5 h-5 text-amber-600" />
-                                Quản lý Trắc Nghiệm Phật học (AI Quiz Engine)
+                                Buddhist Quiz Management (AI Quiz Engine)
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="pt-6">
@@ -67,14 +67,14 @@ export default function MobileManagementPage() {
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2">
                                 <MapIcon className="w-5 h-5 text-green-600" />
-                                Bản đồ Hệ sinh thái (GIS Monitor)
+                                Ecosystem Map (GIS Monitor)
                             </CardTitle>
                         </CardHeader>
                         <CardContent>
                             <div className="bg-slate-100 rounded-xl h-[400px] flex items-center justify-center text-gray-400">
                                 <p className="flex items-center gap-2">
                                     <MapIcon className="w-5 h-5" />
-                                    Display 50-100 ngôi chùa App-only trên Google Maps...
+                                    Display 50-100 app-only temples on Google Maps...
                                 </p>
                             </div>
                         </CardContent>
@@ -90,7 +90,7 @@ export default function MobileManagementPage() {
                             </CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <p className="text-sm text-gray-400 py-8 text-center">Submit notification tới toàn bộ user app...</p>
+                            <p className="text-sm text-gray-400 py-8 text-center">Send notification to all app users...</p>
                         </CardContent>
                     </Card>
                 </TabsContent>
@@ -104,7 +104,7 @@ export default function MobileManagementPage() {
                             </CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <p className="text-sm text-gray-400 py-8 text-center">Statistics count tải và user active...</p>
+                            <p className="text-sm text-gray-400 py-8 text-center">Download counts and active user statistics...</p>
                         </CardContent>
                     </Card>
                 </TabsContent>
@@ -114,7 +114,7 @@ export default function MobileManagementPage() {
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2">
                                 <UsersRound className="w-5 h-5 text-emerald-600" />
-                                Quản lý User Portal (Học viên)
+                                Portal Users Management (Students)
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="pt-6">

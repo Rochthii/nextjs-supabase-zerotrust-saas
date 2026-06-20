@@ -30,30 +30,30 @@ export function SecurityEventsWidget({ events }: SecurityEventsWidgetProps) {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="p-5 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-between">
                     <div>
-                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Sự kiện Nguy Cấp</p>
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Critical Events</p>
                         <h4 className="text-2xl font-black text-rose-500 mt-1">{criticalCount}</h4>
                     </div>
                     <div className="p-3 bg-rose-500/10 rounded-xl border border-rose-500/20 text-rose-500">
                         <ShieldAlert className="w-5 h-5 animate-pulse" />
                     </div>
                 </div>
-
+ 
                 <div className="p-5 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-between">
                     <div>
-                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Cảnh báo An Ninh</p>
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Security Warnings</p>
                         <h4 className="text-2xl font-black text-amber-500 mt-1">{warningCount}</h4>
                     </div>
                     <div className="p-3 bg-amber-500/10 rounded-xl border border-amber-500/20 text-amber-500">
                         <AlertTriangle className="w-5 h-5" />
                     </div>
                 </div>
-
+ 
                 <div className="p-5 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-between">
                     <div>
-                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Trạng Thái Hệ Thống</p>
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">System Status</p>
                         <h4 className="text-sm font-black text-emerald-400 mt-1 flex items-center gap-1.5">
                             <span className="w-2 h-2 bg-emerald-400 rounded-full animate-ping" />
-                            Giám Sát Chủ Động
+                            Active Monitoring
                         </h4>
                     </div>
                     <div className="p-3 bg-emerald-500/10 rounded-xl border border-emerald-500/20 text-emerald-400">
@@ -67,16 +67,16 @@ export function SecurityEventsWidget({ events }: SecurityEventsWidgetProps) {
                 <CardHeader className="border-b border-slate-850 p-6 bg-slate-950/20">
                     <CardTitle className="text-base font-bold flex items-center gap-2 text-slate-100">
                         <Server className="w-5 h-5 text-indigo-400" />
-                        Nhật Ký Sự Kiện An Ninh (Security Events Log)
+                        Security Events Log
                     </CardTitle>
-                    <CardDescription className="text-slate-400 text-xs">Các sự kiện vi phạm rate-limit, nỗ lực can thiệp logs, hoặc xâm phạm cô lập dữ liệu.</CardDescription>
+                    <CardDescription className="text-slate-400 text-xs">Log of rate-limit violations, log tampering attempts, or data isolation breaches.</CardDescription>
                 </CardHeader>
                 <CardContent className="p-6">
                     {events.length === 0 ? (
                         <div className="text-center py-12 text-emerald-400 bg-emerald-500/5 rounded-2xl border border-emerald-500/10">
                             <ShieldCheck className="w-12 h-12 mx-auto mb-2 opacity-50 text-emerald-450" />
-                            <p className="font-bold text-sm">Hệ Thống An Toàn</p>
-                            <p className="text-[10px] text-slate-500 mt-1">Không ghi nhận sự kiện vi phạm an ninh nào trong chu kỳ.</p>
+                            <p className="font-bold text-sm">System Secure</p>
+                            <p className="text-[10px] text-slate-500 mt-1">No security violations recorded in this cycle.</p>
                         </div>
                     ) : (
                         <div className="relative border-l-2 border-slate-800 ml-4 space-y-6">
@@ -111,23 +111,23 @@ export function SecurityEventsWidget({ events }: SecurityEventsWidgetProps) {
                                                 </div>
                                                 <div className="flex items-center gap-1.5 text-[10px] text-slate-500 font-medium">
                                                     <Clock className="w-3.5 h-3.5 text-slate-600" />
-                                                    <span>{new Date(event.created_at).toLocaleString('vi-VN')}</span>
+                                                    <span>{new Date(event.created_at).toLocaleString('en-US')}</span>
                                                 </div>
                                             </div>
 
                                             <p className="text-xs text-slate-350 leading-relaxed mb-3">
-                                                {event.details?.reason || event.details?.message || `Phát hiện hành động '${event.action}' trên tài nguyên '${event.table_name || 'system'}'.`}
+                                                {event.details?.reason || event.details?.message || `Detected action '${event.action}' on resource '${event.table_name || 'system'}'.`}
                                             </p>
 
                                             <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[10px] text-slate-400 font-medium border-t border-slate-900 pt-2.5 mt-2">
                                                 <div className="flex items-center gap-1">
                                                     <User className="w-3.5 h-3.5 text-slate-600" />
-                                                    <span>Nhân sự: <span className="font-semibold text-slate-300">{event.user_email || 'guest/anonymous'}</span></span>
+                                                    <span>Identity: <span className="font-semibold text-slate-300">{event.user_email || 'guest/anonymous'}</span></span>
                                                 </div>
                                                 <div className="hidden sm:block text-slate-700">|</div>
                                                 <div className="flex items-center gap-1">
                                                     <Fingerprint className="w-3.5 h-3.5 text-slate-600" />
-                                                    <span>IP Client: <span className="font-mono text-slate-300">{event.ip_address || 'N/A'}</span></span>
+                                                    <span>Client IP: <span className="font-mono text-slate-300">{event.ip_address || 'N/A'}</span></span>
                                                 </div>
                                                 <div className="hidden sm:block text-slate-700">|</div>
                                                 <div className="flex items-center gap-1">

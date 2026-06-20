@@ -26,10 +26,10 @@ export function GlobalStatsGrid({ stats }: GlobalStatsGridProps) {
             bg: 'bg-amber-500/10 border-amber-500/20',
             borderHover: 'hover:border-amber-500/50',
             shadowHover: 'hover:shadow-[0_0_30px_-5px_rgba(245,158,11,0.3)]',
-            desc: 'Active trên nền tảng'
+            desc: 'Active on platform'
         },
         {
-            title: 'Dòng tiền save chuyển',
+            title: 'Total Transaction Volume',
             value: formatCurrency(stats.totalVolume),
             icon: DollarSign,
             gradient: 'from-amber-500/20 via-amber-500/5 to-transparent',
@@ -37,7 +37,7 @@ export function GlobalStatsGrid({ stats }: GlobalStatsGridProps) {
             bg: 'bg-amber-500/10 border-amber-500/20',
             borderHover: 'hover:border-amber-500/50',
             shadowHover: 'hover:shadow-[0_0_30px_-5px_rgba(245,158,11,0.3)]',
-            desc: 'Tổng block lượng transaction'
+            desc: 'Total volume processed'
         },
         {
             title: 'Content Published',
@@ -48,10 +48,10 @@ export function GlobalStatsGrid({ stats }: GlobalStatsGridProps) {
             bg: 'bg-amber-500/10 border-amber-500/20',
             borderHover: 'hover:border-amber-500/50',
             shadowHover: 'hover:shadow-[0_0_30px_-5px_rgba(245,158,11,0.3)]',
-            desc: 'News & article được phát hành'
+            desc: 'Articles published'
         },
         {
-            title: 'Event & Hội thảo',
+            title: 'Events & Campaigns',
             value: stats.eventsCount,
             icon: Sparkles,
             gradient: 'from-amber-500/20 via-amber-500/5 to-transparent',
@@ -59,7 +59,7 @@ export function GlobalStatsGrid({ stats }: GlobalStatsGridProps) {
             bg: 'bg-amber-500/10 border-amber-500/20',
             borderHover: 'hover:border-amber-500/50',
             shadowHover: 'hover:shadow-[0_0_30px_-5px_rgba(245,158,11,0.3)]',
-            desc: 'Campaign đang diễn ra'
+            desc: 'Active campaigns'
         }
     ];
 

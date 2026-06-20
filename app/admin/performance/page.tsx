@@ -5,7 +5,7 @@ import { BenchmarkResult } from './scaling-engine';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { ShieldCheck, Zap, AlertCircle, BarChart3, Database, Layers, ArrowRight, ShieldAlert } from 'lucide-react';
 
-// Định nghĩa kiểu rõ ràng cho CustomTooltip để tránh mọi error TypeScript của Recharts
+// Explicit type definition for CustomTooltip to avoid any TypeScript errors from Recharts
 interface TooltipPayloadItem {
     name: string;
     value: number;
@@ -24,8 +24,8 @@ const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
         return (
             <div className="bg-slate-950/95 border border-slate-800 p-4 rounded-2xl shadow-2xl backdrop-blur-2xl min-w-[240px] border-amber-500/20">
                 <p className="text-[10px] font-black text-amber-400 uppercase tracking-widest mb-2.5 border-b border-slate-800 pb-1.5 flex items-center justify-between">
-                    <span>Quy mô Dataset</span>
-                    <span className="font-mono text-white">{Number(label).toLocaleString()} dòng</span>
+                    <span>Dataset Size</span>
+                    <span className="font-mono text-white">{Number(label).toLocaleString()} rows</span>
                 </p>
                 <div className="space-y-2">
                     {payload.map((item) => {
@@ -62,7 +62,7 @@ export default function ScalingBenchmarkPage() {
         try {
             const res = await fetch('/api/admin/benchmark', { method: 'POST' });
             const json = await res.json();
-            if (!res.ok) throw new Error(json.error || 'Error unknown');
+            if (!res.ok) throw new Error(json.error || 'Unknown error');
             setData(json.results);
         } catch (err: any) {
             setError(err.message);
@@ -71,13 +71,13 @@ export default function ScalingBenchmarkPage() {
         }
     };
 
-    // Format trục X (1k, 10k, 100k)
+    // Format X axis (1k, 10k, 100k)
     const formatDatasetSize = (value: number) => {
         if (value >= 1000) return `${value / 1000}k`;
         return String(value);
     };
 
-    // Ánh xạ động dữ liệu dựa trên phân vị đã select
+    // Dynamically map data based on selected percentile
     const chartData = data.map((row) => ({
         datasetSize: row.datasetSize,
         appFilterMs: row.appFilter[activePercentile],
@@ -85,7 +85,7 @@ export default function ScalingBenchmarkPage() {
         rlsClaimsMs: row.rlsClaims[activePercentile],
     }));
 
-    // Statistics analytics hiệu năng dựa trên chartData đã ánh xạ động
+    // Performance metrics statistics based on dynamically mapped chartData
     const getStats = () => {
         if (chartData.length === 0) return null;
         const maxScale = chartData[chartData.length - 1];
@@ -120,14 +120,14 @@ export default function ScalingBenchmarkPage() {
                         <div>
                             <div className="flex items-center gap-3">
                                 <h1 className="text-3xl md:text-4xl font-black bg-gradient-to-r from-amber-200 via-amber-400 to-amber-200 bg-clip-text text-transparent tracking-tight">
-                                    Hiệu Năng Filter Dữ Liệu Lớn
+                                    Large Dataset Filtering Performance
                                 </h1>
                                 <span className="px-3 py-1 text-[10px] font-black text-amber-400 bg-amber-500/10 border border-amber-500/20 rounded-full uppercase tracking-wider">
-                                    Chương 5 Đồ Án
+                                    Chapter 5 Thesis
                                 </span>
                             </div>
                             <p className="text-slate-400 mt-2 text-sm max-w-2xl leading-relaxed">
-                                Chart thực nghiệm đo lường và so sánh hiệu năng trực quan giữa 3 giải pháp authorization khi quy mô dataset tăng dần lên đến <strong className="text-amber-400">100,000 records</strong>.
+                                Experimental chart measuring and visually comparing performance between 3 authorization solutions as dataset size scales up to <strong className="text-amber-400">100,000 records</strong>.
                             </p>
                         </div>
                     </div>
@@ -140,12 +140,12 @@ export default function ScalingBenchmarkPage() {
                         {loading ? (
                             <>
                                 <span className="w-4 h-4 rounded-full border-2 border-t-transparent border-slate-950 animate-spin" />
-                                <span>Đang Benchmark...</span>
+                                <span>Benchmarking...</span>
                             </>
                         ) : (
                             <>
                                 <Zap className="w-4 h-4 text-slate-950 fill-slate-950" />
-                                <span>Bắt đầu thực nghiệm</span>
+                                <span>Start Experiment</span>
                             </>
                         )}
                     </button>
@@ -157,7 +157,7 @@ export default function ScalingBenchmarkPage() {
                 <div className="bg-red-500/10 border border-red-500/20 p-5 rounded-[2rem] flex items-start gap-4 animate-in shake duration-500">
                     <AlertCircle className="w-6 h-6 text-red-400 shrink-0 mt-0.5" />
                     <div>
-                        <p className="text-red-200 font-bold text-sm">Error thực nghiệm system</p>
+                        <p className="text-red-200 font-bold text-sm">System Experiment Error</p>
                         <p className="text-red-400/90 text-xs mt-1 leading-relaxed">{error}</p>
                     </div>
                 </div>
@@ -168,54 +168,54 @@ export default function ScalingBenchmarkPage() {
                 {/* Stat 1: Speedup Ratio */}
                 <div className="border border-slate-800/80 shadow-2xl bg-slate-900/40 backdrop-blur-xl rounded-[2rem] p-7 transition-all duration-300 hover:shadow-amber-500/5 hover:border-amber-500/30 group">
                     <div className="flex items-center justify-between text-slate-400 mb-3">
-                        <span className="text-xs font-black uppercase tracking-widest text-slate-400">Tỷ lệ tăng tốc</span>
+                        <span className="text-xs font-black uppercase tracking-widest text-slate-400">Speedup Ratio</span>
                         <Zap className="w-5 h-5 text-amber-500 group-hover:scale-110 transition-transform" />
                     </div>
                     <p className="text-4xl font-black text-amber-400 drop-shadow-[0_0_12px_rgba(245,158,11,0.3)]">
                         {stats ? `${stats.speedup}x` : '—'}
                     </p>
                     <p className="text-[10px] text-slate-500 mt-3 font-bold uppercase tracking-wider leading-relaxed">
-                        JWT Claims nhanh hơn RLS JOIN (Legacy)
+                        JWT Claims faster than RLS JOIN (Legacy)
                     </p>
                 </div>
 
                 {/* Stat 2: Latency Reduction */}
                 <div className="border border-slate-800/80 shadow-2xl bg-slate-900/40 backdrop-blur-xl rounded-[2rem] p-7 transition-all duration-300 hover:shadow-emerald-500/5 hover:border-emerald-500/30 group">
                     <div className="flex items-center justify-between text-slate-400 mb-3">
-                        <span className="text-xs font-black uppercase tracking-widest text-slate-400">Giảm độ trễ</span>
+                        <span className="text-xs font-black uppercase tracking-widest text-slate-400">Latency Reduction</span>
                         <Layers className="w-5 h-5 text-emerald-500 group-hover:scale-110 transition-transform" />
                     </div>
                     <p className="text-4xl font-black text-emerald-400 drop-shadow-[0_0_12px_rgba(16,185,129,0.3)]">
                         {stats ? `-${stats.reduction}%` : '—'}
                     </p>
                     <p className="text-[10px] text-slate-500 mt-3 font-bold uppercase tracking-wider leading-relaxed">
-                        Mức giảm overhead authorization
+                        Authorization overhead reduction
                     </p>
                 </div>
 
                 {/* Stat 3: Complexity */}
                 <div className="border border-slate-800/80 shadow-2xl bg-slate-900/40 backdrop-blur-xl rounded-[2rem] p-7 transition-all duration-300 hover:shadow-blue-500/5 hover:border-blue-500/30 group">
                     <div className="flex items-center justify-between text-slate-400 mb-3">
-                        <span className="text-xs font-black uppercase tracking-widest text-slate-400">Overhead Validate</span>
+                        <span className="text-xs font-black uppercase tracking-widest text-slate-400">Validation Overhead</span>
                         <BarChart3 className="w-5 h-5 text-blue-400 group-hover:scale-110 transition-transform" />
                     </div>
                     <p className="text-4xl font-black text-blue-400 drop-shadow-[0_0_12px_rgba(59,130,246,0.3)]">Const</p>
                     <p className="text-[10px] text-slate-500 mt-3 font-bold uppercase tracking-wider leading-relaxed">
-                        Trích xuất claim trong RAM Session
+                        Claim extraction in RAM Session
                     </p>
                 </div>
 
                 {/* Stat 4: Sample size */}
                 <div className="border border-slate-800/80 shadow-2xl bg-slate-900/40 backdrop-blur-xl rounded-[2rem] p-7 transition-all duration-300 hover:shadow-purple-500/5 hover:border-purple-500/30 group">
                     <div className="flex items-center justify-between text-slate-400 mb-3">
-                        <span className="text-xs font-black uppercase tracking-widest text-slate-400">Tổng template test</span>
+                        <span className="text-xs font-black uppercase tracking-widest text-slate-400">Total Test Samples</span>
                         <Database className="w-5 h-5 text-purple-400 group-hover:scale-110 transition-transform" />
                     </div>
                     <p className="text-4xl font-black text-slate-200">
                         {stats ? stats.maxScaleSize : '100,000'}
                     </p>
                     <p className="text-[10px] text-slate-500 mt-3 font-bold uppercase tracking-wider leading-relaxed">
-                        Số dòng dữ liệu đo lường
+                        Measured data rows
                     </p>
                 </div>
             </div>
@@ -226,14 +226,14 @@ export default function ScalingBenchmarkPage() {
                     <div className="flex flex-col sm:flex-row sm:items-center gap-6 justify-between w-full xl:w-auto">
                         <div>
                             <span className="text-xs font-black uppercase tracking-widest text-slate-400 block">
-                                Đồ thị đường cong hiệu năng Scaling (Thống Kê Phân Vị)
+                                Performance Scaling Curve (Percentile Stats)
                             </span>
                             <p className="text-[10px] text-slate-500 mt-1 font-bold">
-                                So sánh actual tốc độ process (ms) khi quy mô dữ liệu (N) growth tuyến tính
+                                Comparing actual processing latency (ms) as dataset size (N) grows linearly
                             </p>
                         </div>
                         
-                        {/* Bộ chuyển đổi phân vị Percentiles P50/P95/P99 */}
+                        {/* Percentiles P50/P95/P99 Switcher */}
                         <div className="flex items-center gap-1 p-1 bg-slate-950/80 rounded-xl border border-slate-850 shadow-inner shrink-0">
                             {(['p50', 'p95', 'p99'] as const).map((p) => (
                                 <button
@@ -274,9 +274,9 @@ export default function ScalingBenchmarkPage() {
                                 <div className="w-16 h-16 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-500 shadow-inner">
                                     <BarChart3 className="w-8 h-8 text-amber-500" />
                                 </div>
-                                <p className="font-black text-slate-350 tracking-wider uppercase text-xs">No data yet thực nghiệm</p>
+                                <p className="font-black text-slate-350 tracking-wider uppercase text-xs">No experimental data yet</p>
                                 <p className="text-slate-500 text-xs max-w-sm text-center leading-relaxed font-medium">
-                                    Nhấp vào nút <strong className="text-amber-400 font-bold">"Bắt đầu thực nghiệm"</strong> để chạy RPC đo lường đồng thời 100,000 dòng dữ liệu directly trên Supabase.
+                                    Click the <strong className="text-amber-400 font-bold">"Start Experiment"</strong> button to run RPC measurement on up to 100,000 rows of data directly on Supabase.
                                 </p>
                             </div>
                         )}
@@ -284,7 +284,7 @@ export default function ScalingBenchmarkPage() {
                         {loading && (
                             <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-400 text-sm gap-4 bg-slate-950/20 backdrop-blur-sm rounded-[2rem]">
                                 <div className="w-14 h-14 rounded-full border-4 border-slate-850 border-t-amber-500 animate-spin shadow-lg" />
-                                <p className="font-black text-amber-400 tracking-widest animate-pulse uppercase text-xs">Đang execute các RPC đo lường...</p>
+                                <p className="font-black text-amber-400 tracking-widest animate-pulse uppercase text-xs">Executing measurement RPCs...</p>
                             </div>
                         )}
 
@@ -303,7 +303,7 @@ export default function ScalingBenchmarkPage() {
                                         stroke="#475569" 
                                         fontSize={11} 
                                         fontWeight="bold"
-                                        label={{ value: 'Độ trễ (ms)', angle: -90, position: 'insideLeft', offset: -5, fill: '#475569', fontSize: 10, fontWeight: 'bold' }}
+                                        label={{ value: 'Latency (ms)', angle: -90, position: 'insideLeft', offset: -5, fill: '#475569', fontSize: 10, fontWeight: 'bold' }}
                                     />
                                     <Tooltip content={<CustomTooltip />} />
                                     <Legend wrapperStyle={{ fontSize: '10px', fontWeight: 'black', textTransform: 'uppercase', letterSpacing: '0.05em', paddingTop: '15px' }} />
@@ -346,18 +346,18 @@ export default function ScalingBenchmarkPage() {
                 <div className="border border-slate-800/80 shadow-2xl bg-slate-900/40 backdrop-blur-xl rounded-[2.5rem] overflow-hidden animate-in fade-in duration-700">
                     <div className="py-5 px-8 border-b border-slate-800 bg-slate-900/50 flex justify-between items-center">
                         <span className="text-xs font-black uppercase tracking-widest text-slate-400 block">
-                            Bảng số liệu đối chiếu details các kịch bản ({activePercentile.toUpperCase()})
+                            Detailed comparative table of scenarios ({activePercentile.toUpperCase()})
                         </span>
                     </div>
                     <div className="overflow-x-auto">
                         <table className="w-full min-w-[600px] border-collapse text-left text-xs text-slate-350">
                             <thead className="bg-slate-950/60 border-b border-slate-800 text-[10px] uppercase font-black text-slate-400 tracking-wider">
                                 <tr>
-                                    <th className="px-8 py-5">Số dòng kiểm nghiệm (N)</th>
+                                    <th className="px-8 py-5">Test Row Count (N)</th>
                                     <th className="px-8 py-5">App-side Filtering (ms)</th>
                                     <th className="px-8 py-5">Standard RLS JOIN (ms)</th>
                                     <th className="px-8 py-5 text-emerald-400">Optimized RLS (ms)</th>
-                                    <th className="px-8 py-5">Chỉ số tăng tốc vượt trội</th>
+                                    <th className="px-8 py-5">Superior Speedup Metric</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-slate-800 font-medium">
@@ -383,7 +383,7 @@ export default function ScalingBenchmarkPage() {
                                             </td>
                                             <td className="px-8 py-5">
                                                 <span className="px-3 py-1 bg-emerald-500/10 text-emerald-400 text-[10px] font-black rounded-full border border-emerald-500/20 inline-flex items-center gap-1 shadow-inner">
-                                                    Nhanh hơn {speedup}x (-{improvement}% trễ)
+                                                    Faster by {speedup}x (-{improvement}% latency)
                                                 </span>
                                             </td>
                                         </tr>
@@ -398,23 +398,23 @@ export default function ScalingBenchmarkPage() {
             {/* Benchmark Environment Specs Card */}
             <div className="border border-slate-800/80 shadow-2xl bg-slate-900/40 backdrop-blur-xl rounded-[2.5rem] p-8 mb-8 mt-8">
                 <span className="text-xs font-black uppercase tracking-widest text-slate-400 block mb-4">
-                    Thông số Môi trường Thực nghiệm (Benchmark Environment Specs)
+                    Benchmark Environment Specifications
                 </span>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-xs">
                     <div className="bg-slate-950/50 p-5 rounded-2xl border border-slate-800/60">
                         <span className="text-slate-500 font-bold uppercase tracking-wider block mb-1">Database & Hosting</span>
                         <p className="text-slate-200 font-black">PostgreSQL 16.3 (Supabase Cloud)</p>
-                        <p className="text-slate-400 mt-1">Gói VPS: 2 vCPU, 1GB RAM, SSD Storage (GP3)</p>
+                        <p className="text-slate-400 mt-1">VPS Spec: 2 vCPU, 1GB RAM, SSD Storage (GP3)</p>
                     </div>
                     <div className="bg-slate-950/50 p-5 rounded-2xl border border-slate-800/60">
-                        <span className="text-slate-500 font-bold uppercase tracking-wider block mb-1">Dữ liệu kiểm thử & Index</span>
-                        <p className="text-slate-200 font-black">111,000 dòng dữ liệu thật (Synthetic Data)</p>
-                        <p className="text-slate-400 mt-1">Chỉ mục: B-Tree Index trên trường `tenant_id` & `id`</p>
+                        <span className="text-slate-500 font-bold uppercase tracking-wider block mb-1">Test Data & Indexing</span>
+                        <p className="text-slate-200 font-black">111,000 rows of synthetic data</p>
+                        <p className="text-slate-400 mt-1">Indexes: B-Tree Index on `tenant_id` & `id` fields</p>
                     </div>
                     <div className="bg-slate-950/50 p-5 rounded-2xl border border-slate-800/60">
-                        <span className="text-slate-500 font-bold uppercase tracking-wider block mb-1">Status Cache & Load-testing</span>
+                        <span className="text-slate-500 font-bold uppercase tracking-wider block mb-1">Cache Status & Load-testing</span>
                         <p className="text-slate-200 font-black">Warm Cache (Hot Read) & Cold Read</p>
-                        <p className="text-slate-400 mt-1">Công cụ: `k6` + Postgres `pg_stat_statements` (loại bỏ nhiễu mạng)</p>
+                        <p className="text-slate-400 mt-1">Tools: `k6` + Postgres `pg_stat_statements` (network noise excluded)</p>
                     </div>
                 </div>
             </div>
@@ -427,15 +427,15 @@ export default function ScalingBenchmarkPage() {
                         <ShieldAlert className="w-7 h-7 animate-pulse" />
                     </div>
                     <div>
-                        <h3 className="text-xs font-black text-amber-400 uppercase tracking-widest mb-1.5">Ý nghĩa khoa last namec của thực nghiệm (Chương 5 Đồ Án)</h3>
+                        <h3 className="text-xs font-black text-amber-400 uppercase tracking-widest mb-1.5">Scientific Significance of Experiment (Chapter 5 Thesis)</h3>
                         <p className="text-sm text-slate-350 leading-relaxed max-w-3xl">
-                            Đường cong độ trễ dạng logarithmic <strong className="text-emerald-400 font-bold">O(log N)</strong> của <strong className="text-emerald-400">Optimized RLS</strong> chứng minh system SaaS có khả năng open rộng (Scale) vượt trội. Bằng cách triệt tiêu hoàn toàn chi phí JOIN authorization (Constant-time RAM Claims lookup) và tận dụng B-Tree Index Scan, system loại bỏ triệt để hiện tượng thắt nút cổ chai hiệu năng khi dữ liệu phình to.
+                            The logarithmic latency curve <strong className="text-emerald-400 font-bold">O(log N)</strong> of <strong className="text-emerald-400">Optimized RLS</strong> demonstrates excellent SaaS scalability. By entirely eliminating JOIN authorization overhead (constant-time RAM Claims lookup) and utilizing B-Tree Index Scans, the system completely removes performance bottlenecks as data scales up.
                         </p>
                     </div>
                 </div>
                 <div className="relative z-10 flex items-center gap-2.5 shrink-0 bg-slate-950 px-4 py-2.5 rounded-xl border border-slate-800 shadow-inner">
                     <div className="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-ping" />
-                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">System giám sát running</span>
+                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Monitoring system running</span>
                 </div>
             </div>
         </div>

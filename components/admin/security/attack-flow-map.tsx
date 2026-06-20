@@ -21,7 +21,7 @@ interface AttackFlowMapProps {
     result: SimulationResult | null;
 }
 
-// Định nghĩa 5 Nodes trong mô hình Zero Trust Phân Tầng
+// Define 5 Nodes in the Layered Zero Trust model
 interface FlowNode {
     id: number;
     name: string;
@@ -34,7 +34,7 @@ const FLOW_NODES: FlowNode[] = [
     {
         id: 1,
         name: 'Attacker Client',
-        desc: 'Truy cập từ WAN (IP Lạ)',
+        desc: 'Access from WAN (Unknown IP)',
         icon: <User className="w-5 h-5" />,
         layer: 'client'
     },
@@ -72,29 +72,29 @@ export function AttackFlowMap({ activeScenario, running, phase, result }: Attack
     const [progressNode, setProgressNode] = useState<number>(0);
     const [blockedNode, setBlockedNode] = useState<number | null>(null);
 
-    // Xác định Node nào sẽ là chốt block (block) cho từng Scenario
+    // Determine which Node will be the block point for each Scenario
     const getBlockedNodeForScenario = (scen: Scenario): number => {
         switch (scen) {
             case 'cache_pollution':
-                return 2; // Edge Cache Layer block chéo Cache Poisoning
+                return 2; // Edge Cache Layer blocks cross Cache Poisoning
             case 'noisy_neighbor':
-                return 2; // Connection Limit bảo vệ tại cổng Route/Pooler
+                return 2; // Connection Limit protects at the Route/Pooler gateway
             case 'sql_injection':
-                return 4; // RLS / Parameterized Query block SQL Injection
+                return 4; // RLS / Parameterized Query blocks SQL Injection
             case 'cross_tenant_read':
-                return 4; // DB RLS block đứng truy cập chéo tenant
+                return 4; // DB RLS blocks cross-tenant access
             default:
                 return 4;
         }
     };
 
-    // Điều khiển hoạt ảnh chấm sáng và status Node khi chạy Simulator
+    // Control active dot animation and Node status when running Simulator
     useEffect(() => {
         if (running) {
             setBlockedNode(null);
             setProgressNode(1);
             
-            // Giả lập luồng gói tin đi qua các lớp
+            // Simulate packet flow through layers
             const interval = setInterval(() => {
                 setProgressNode(prev => {
                     const targetBlock = getBlockedNodeForScenario(activeScenario);
@@ -117,7 +117,7 @@ export function AttackFlowMap({ activeScenario, running, phase, result }: Attack
         }
     }, [running, result, activeScenario]);
 
-    // Lấy màu status cho Node
+    // Get status color for Node
     const getNodeStateColor = (node: FlowNode) => {
         const targetBlock = getBlockedNodeForScenario(activeScenario);
         
@@ -159,7 +159,7 @@ export function AttackFlowMap({ activeScenario, running, phase, result }: Attack
             };
         }
 
-        // Status tĩnh ban đầu
+        // Initial static status
         if (node.id === 1) {
             return {
                 border: 'border-rose-500/40 bg-rose-950/10 text-rose-400',
@@ -195,20 +195,20 @@ export function AttackFlowMap({ activeScenario, running, phase, result }: Attack
             <div className="flex items-center justify-between">
                 <div>
                     <h3 className="text-white font-black text-sm flex items-center gap-1.5 uppercase tracking-wide">
-                        🛡️ Bản Đồ Luồng Phòng Thủ Quyết Định (Zero Trust Map)
+                        Zero Trust Defense Architecture Map
                     </h3>
                     <p className="text-slate-500 text-[10px] mt-0.5">
-                        Trực quan hóa đường đi của request và chốt block an ninh time thực
+                        Visualize request lifecycles and real-time security mitigation points
                     </p>
                 </div>
                 {running && (
                     <span className="text-[10px] bg-amber-500/10 text-amber-400 border border-amber-500/30 px-2 py-0.5 rounded font-black animate-pulse">
-                        SÓNG PHÒNG THỦ ĐANG HOẠT ĐỘNG
+                        DEFENSE SHIELD ACTIVE
                     </span>
                 )}
             </div>
 
-            {/* Sơ đồ Nodes & Path */}
+            {/* Nodes & Path Diagram */}
             <div className="relative py-4 flex flex-col md:flex-row justify-between items-center gap-6 md:gap-4 z-10">
                 {/* SVG Connection Paths for Desktop */}
                 <div className="absolute inset-0 pointer-events-none hidden md:block z-0" style={{ height: '70px', top: '25px' }}>
@@ -295,12 +295,12 @@ export function AttackFlowMap({ activeScenario, running, phase, result }: Attack
                             {/* Node Status Badge */}
                             {result && isBlocked && (
                                 <span className="absolute -top-3 bg-rose-500/20 text-rose-400 border border-rose-500/40 text-[8px] font-black uppercase px-2 py-0.5 rounded shadow shadow-rose-950 animate-pulse">
-                                    CHẶN ĐỨNG ❌
+                                    BLOCKED
                                 </span>
                             )}
                             {result && !isBlocked && node.id < getBlockedNodeForScenario(activeScenario) && (
                                 <span className="absolute -top-3 bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-[8px] font-black uppercase px-2 py-0.5 rounded">
-                                    VƯỢT QUA ✓
+                                    PASSED
                                 </span>
                             )}
                         </div>
@@ -314,11 +314,11 @@ export function AttackFlowMap({ activeScenario, running, phase, result }: Attack
                     <div className="flex items-center gap-2">
                         <ShieldAlert className="w-4 h-4 text-rose-400" />
                         <span className="text-xs font-black text-rose-300 uppercase tracking-widest">
-                            [Lớp chắn security] {result.defense_layer || FLOW_NODES[getBlockedNodeForScenario(activeScenario) - 1].name}
+                            [Security Defense Layer] {result.defense_layer || FLOW_NODES[getBlockedNodeForScenario(activeScenario) - 1].name}
                         </span>
                     </div>
                     <p className="text-[11px] text-slate-400 leading-relaxed">
-                        Hành động giả lập tấn công chéo chắp đã bị nhận diện và cô lập successfully tại lớp <strong>{FLOW_NODES[getBlockedNodeForScenario(activeScenario) - 1].name}</strong>. Database và dữ liệu branch được bảo vệ toàn vẹn tuyệt đối nhờ lưới filter an ninh Zero Trust.
+                        The simulated attack vector was successfully detected and isolated at the <strong>{result.defense_layer || FLOW_NODES[getBlockedNodeForScenario(activeScenario) - 1].name}</strong> layer. The database and tenant records remain fully integrated and secure under the Zero Trust framework.
                     </p>
                 </div>
             )}

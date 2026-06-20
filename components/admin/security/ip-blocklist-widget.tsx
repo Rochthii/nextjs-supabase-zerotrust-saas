@@ -30,20 +30,20 @@ export function IpBlocklistWidget({ blockedIps: initialBlockedIps }: IpBlocklist
         setErrorMsg(null);
  
         try {
-            // Gọi Server Action để unblock IP (chạy bằng admin client ở phía server)
+            // Invoke Server Action to unblock IP (running using admin client on the server side)
             const result = await unblockIpAction(ip, tenantId);
  
             if (!result.success) {
-                throw new Error(result.error || 'Lỗi khi gỡ block IP');
+                throw new Error(result.error || 'Error unblocking IP address');
             }
  
-            // Update state cục bộ để biến mất ngay lập tức trên UI
+            // Update local state to remove the item immediately from the UI
             setBlockedIps(prev => prev.filter(item => !(item.ip === ip && item.tenant_id === tenantId)));
             
-            // Revalidate lại page Next.js để sync server state
+            // Revalidate Next.js page to sync with server state
             router.refresh();
         } catch (err: any) {
-            setErrorMsg(err?.message || 'Error on gỡ lệnh block IP.');
+            setErrorMsg(err?.message || 'Error unblocking IP address.');
         } finally {
             setLoadingIp(null);
         }
@@ -57,7 +57,7 @@ export function IpBlocklistWidget({ blockedIps: initialBlockedIps }: IpBlocklist
                     <ShieldAlert className="w-5 h-5 text-amber-500 animate-pulse" /> SOAR Dynamic IP Blocklist
                 </h3>
                 <p className="text-[10px] text-slate-400 mt-1 relative z-10 font-medium">
-                    Các IP lạ bị block tại Edge Middleware ({"<"} 4ms) bảo vệ CSDL khỏi nguy cơ Reverse DDoS.
+                    Suspicious IPs blocked at Edge Middleware ({"<"} 4ms) protecting the database from reverse DDoS threats.
                 </p>
             </div>
 
@@ -72,8 +72,8 @@ export function IpBlocklistWidget({ blockedIps: initialBlockedIps }: IpBlocklist
                 {blockedIps.length === 0 ? (
                     <div className="text-center py-10 text-emerald-600 dark:text-emerald-400 bg-emerald-500/5 dark:bg-emerald-950/10 rounded-2xl border border-emerald-100 dark:border-emerald-900/10 shadow-inner">
                         <ShieldCheck className="w-12 h-12 mx-auto mb-2 opacity-50 text-emerald-500" />
-                        <p className="font-bold text-sm">System An toàn</p>
-                        <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-1">Không phát hiện address IP nào bị cấm truy cập.</p>
+                        <p className="font-bold text-sm">System Secure</p>
+                        <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-1">No banned IP addresses detected.</p>
                     </div>
                 ) : (
                     <div className="space-y-4 max-h-[300px] overflow-y-auto pr-1">
@@ -92,16 +92,16 @@ export function IpBlocklistWidget({ blockedIps: initialBlockedIps }: IpBlocklist
                                     </div>
                                     
                                     <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed italic mb-2">
-                                        "{item.reason || 'Bị block tự động do phát hiện hành vi xâm phạm.'}"
+                                        "{item.reason || 'Automatically blocked due to suspicious activity.'}"
                                     </p>
                                     
                                     <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[10px] text-slate-400 dark:text-slate-500 font-medium">
                                         <div className="flex items-center gap-1">
                                             <Clock className="w-3.5 h-3.5" />
-                                            <span>Open khóa lúc: {new Date(item.blocked_until).toLocaleString('vi-VN')}</span>
+                                            <span>Expires: {new Date(item.blocked_until).toLocaleString('en-US')}</span>
                                         </div>
                                         <div className="hidden sm:block">|</div>
-                                        <div>Tạo bởi: {item.created_by}</div>
+                                        <div>Created by: {item.created_by}</div>
                                     </div>
                                 </div>
 
@@ -115,7 +115,7 @@ export function IpBlocklistWidget({ blockedIps: initialBlockedIps }: IpBlocklist
                                     }`}
                                 >
                                     <Unlock className={`w-3.5 h-3.5 ${loadingIp === item.ip ? 'animate-spin' : ''}`} />
-                                    <span>{loadingIp === item.ip ? '...' : 'Gỡ block'}</span>
+                                    <span>{loadingIp === item.ip ? '...' : 'Unblock'}</span>
                                 </button>
                             </div>
                         ))}

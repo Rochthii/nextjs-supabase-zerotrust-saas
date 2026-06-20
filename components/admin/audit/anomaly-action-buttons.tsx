@@ -16,7 +16,7 @@ export function AnomalyActionButtons({ userEmail, userId }: Props) {
     const [loading, setLoading] = useState(false);
 
     const handleForceLogout = async () => {
-        if (!confirm(`Bạn có chắc chắn muốn ép sign out (Force Logout) account ${userEmail}?`)) {
+        if (!confirm(`Are you sure you want to force logout user ${userEmail}?`)) {
             return;
         }
 
@@ -31,12 +31,12 @@ export function AnomalyActionButtons({ userEmail, userId }: Props) {
             const data = await res.json();
             if (!res.ok) throw new Error(data.error || 'Failed to force logout');
 
-            // Refresh các Server Component trên page
+            // Refresh server components on the page
             router.refresh();
 
-            toast.success(data.message || `Đã sign out ${userEmail}`);
+            toast.success(data.message || `Successfully logged out ${userEmail}`);
         } catch (error: any) {
-            toast.error(error.message || 'Error sign out');
+            toast.error(error.message || 'Logout error');
         } finally {
             setLoading(false);
         }
@@ -50,7 +50,7 @@ export function AnomalyActionButtons({ userEmail, userId }: Props) {
                 className="h-7 text-[10px] px-2 gap-1"
                 onClick={handleForceLogout}
                 disabled={loading}
-                title="Ép user sign out ngay lập tức"
+                title="Force user logout immediately"
             >
                 {loading ? <Loader2 className="w-3 h-3 animate-spin" /> : <LogOut className="w-3 h-3" />}
                 Force Logout
@@ -60,7 +60,7 @@ export function AnomalyActionButtons({ userEmail, userId }: Props) {
                 size="sm" 
                 className="h-7 text-[10px] px-2 gap-1 border-rose-500/30 text-rose-600 hover:bg-rose-500/10 hover:text-rose-700"
                 disabled={true}
-                title="Chức năng đang phát triển"
+                title="Feature in development"
             >
                 <ShieldAlert className="w-3 h-3" />
                 Suspend (TBD)

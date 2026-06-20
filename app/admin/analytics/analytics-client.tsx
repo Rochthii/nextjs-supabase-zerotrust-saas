@@ -143,7 +143,7 @@ export function AnalyticsClient({
         for (let i = 5; i >= 0; i--) {
             const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
             const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
-            const label = `Tháng ${d.getMonth() + 1}/${d.getFullYear().toString().slice(-2)}`;
+            const label = `${d.getMonth() + 1}/${d.getFullYear().toString().slice(-2)}`;
             monthsData[key] = { name: label, 'Security Logs': 0, 'Blocked IPs': 0, dateObj: d };
         }
 
@@ -199,7 +199,7 @@ export function AnalyticsClient({
         });
     }, [tenants, filtered]);
 
-    // Filter theo search query
+    // Filter by search query
     const searchedTenants = tenantMetrics.filter(t => 
         t.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
         t.domain.toLowerCase().includes(searchQuery.toLowerCase())
@@ -237,7 +237,7 @@ export function AnalyticsClient({
 
     // ─── Export CSV Report (Real Side-Effect) ────────────────────────────────────
     const handleExportCSV = () => {
-        const header = "Ten Chi Nhanh,Domain,Loai Hinh,Tong Audit Log,So IP Bi Block,Su Kien Nguy Hiem\n";
+        const header = "Branch Name,Domain,Workspace Type,Total Audit Logs,Blocked IPs Count,Critical Events Count\n";
         const rows = tenantMetrics.map(t => 
             `"${t.name.normalize('NFD').replace(/[\u0300-\u036f]/g, '')}",${t.domain},${t.type},${t.totalLogs},${t.blockedCount},${t.criticalCount}`
         ).join("\n");
@@ -246,7 +246,7 @@ export function AnalyticsClient({
         const encodedUri = encodeURI(csvContent);
         const link = document.createElement("a");
         link.setAttribute("href", encodedUri);
-        link.setAttribute("download", `bao_cao_an_ninh_saas_${new Date().toISOString().slice(0, 10)}.csv`);
+        link.setAttribute("download", `saas_security_report_${new Date().toISOString().slice(0, 10)}.csv`);
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -259,20 +259,20 @@ export function AnalyticsClient({
                 <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/5 rounded-full blur-3xl pointer-events-none" />
                 
                 <div className="flex items-center gap-3 relative z-10">
-                    <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Thời gian:</span>
+                    <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Time Range:</span>
                     <div className="flex rounded-xl bg-slate-100 dark:bg-slate-950 p-1 border border-slate-200/50 dark:border-slate-800/80">
                         {(['all', '90d', '30d', '7d'] as const).map((r) => (
                             <button
                                 key={r}
                                 onClick={() => setTimeRange(r)}
                                 className={cn(
-                                    "px-4 py-2 rounded-lg text-xs font-bold transition-all",
+                                    "aria-checked:bg-indigo-500 px-4 py-2 rounded-lg text-xs font-bold transition-all",
                                     timeRange === r 
                                         ? 'bg-indigo-500 text-white shadow-[0_0_15px_rgba(99,102,241,0.4)]' 
                                         : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200'
                                 )}
                             >
-                                {r === 'all' ? 'Tất cả' : r === '90d' ? '90 ngày' : r === '30d' ? '30 ngày' : '7 ngày'}
+                                {r === 'all' ? 'All' : r === '90d' ? '90 Days' : r === '30d' ? '30 Days' : '7 Days'}
                             </button>
                         ))}
                     </div>
@@ -283,7 +283,7 @@ export function AnalyticsClient({
                     className="flex items-center gap-2 bg-indigo-500 hover:bg-indigo-600 text-white font-bold px-6 py-3 rounded-xl shadow-lg shadow-indigo-500/20 active:scale-95 transition-all text-xs border border-indigo-500/30 hover:shadow-[0_0_20px_rgba(99,102,241,0.4)] relative z-10"
                 >
                     <Download className="w-4 h-4" />
-                    <span>Xuất báo cáo An ninh (CSV)</span>
+                    <span>Export Security Report (CSV)</span>
                 </button>
             </div>
 
@@ -294,7 +294,7 @@ export function AnalyticsClient({
                     <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-500/5 rounded-full blur-2xl pointer-events-none group-hover:scale-150 transition-transform duration-500" />
                     <CardHeader className="pb-3">
                         <CardTitle className="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest flex items-center justify-between">
-1.                             <span>Hành động Audit (RLS Logs)</span>
+                            <span>Audit Actions (RLS Logs)</span>
                             <Layers className="w-4 h-4 text-indigo-500" />
                         </CardTitle>
                     </CardHeader>
@@ -303,7 +303,7 @@ export function AnalyticsClient({
                             {totalLogsCount.toLocaleString()}
                         </h3>
                         <p className="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider">
-                            Tổng số sự kiện được ghi nhận
+                            Total recorded events
                         </p>
                     </CardContent>
                 </Card>
@@ -313,16 +313,16 @@ export function AnalyticsClient({
                     <div className="absolute top-0 right-0 w-24 h-24 bg-rose-500/5 rounded-full blur-2xl pointer-events-none group-hover:scale-150 transition-transform duration-500" />
                     <CardHeader className="pb-3">
                         <CardTitle className="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest flex items-center justify-between">
-                            <span>Sự kiện bất thường / Cảnh báo</span>
+                            <span>Anomalies / Warnings</span>
                             <ShieldAlert className="w-4 h-4 text-rose-500" />
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <h3 className="text-3xl font-black text-slate-900 dark:text-white mb-1.5 transition-colors group-hover:text-rose-500 dark:group-hover:text-rose-450">
+                        <h3 className="text-3xl font-black text-slate-900 dark:text-white mb-1.5 transition-colors group-hover:text-rose-500 dark:group-hover:text-rose-455">
                             {totalCriticalCount.toLocaleString()}
                         </h3>
                         <p className="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider">
-                            Cảnh báo nguy cơ cao (CRITICAL/WARNING)
+                            High risk alerts (CRITICAL/WARNING)
                         </p>
                     </CardContent>
                 </Card>
@@ -332,7 +332,7 @@ export function AnalyticsClient({
                     <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/5 rounded-full blur-2xl pointer-events-none group-hover:scale-150 transition-transform duration-500" />
                     <CardHeader className="pb-3">
                         <CardTitle className="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest flex items-center justify-between">
-                            <span>IP Bị Chặn (SOAR active)</span>
+                            <span>Blocked IPs (Active SOAR)</span>
                             <Ban className="w-4 h-4 text-emerald-500" />
                         </CardTitle>
                     </CardHeader>
@@ -341,7 +341,7 @@ export function AnalyticsClient({
                             {totalBlockedCount.toLocaleString()}
                         </h3>
                         <p className="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider">
-                            Các địa chỉ IP đang bị block tạm thời
+                            Currently blocked IP addresses
                         </p>
                     </CardContent>
                 </Card>
@@ -351,7 +351,7 @@ export function AnalyticsClient({
                     <div className="absolute top-0 right-0 w-24 h-24 bg-purple-500/5 rounded-full blur-2xl pointer-events-none group-hover:scale-150 transition-transform duration-500" />
                     <CardHeader className="pb-3">
                         <CardTitle className="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest flex items-center justify-between">
-                            <span>Nhân sự đa hệ thống</span>
+                            <span>Multi-system Personnel</span>
                             <Users className="w-4 h-4 text-purple-500" />
                         </CardTitle>
                     </CardHeader>
@@ -360,7 +360,7 @@ export function AnalyticsClient({
                             {totalUsers.toLocaleString()}
                         </h3>
                         <p className="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider">
-                            Nhân viên & admin được cấp quyền
+                            Staff & Admins authorized
                         </p>
                     </CardContent>
                 </Card>
@@ -374,7 +374,7 @@ export function AnalyticsClient({
                     <CardHeader className="py-6 border-b border-slate-100 dark:border-slate-800/80 p-8 pb-5">
                         <CardTitle className="text-sm font-black uppercase tracking-wider text-slate-900 dark:text-white flex items-center gap-2">
                             <Activity className="w-4 h-4 text-indigo-500 animate-pulse" />
-                            Biểu đồ Sự kiện An ninh & Tần suất Log (6 tháng gần nhất)
+                            Security Events & Log Frequency Chart (Last 6 Months)
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="p-8">
@@ -414,8 +414,8 @@ export function AnalyticsClient({
                                             wrapperStyle={{ fontSize: '11px', fontWeight: 'bold', paddingTop: '10px' }} 
                                             iconType="circle"
                                         />
-                                        <Line yAxisId="left" type="monotone" dataKey="Security Logs" name="Số lượng Log" stroke="#6366f1" strokeWidth={3} activeDot={{ r: 6 }} />
-                                        <Line yAxisId="right" type="monotone" dataKey="Blocked IPs" name="IP Bị Chặn" stroke="#f43f5e" strokeWidth={3} />
+                                        <Line yAxisId="left" type="monotone" dataKey="Security Logs" name="Logs Count" stroke="#6366f1" strokeWidth={3} activeDot={{ r: 6 }} />
+                                        <Line yAxisId="right" type="monotone" dataKey="Blocked IPs" name="Blocked IPs" stroke="#f43f5e" strokeWidth={3} />
                                     </LineChart>
                                 </ResponsiveContainer>
                             )}
@@ -429,7 +429,7 @@ export function AnalyticsClient({
                     <CardHeader className="py-6 border-b border-slate-100 dark:border-slate-800/80 p-8 pb-5">
                         <CardTitle className="text-sm font-black uppercase tracking-wider text-slate-900 dark:text-white flex items-center gap-2">
                             <Shield className="w-4 h-4 text-emerald-500" />
-                            Phân loại Workspace
+                            Workspace Classification
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="p-8 flex flex-col justify-center items-center h-80">
@@ -467,7 +467,7 @@ export function AnalyticsClient({
                                 </div>
                             </div>
                         ) : (
-                            <p className="text-xs text-slate-400 italic">Chưa có dữ liệu phân loại.</p>
+                            <p className="text-xs text-slate-400 italic">No classification data yet.</p>
                         )}
                     </CardContent>
                 </Card>
@@ -477,15 +477,15 @@ export function AnalyticsClient({
             <Card className="border border-slate-200 dark:border-slate-800/60 shadow-2xl bg-white dark:bg-slate-900/40 backdrop-blur-xl rounded-[2.5rem] overflow-hidden">
                 <CardHeader className="p-8 border-b border-slate-100 dark:border-slate-800/80 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
                     <div>
-                        <CardTitle className="text-base font-black text-slate-900 dark:text-white">Chi tiết Báo cáo An ninh theo Workspace</CardTitle>
-                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">Theo dõi logs, số IP bị chặn và sự kiện nguy hiểm theo từng branch</p>
+                        <CardTitle className="text-base font-black text-slate-900 dark:text-white">Detailed Security Report by Workspace</CardTitle>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">Monitor logs, blocked IPs, and critical events by branch</p>
                     </div>
 
                     <div className="relative w-full sm:w-80">
                         <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                         <input
                             type="text"
-                            placeholder="Tìm kiếm branch..."
+                            placeholder="Search workspace..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             className="w-full bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 py-3 pl-10 pr-4 text-xs font-semibold focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none placeholder-slate-400 dark:placeholder-slate-500 rounded-xl"
@@ -496,24 +496,24 @@ export function AnalyticsClient({
                     <table className="w-full min-w-[800px] text-left text-xs">
                         <thead className="bg-slate-50 dark:bg-slate-950/40 border-b border-slate-100 dark:border-slate-800 text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 tracking-wider">
                             <tr>
-                                <th className="px-8 py-5">Tên Chi Nhánh</th>
+                                <th className="px-8 py-5">Workspace Name</th>
                                 <th className="px-8 py-5">Domain</th>
-                                <th className="px-8 py-5">Loại hình</th>
+                                <th className="px-8 py-5">Workspace Type</th>
                                 <th className="px-8 py-5 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-850/60 transition-colors" onClick={() => handleSort('logs')}>
                                     <div className="flex items-center gap-1.5">
-                                        <span>Tổng Audit Logs</span>
+                                        <span>Total Audit Logs</span>
                                         <ArrowUpDown className="w-3.5 h-3.5 text-slate-400" />
                                     </div>
                                 </th>
                                 <th className="px-8 py-5 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-850/60 transition-colors" onClick={() => handleSort('blocked')}>
                                     <div className="flex items-center gap-1.5">
-                                        <span>IP Bị Chặn</span>
+                                        <span>Blocked IPs</span>
                                         <ArrowUpDown className="w-3.5 h-3.5 text-slate-400" />
                                     </div>
                                 </th>
                                 <th className="px-8 py-5 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-850/60 transition-colors" onClick={() => handleSort('critical')}>
                                     <div className="flex items-center gap-1.5">
-                                        <span>Cảnh báo An ninh</span>
+                                        <span>Security Alerts</span>
                                         <ArrowUpDown className="w-3.5 h-3.5 text-slate-400" />
                                     </div>
                                 </th>
@@ -535,7 +535,7 @@ export function AnalyticsClient({
                                                 ? 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-500/25' 
                                                 : 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/25'
                                         )}>
-                                            {item.type === 'Enterprise' ? 'Enterprise' : 'Legacy Space'}
+                                            {item.type === 'Enterprise' ? 'Enterprise SaaS' : 'Legacy Space'}
                                         </Badge>
                                     </td>
                                     <td className="px-8 py-5 font-black text-indigo-600 dark:text-indigo-400">
@@ -545,13 +545,13 @@ export function AnalyticsClient({
                                         {item.blockedCount} IP
                                     </td>
                                     <td className="px-8 py-5 font-bold text-amber-600 dark:text-amber-405">
-                                        {item.criticalCount} cảnh báo
+                                        {item.criticalCount} alerts
                                     </td>
                                 </tr>
                             )) : (
                                 <tr>
                                     <td colSpan={6} className="px-8 py-12 text-center text-slate-400 italic">
-                                        Không tìm thấy chi nhánh nào.
+                                        No workspaces found.
                                     </td>
                                 </tr>
                             )}
@@ -570,13 +570,13 @@ export function AnalyticsClient({
                         <ShieldAlert className="w-7 h-7 animate-pulse text-indigo-400" />
                     </div>
                     <div>
-                        <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Màn hình giám sát và tuân thủ an ninh hệ thống</h4>
-                        <p className="text-lg font-black text-slate-100">Đã kiểm toán và ghi nhận {auditCount.toLocaleString()} sự kiện an ninh RLS</p>
+                        <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">System Security Monitoring & Compliance Dashboard</h4>
+                        <p className="text-lg font-black text-slate-100">Audited and recorded {auditCount.toLocaleString()} RLS security events</p>
                     </div>
                 </div>
                 <div className="relative z-10 flex items-center gap-2.5 px-4.5 py-2.5 bg-white/5 rounded-xl border border-white/10 shrink-0">
                     <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
-                    <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider">Cơ chế RLS hoạt động thực tế</span>
+                    <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider">Active Row Level Security (RLS) enforcement</span>
                 </div>
             </div>
         </div>

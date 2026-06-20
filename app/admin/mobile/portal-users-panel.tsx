@@ -81,7 +81,7 @@ export function PortalUsersPanel() {
                         email: 'N/A (Security)', 
                         created_at: ur.created_at,
                         user_metadata: {
-                            full_name: profile.full_name || 'Học viên ẩn danh',
+                            full_name: profile.full_name || 'Anonymous Student',
                         }
                     };
                 })
@@ -89,7 +89,7 @@ export function PortalUsersPanel() {
 
             setUsers(mappedUsers);
         } catch (err: any) {
-            console.error('Error khi tải danh sách user portal:', err);
+            console.error('Error loading portal users list:', err);
             setError(err.message);
         } finally {
             setLoading(false);
@@ -104,11 +104,11 @@ export function PortalUsersPanel() {
         <div className="space-y-4">
             <div className="flex justify-between items-center mb-4">
                 <p className="text-sm text-gray-500">
-                    Danh sách những last namec viên đã registration account tham gia đàm đạo qua Dharma Portal.
+                    List of students who have registered accounts to participate in discussions via the Dharma Portal.
                 </p>
                 <Button variant="outline" size="sm" onClick={fetchUsers} disabled={loading}>
                     <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
-                    Tải lại
+                    Reload
                 </Button>
             </div>
 
@@ -122,9 +122,9 @@ export function PortalUsersPanel() {
                 <Table>
                     <TableHeader className="bg-gray-50">
                         <TableRow>
-                            <TableHead>Last namec viên / Pháp danh</TableHead>
+                            <TableHead>Student / Dharma Name</TableHead>
                             <TableHead>ID (UUID)</TableHead>
-                            <TableHead>Ngày registration</TableHead>
+                            <TableHead>Registration Date</TableHead>
                             <TableHead>Status</TableHead>
                         </TableRow>
                     </TableHeader>
@@ -138,7 +138,7 @@ export function PortalUsersPanel() {
                         ) : users.length === 0 ? (
                             <TableRow>
                                 <TableCell colSpan={4} className="h-24 text-center text-gray-500">
-                                    Chưa có last namec viên nào registration qua Cổng thông tin (Portal).
+                                    No students have registered through the portal yet.
                                 </TableCell>
                             </TableRow>
                         ) : (
@@ -154,11 +154,11 @@ export function PortalUsersPanel() {
                                         {user.id.substring(0, 8)}...
                                     </TableCell>
                                     <TableCell className="text-sm text-gray-600">
-                                        {new Date(user.created_at).toLocaleDateString('vi-VN')}
+                                        {new Date(user.created_at).toLocaleDateString('en-US')}
                                     </TableCell>
                                     <TableCell>
                                         <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200">
-                                            Đã validate
+                                            Validated
                                         </Badge>
                                     </TableCell>
                                 </TableRow>
@@ -169,7 +169,7 @@ export function PortalUsersPanel() {
             </div>
             
             <p className="text-xs text-amber-600 bg-amber-50 p-3 rounded-lg border border-amber-100 italic">
-                Save ý: Vì lý do security dữ liệu cá nhân theo tiêu standard quốc tế và quy định của Kiến trúc sư, Email và thông tin nhạy cảm của user được hidden khỏi bảng điều khiển CMS thông thường. Only Super Admin (có khóa Service Role) mới view được toàn bộ trên Supabase Dashboard.
+                Note: For personal data privacy reasons in accordance with international security standards and architect policies, email and other sensitive user information are hidden from the standard CMS dashboard. Only Super Admins (with the Service Role key) can view the complete data directly in the Supabase Dashboard.
             </p>
         </div>
     );

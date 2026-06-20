@@ -13,7 +13,7 @@ export function ExportCSVButton({ data }: ExportCSVButtonProps) {
         if (!data || data.length === 0) return;
 
         // CSV headers
-        const headers = ['Last name name', 'Event', 'Số người', 'Điện thoại', 'Email', 'Status', 'Ngày registration'];
+        const headers = ['Full Name', 'Event', 'Guests', 'Phone', 'Email', 'Status', 'Registration Date'];
 
         // CSV rows
         const rows = data.map((reg) => [
@@ -22,9 +22,9 @@ export function ExportCSVButton({ data }: ExportCSVButtonProps) {
             reg.num_participants || 0,
             reg.phone || '',
             reg.email || '',
-            reg.status === 'confirmed' ? 'Đã confirm' :
-                reg.status === 'pending' ? 'Chờ confirm' : 'Đã cancel',
-            new Date(reg.registration_date || reg.created_at).toLocaleString('vi-VN'),
+            reg.status === 'confirmed' ? 'Confirmed' :
+                reg.status === 'pending' ? 'Pending' : 'Cancelled',
+            new Date(reg.registration_date || reg.created_at).toLocaleString('en-US'),
         ]);
 
         // Combine headers and rows
@@ -38,7 +38,7 @@ export function ExportCSVButton({ data }: ExportCSVButtonProps) {
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
-        link.download = `dang-ky-su-kien-${Date.now()}.csv`;
+        link.download = `event-registrations-${Date.now()}.csv`;
         link.click();
         URL.revokeObjectURL(url);
     };

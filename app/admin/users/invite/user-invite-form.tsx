@@ -32,10 +32,10 @@ import { RoleSelector } from '@/components/admin/role-selector';
 import { Role } from '@/lib/permissions';
 
 const formSchema = z.object({
-    email: z.string().email('Email invalid'),
-    fullName: z.string().min(2, 'Name phải có ít nhất 2 characters'),
-    password: z.string().min(6, 'Password phải có ít nhất 6 characters'),
-    role: z.string().min(1, 'Please select role'),
+    email: z.string().email('Invalid email'),
+    fullName: z.string().min(2, 'Name must be at least 2 characters'),
+    password: z.string().min(6, 'Password must be at least 6 characters'),
+    role: z.string().min(1, 'Please select a role'),
     tenantId: z.string().optional(),
 });
 
@@ -62,7 +62,7 @@ export default function UserInviteForm({ currentUserRole, currentUserTenantId, t
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         if (['tenant_admin', 'tenant_editor', 'tenant_accountant'].includes(values.role) && !values.tenantId) {
-            toast.error('Please select một ngôi branch (branch) cho quyền Tenant này.');
+            toast.error('Please select a branch for this Tenant permission.');
             return;
         }
         try {
@@ -70,7 +70,7 @@ export default function UserInviteForm({ currentUserRole, currentUserTenantId, t
             const result = await createUser(values);
 
             if (result.success) {
-                toast.success('Đã tạo account successfully');
+                toast.success('Account created successfully');
                 router.push('/admin/users');
                 router.refresh();
             } else {
@@ -93,8 +93,8 @@ export default function UserInviteForm({ currentUserRole, currentUserTenantId, t
                     </Link>
                 </Button>
                 <div>
-                    <h1 className="text-2xl font-playfair font-bold">Add member mới</h1>
-                    <p className="text-gray-500">Tạo account mới cho administrator hoặc editor</p>
+                    <h1 className="text-2xl font-playfair font-bold">Add New Member</h1>
+                    <p className="text-gray-500">Create a new account for administrators or editors</p>
                 </div>
             </div>
 
@@ -121,9 +121,9 @@ export default function UserInviteForm({ currentUserRole, currentUserTenantId, t
                                 name="fullName"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Last name và name</FormLabel>
+                                        <FormLabel>Full Name</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="Nguyễn Văn A" {...field} />
+                                            <Input placeholder="John Doe" {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -167,7 +167,7 @@ export default function UserInviteForm({ currentUserRole, currentUserTenantId, t
                                     name="tenantId"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Select Ngôi Branch Quản Lý <span className="text-red-500">*</span></FormLabel>
+                                            <FormLabel>Select Branch to Manage <span className="text-red-500">*</span></FormLabel>
                                             <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isLoading || currentUserRole === 'tenant_admin'}>
                                                 <FormControl>
                                                     <SelectTrigger>
@@ -177,7 +177,7 @@ export default function UserInviteForm({ currentUserRole, currentUserTenantId, t
                                                 <SelectContent>
                                                     {currentUserRole === 'tenant_admin' ? (
                                                         <SelectItem key={currentUserTenantId} value={currentUserTenantId || ''}>
-                                                            {tenants.find(t => t.id === currentUserTenantId)?.name || 'Branch của bạn'}
+                                                            {tenants.find(t => t.id === currentUserTenantId)?.name || 'Your Branch'}
                                                         </SelectItem>
                                                     ) : (
                                                         tenants.map(t => (
@@ -207,7 +207,7 @@ export default function UserInviteForm({ currentUserRole, currentUserTenantId, t
                                     disabled={isLoading}
                                 >
                                     {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                                    Tạo account
+                                    Create Account
                                 </Button>
                             </div>
                         </form>

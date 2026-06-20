@@ -15,13 +15,13 @@ const PLAN_TYPE_BADGES: Record<string, { label: string; className: string }> = {
 
 
 const LAYOUT_LABELS: Record<string, string> = {
-    // Chỉ giữ lại các layout standard doanh nghiệp
-    saas_violet: '⚡ Violet Premium SaaS',
-    corp_navy: '🛡️ Corporate Navy Premium',
-    modern_tech: '🌌 Cyberpunk Neon Tech',
-    charity_green: '🌱 Social Green Sustainable',
-    creative_amber: '☀️ Creative Amber Studio',
-    minimal_white: '❄️ Clean Minimalist Elite',
+    // Only standard business layouts
+    saas_violet: 'Violet Premium SaaS',
+    corp_navy: 'Corporate Navy Premium',
+    modern_tech: 'Cyberpunk Neon Tech',
+    charity_green: 'Social Green Sustainable',
+    creative_amber: 'Creative Amber Studio',
+    minimal_white: 'Clean Minimalist Elite',
 };
 
 
@@ -37,17 +37,17 @@ export default async function TenantsPage() {
                 <div>
                     <h1 className="text-3xl font-bold text-white tracking-tight flex items-center gap-2">
                         <Building2 className="w-8 h-8 text-amber-400" />
-                        Quản lý Workspace & Unit member
+                        Workspace & Organization Management
                     </h1>
                     <p className="text-slate-400 mt-1 text-sm">
-                        Danh sách các doanh nghiệp, đối tác và unit member sử dụng system ({tenants.length} unit)
+                        List of businesses, partners, and organizations using the system ({tenants.length} tenants)
                     </p>
                 </div>
                 <div className="flex flex-wrap gap-2 font-sans">
                     <Link href="/admin/tenants/new">
                         <Button className="gap-2 bg-amber-600 hover:bg-amber-500 text-white font-bold shadow-md shadow-amber-900/10">
                             <Plus className="w-4 h-4" />
-                            Initialize Workspace mới
+                            Create New Workspace
                         </Button>
                     </Link>
                 </div>
@@ -56,7 +56,7 @@ export default async function TenantsPage() {
             {error && (
                 <div className="bg-red-950/30 border border-red-500/30 text-red-200 px-4 py-3 rounded-xl flex items-center gap-3">
                     <ShieldAlert className="w-5 h-5 text-red-400 shrink-0" />
-                    <span>Error tải dữ liệu: {error}</span>
+                    <span>Failed to load data: {error}</span>
                 </div>
             )}
 
@@ -65,7 +65,7 @@ export default async function TenantsPage() {
                 <Card className="border-white/[0.08] bg-slate-900/40 backdrop-blur-xl">
                     <CardContent className="py-16 text-center text-slate-500">
                         <Building2 className="w-12 h-12 mx-auto mb-4 opacity-30 text-amber-400" />
-                        <p className="text-slate-400">Chưa có Workspace nào trong system.</p>
+                        <p className="text-slate-400">No workspaces found in the system.</p>
                     </CardContent>
                 </Card>
             ) : (
@@ -98,11 +98,11 @@ export default async function TenantsPage() {
                                                 {/* Suspended badge */}
                                                 {(tenant.modules_config as any)?.lifecycle_status === 'suspended' && (
                                                     <Badge variant="outline" className="text-[10px] font-bold py-0.5 px-2 uppercase tracking-wide bg-red-950/60 text-red-300 border-red-600/40">
-                                                        Đình chỉ
+                                                        Suspended
                                                     </Badge>
                                                 )}
                                                 <Badge variant="outline" className="text-[10px] bg-white/5 border-white/10 text-slate-300 font-bold py-0.5 px-2 uppercase tracking-wide">
-                                                    {LAYOUT_LABELS[tenant.layout_style || 'saas_violet'] || '⚡ Violet Premium SaaS'}
+                                                    {LAYOUT_LABELS[tenant.layout_style || 'saas_violet'] || 'Violet Premium SaaS'}
                                                 </Badge>
                                             </div>
                                             <div className="flex items-center gap-4 mt-1.5 text-xs text-slate-400">
@@ -121,7 +121,7 @@ export default async function TenantsPage() {
                                     <Link href={`/admin/tenants/${tenant.id}`} className="sm:self-center">
                                         <Button variant="outline" size="sm" className="w-full sm:w-auto gap-1.5 border-white/10 text-slate-300 hover:bg-white/5 hover:text-white bg-slate-950/20">
                                             <Pencil className="w-3.5 h-3.5 text-amber-400" />
-                                            Chỉnh edit configuration
+                                            Edit Settings
                                         </Button>
                                     </Link>
                                 </div>

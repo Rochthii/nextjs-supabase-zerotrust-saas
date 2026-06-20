@@ -332,7 +332,7 @@ export function LiveThemeEditor({ initialSettings, tenantType = 'tenant' }: { in
     };
 
     const handleDeleteCustomPreset = (nameToDelete: string) => {
-        if (!window.confirm(`Bạn có chắc muốn delete preset "${nameToDelete}"?`)) return;
+        if (!window.confirm(`Are you sure you want to delete preset "${nameToDelete}"?`)) return;
         setCustomPresets(customPresets.filter(p => p.name !== nameToDelete));
         if (activePreset === `custom_${nameToDelete}`) {
             setActivePreset(null);
@@ -362,10 +362,10 @@ export function LiveThemeEditor({ initialSettings, tenantType = 'tenant' }: { in
             <div className="bg-slate-900/20 backdrop-blur-xl border border-white/[0.08] rounded-2xl p-5 shadow-none mb-8">
                 <div className="flex items-center gap-3 mb-5">
                     <h3 className="text-base font-bold text-white flex items-center gap-2">
-                        <span>🎨</span> {isCompany ? 'Bộ màu Enterprise Premium' : 'Bộ màu system Premium'}
+                        <span>🎨</span> {isCompany ? 'Enterprise Premium Color Palette' : 'Premium System Color Palette'}
                     </h3>
                     <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-white/[0.06] text-slate-300 border border-white/[0.08]">
-                        {activePresetsList.length} Themes {isCompany ? 'chuyên nghiệp' : 'nghiên cứu'}
+                        {activePresetsList.length} Themes {isCompany ? '(Professional)' : '(Academic)'}
                     </span>
                 </div>
 
@@ -421,7 +421,7 @@ export function LiveThemeEditor({ initialSettings, tenantType = 'tenant' }: { in
                                     type="button"
                                     onClick={(e) => { e.stopPropagation(); handleDeleteCustomPreset(preset.name); }}
                                     className="absolute -top-1.5 -right-1.5 bg-red-950/80 text-red-400 hover:bg-red-600 hover:text-white rounded-full w-6 h-6 flex items-center justify-center text-[10px] opacity-0 group-hover:opacity-100 transition-opacity shadow-sm border border-red-900/50 z-40"
-                                    title="Delete preset này"
+                                    title="Delete this preset"
                                 >
                                     ✕
                                 </button>
@@ -436,17 +436,17 @@ export function LiveThemeEditor({ initialSettings, tenantType = 'tenant' }: { in
                                 type="button"
                                 onClick={() => setIsAddingPreset(true)}
                                 className="flex flex-col items-center justify-center p-3 rounded-2xl border border-dashed border-white/10 text-slate-400 hover:text-slate-200 hover:border-white/20 hover:bg-slate-950/30 transition-all w-full h-full min-h-[90px]"
-                                title="Save bộ màu current thành một Preset mới"
+                                title="Save current color palette as a new preset"
                             >
                                 <span className="text-2xl mb-1">+</span>
                                 <span className="text-[10px] font-medium text-center text-slate-400">Save Preset</span>
                             </button>
                         ) : (
                             <div className="absolute top-0 left-0 flex flex-col gap-2 bg-slate-950 p-2.5 rounded-xl border border-white/[0.12] shadow-2xl z-50 animate-in fade-in zoom-in-95 duration-200" style={{ width: '220px' }}>
-                                <p className="text-xs font-semibold text-slate-200">Save bộ màu mới</p>
+                                <p className="text-xs font-semibold text-slate-200">Save new preset</p>
                                 <input
                                     type="text"
-                                    placeholder={isCompany ? "Name preset (VD: Corporate)" : "Name preset (VD: Mùa An Cư)"}
+                                    placeholder={isCompany ? "Preset name (e.g. Corporate)" : "Preset name (e.g. Saffron)"}
                                     value={newPresetName}
                                     onChange={e => setNewPresetName(e.target.value)}
                                     className="text-xs px-2.5 py-2 w-full border border-white/10 rounded focus:outline-none focus:ring-1 focus:ring-amber-500 bg-slate-900 text-white"
@@ -483,48 +483,48 @@ export function LiveThemeEditor({ initialSettings, tenantType = 'tenant' }: { in
                 <div className="space-y-5">
                     {/* Row 1: Core Colors */}
                     <div>
-                        <p className="text-xs font-semibold text-slate-300 uppercase tracking-widest mb-3">🎨 Colors chủ đạo</p>
+                        <p className="text-xs font-semibold text-slate-300 uppercase tracking-widest mb-3">🎨 Primary Colors</p>
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                            <ColorField label={isCompany ? "Màu Chủ đạo" : "Màu Chủ đạo (Gold)"} id="primary" value={colors.primary} onChange={v => setColor('primary', v)}
-                                hint={isCompany ? "Colors chính cho nút bấm, liên kết và điểm nhấn thương hiệu" : "Nút bấm, badge, điểm nhấn chính"} />
-                            <ColorField label={isCompany ? "Màu Phụ" : "Màu Phụ (Brown)"} id="secondary" value={colors.secondary} onChange={v => setColor('secondary', v)}
-                                hint={isCompany ? "Dùng cho thanh định hướng, các details phụ trợ" : "Viền, icon phụ, section tử thứ cấp"} />
-                            <ColorField label={isCompany ? "Màu Nhấn (Accent)" : "Accent (Saffron)"} id="accent" value={colors.accent} onChange={v => setColor('accent', v)}
-                                hint={isCompany ? "Làm featured các section tử thu hút chú ý (Sale, Hot, v.v.)" : "Highlight đặc biệt, label featured"} />
+                            <ColorField label={isCompany ? "Primary Color" : "Primary Color (Gold)"} id="primary" value={colors.primary} onChange={v => setColor('primary', v)}
+                                hint={isCompany ? "Main color for buttons, links, and brand highlights" : "Buttons, badges, primary highlights"} />
+                            <ColorField label={isCompany ? "Secondary Color" : "Secondary Color (Brown)"} id="secondary" value={colors.secondary} onChange={v => setColor('secondary', v)}
+                                hint={isCompany ? "Used for navigation bars and secondary details" : "Borders, secondary icons, sub-sections"} />
+                            <ColorField label={isCompany ? "Accent Color" : "Accent (Saffron)"} id="accent" value={colors.accent} onChange={v => setColor('accent', v)}
+                                hint={isCompany ? "Highlights featured sections to draw attention" : "Special highlights, featured labels"} />
                         </div>
                     </div>
 
                     {/* Row 2: Text + Backgrounds */}
                     <div>
-                        <p className="text-xs font-semibold text-slate-300 uppercase tracking-widest mb-3">🖌️ Nền & Chữ</p>
+                        <p className="text-xs font-semibold text-slate-300 uppercase tracking-widest mb-3">🖌️ Backgrounds & Text</p>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <ColorField label="Màu Chữ Tiêu Đề" id="text" value={colors.text} onChange={v => setColor('text', v)}
-                                hint="Title chính, đoạn văn, văn bản quan trọng" />
+                            <ColorField label="Heading Text Color" id="text" value={colors.text} onChange={v => setColor('text', v)}
+                                hint="Main title, paragraphs, important texts" />
                             <div className="grid grid-cols-2 gap-2">
-                                <ColorField label="Nền Gradient (trên)" id="bgStart" value={colors.bgStart} onChange={v => setColor('bgStart', v)}
-                                    hint="Nền page gradient phía trên" compact />
-                                <ColorField label="Nền Gradient (dưới)" id="bgEnd" value={colors.bgEnd} onChange={v => setColor('bgEnd', v)}
-                                    hint="Nền page gradient phía dưới" compact />
+                                <ColorField label="Gradient Bg (Top)" id="bgStart" value={colors.bgStart} onChange={v => setColor('bgStart', v)}
+                                    hint="Page background gradient top color" compact />
+                                <ColorField label="Gradient Bg (Bottom)" id="bgEnd" value={colors.bgEnd} onChange={v => setColor('bgEnd', v)}
+                                    hint="Page background gradient bottom color" compact />
                             </div>
                         </div>
                     </div>
 
                     {/* Row 3: Semantic Colors */}
                     <div>
-                        <p className="text-xs font-semibold text-slate-300 uppercase tracking-widest mb-1">⚙️ Màu Ngữ Nghĩa (tự tính nếu để trống)</p>
-                        <p className="text-xs text-slate-400 mb-3">Các màu này tự động tính từ màu trên. Chỉ cần đặt nếu muốn override.</p>
+                        <p className="text-xs font-semibold text-slate-300 uppercase tracking-widest mb-1">⚙️ Semantic Colors (Auto-computed if empty)</p>
+                        <p className="text-xs text-slate-400 mb-3">These colors auto-derive from the colors above. Only set if you want to override.</p>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <ColorField label="Hero Background (Header/Footer/CTA)" id="hero" value={colors.hero} onChange={v => setColor('hero', v)}
-                                hint={`Tự tính: ${darken(colors.text, 0.55)}`} />
-                            <ColorField label="Surface (Nền page — Ivory)" id="surface" value={colors.surface} onChange={v => setColor('surface', v)}
-                                hint={`Tự tính: ${lighten(colors.bgStart, 0.4)}`} />
+                                hint={`Auto-computed: ${darken(colors.text, 0.55)}`} />
+                            <ColorField label="Surface (Page Background — Ivory)" id="surface" value={colors.surface} onChange={v => setColor('surface', v)}
+                                hint={`Auto-computed: ${lighten(colors.bgStart, 0.4)}`} />
                         </div>
                     </div>
 
                     {/* Row 4: Pattern Opacity */}
                     <div>
                         <Label className="text-xs font-semibold text-slate-300 uppercase tracking-widest">
-                            {isCompany ? `🌸 Độ mờ last namea tiết nền (${(parseFloat(colors.patternOpacity) * 100).toFixed(0)}%)` : `🌸 Độ mờ hoa văn nền Khmer (${(parseFloat(colors.patternOpacity) * 100).toFixed(0)}%)`}
+                            {isCompany ? `🌸 Pattern Opacity (${(parseFloat(colors.patternOpacity) * 100).toFixed(0)}%)` : `🌸 Khmer Pattern Opacity (${(parseFloat(colors.patternOpacity) * 100).toFixed(0)}%)`}
                         </Label>
                         <input
                             type="range"
@@ -536,27 +536,27 @@ export function LiveThemeEditor({ initialSettings, tenantType = 'tenant' }: { in
                             className="w-full mt-2 accent-amber-500"
                         />
                         <div className="flex justify-between text-[10px] text-slate-400 mt-1">
-                            <span>Mờ (1%)</span>
-                            <span>Đậm (15%)</span>
+                            <span>Faint (1%)</span>
+                            <span>Strong (15%)</span>
                         </div>
                     </div>
 
                     
                     {/* Row 5: Custom Header & Footer Background */}
                     <div>
-                        <p className="text-xs font-semibold text-slate-300 uppercase tracking-widest mb-1">📐 Tùy chỉnh Nền Header & Footer</p>
-                        <p className="text-[10px] text-slate-400 mb-3">Chỉ đặt khi bạn không muốn dùng màu nền default của Interface (Theme).</p>
+                        <p className="text-xs font-semibold text-slate-300 uppercase tracking-widest mb-1">📐 Custom Header & Footer Background</p>
+                        <p className="text-[10px] text-slate-400 mb-3">Only set if you do not want to use the default theme background.</p>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <ColorField label="Nền Header" id="headerBg" value={colors.headerBg} onChange={v => setColor('headerBg', v)}
-                                hint="Ví dụ: #000000 hoặc để trống" />
-                            <ColorField label="Nền Footer" id="footerBg" value={colors.footerBg} onChange={v => setColor('footerBg', v)}
-                                hint="Ví dụ: #FFFFFF hoặc để trống" />
+                            <ColorField label="Header Background" id="headerBg" value={colors.headerBg} onChange={v => setColor('headerBg', v)}
+                                hint="Example: #000000 or leave blank" />
+                            <ColorField label="Footer Background" id="footerBg" value={colors.footerBg} onChange={v => setColor('footerBg', v)}
+                                hint="Example: #FFFFFF or leave blank" />
                         </div>
                     </div>
 
                     {/* Auto-derived display */}
                     <div className="bg-slate-950/40 rounded-xl p-4 border border-white/[0.06]">
-                        <p className="text-xs font-semibold text-slate-300 mb-2">🔁 Màu tự động (not needed đặt)</p>
+                        <p className="text-xs font-semibold text-slate-300 mb-2">🔁 Derived Colors (No need to set)</p>
                         <div className="grid grid-cols-2 gap-2">
                             <AutoColorChip label="gold-dark (hover)" hex={darken(colors.primary, 0.85)} />
                             <AutoColorChip label="gold-light (badge)" hex={lighten(colors.primary, 0.25)} />
@@ -568,7 +568,7 @@ export function LiveThemeEditor({ initialSettings, tenantType = 'tenant' }: { in
 
                 {/* Right: Live Preview */}
                 <div className="sticky top-4 self-start bg-slate-900/10 backdrop-blur-xl border border-white/[0.08] p-4 rounded-2xl">
-                    <p className="text-xs font-semibold text-slate-300 uppercase tracking-widest mb-3">👁️ View Trước Trực Tiếp</p>
+                    <p className="text-xs font-semibold text-slate-300 uppercase tracking-widest mb-3">👁️ Live Preview</p>
                     <LivePreview colors={colors} tenantType={tenantType} />
                 </div>
             </div>
@@ -576,13 +576,13 @@ export function LiveThemeEditor({ initialSettings, tenantType = 'tenant' }: { in
             {/* Unsaved indicator */}
             {hasUnsaved && (
                 <div className="flex items-center justify-between p-3 bg-amber-950/30 border border-amber-900/50 rounded-lg">
-                    <span className="text-xs text-amber-400 font-medium">⚠️ Bạn có thay đổi chưa save. Kéo xuống và nhấn "Save settings" để áp dụng vĩnh viễn.</span>
+                    <span className="text-xs text-amber-400 font-medium">⚠️ You have unsaved changes. Scroll down and click "Save settings" to persist.</span>
                     <button
                         type="button"
                         onClick={resetToSaved}
                         className="text-xs text-slate-400 hover:text-slate-200 underline ml-4 whitespace-nowrap"
                     >
-                        Hoàn tác
+                        Revert
                     </button>
                 </div>
             )}
@@ -633,18 +633,18 @@ function LivePreview({ colors, tenantType = 'tenant' }: { colors: ThemeColors; t
     const goldLight = lighten(primary, 0.25);
 
     // Dynamic strings for Enterprise vs Temple
-    const previewTitle = isCompany ? 'Name Enterprise' : 'Name Branch';
-    const previewSubtitle = isCompany ? 'ENTERPRISE' : 'THERAVADA';
-    const previewHeroTitle = isCompany ? 'Sản phẩm & Dịch vụ' : 'Pháp sự hằng ngày';
-    const previewHeroSub = isCompany ? 'Giải pháp công nghệ vượt trội' : 'Nơi bình an và tu tập';
-    const previewBtnText = isCompany ? 'Tìm hiểu add →' : 'Khám phá ngay →';
-    const previewNewsTitle = isCompany ? 'News featured' : 'Lịch lễ tháng 3/2026';
+    const previewTitle = isCompany ? 'Enterprise Name' : 'Branch Name';
+    const previewSubtitle = isCompany ? 'ENTERPRISE' : 'ACADEMIC';
+    const previewHeroTitle = isCompany ? 'Products & Services' : 'Daily Activities';
+    const previewHeroSub = isCompany ? 'Outstanding technology solutions' : 'A place of peace and study';
+    const previewBtnText = isCompany ? 'Learn more →' : 'Explore now →';
+    const previewNewsTitle = isCompany ? 'Featured News' : 'Upcoming Event Calendar';
     const previewNewsDesc = isCompany 
-        ? 'Chúng tôi không ngừng đổi mới để mang lại những giá trị tối ưu nhất...'
-        : 'Branch organization nhiều pháp sự quan trọng trong this month...';
-    const previewCtaTitle = isCompany ? 'Hợp tác phát triển' : 'Hộ Trì Tam Bảo';
-    const previewCtaBtn = isCompany ? 'Submit yêu cầu →' : 'Payment →';
-    const previewNavItems = isCompany ? ['Homepage', 'Sản phẩm', 'Contact'] : ['About', 'News', 'Payment'];
+        ? 'We constantly innovate to deliver the best value...'
+        : 'Organizing important ceremonies and events this month...';
+    const previewCtaTitle = isCompany ? 'Partnership & Growth' : 'Support Our Mission';
+    const previewCtaBtn = isCompany ? 'Submit Inquiry →' : 'Contribute →';
+    const previewNavItems = isCompany ? ['Home', 'Products', 'Contact'] : ['About', 'News', 'Contribute'];
     const previewFooterText = isCompany ? '© 2026 Enterprise · All rights reserved' : '© 2026 Branch · All rights reserved';
 
     return (
@@ -669,7 +669,7 @@ function LivePreview({ colors, tenantType = 'tenant' }: { colors: ThemeColors; t
             <div className="px-4 py-4 flex flex-col items-center text-center" style={{
                 background: `linear-gradient(135deg, ${hero}, ${colors.text})`
             }}>
-                <div className="text-[9px] font-bold" style={{ color: primary }}>{isCompany ? '✦ GIỚI THIỆU ✦' : '✦ CHÀO MỪNG ✦'}</div>
+                <div className="text-[9px] font-bold" style={{ color: primary }}>{isCompany ? '✦ INTRODUCTION ✦' : '✦ WELCOME ✦'}</div>
                 <div className="text-sm font-bold mt-1 text-white leading-tight">{previewHeroTitle}</div>
                 <div className="text-[8px] mt-1" style={{ color: goldLight }}>{previewHeroSub}</div>
                 <div className="mt-2.5 px-3 py-1 rounded text-[8px] font-semibold" style={{ backgroundColor: primary, color: 'white' }}>

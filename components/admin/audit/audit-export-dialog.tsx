@@ -54,21 +54,21 @@ export function AuditExportDialog({ tenantId, currentFilters }: AuditExportDialo
             });
 
             if (!result.success || !result.data) {
-                toast.error(result.error || 'Không lấy được dữ liệu log');
+                toast.error(result.error || 'Could not retrieve log data');
                 return;
             }
 
             if (result.data.length === 0) {
-                toast.warning('No data available log trong khoảng time này');
+                toast.warning('No log data available in this time range');
                 return;
             }
 
             exportExcel(result.data);
             setIsOpen(false);
-            toast.success('Dữ liệu log đã được xuất successfully');
+            toast.success('Log data exported successfully');
         } catch (error) {
             console.error(error);
-            toast.error('Error on xuất log');
+            toast.error('Error exporting logs');
         } finally {
             setIsLoading(false);
         }
@@ -86,7 +86,7 @@ export function AuditExportDialog({ tenantId, currentFilters }: AuditExportDialo
                         const beforeVal = d.changes.before[key];
                         const afterVal = d.changes.after[key];
                         if (JSON.stringify(beforeVal) !== JSON.stringify(afterVal)) {
-                            updates.push(`${key}: ${beforeVal ?? 'trống'} -> ${afterVal ?? 'trống'}`);
+                            updates.push(`${key}: ${beforeVal ?? 'empty'} -> ${afterVal ?? 'empty'}`);
                         }
                     }
                     changesStr = updates.join(' | ') || 'Update';
@@ -96,14 +96,14 @@ export function AuditExportDialog({ tenantId, currentFilters }: AuditExportDialo
             }
 
             return {
-                'STT': index + 1,
-                'Time': new Date(d.created_at).toLocaleString('vi-VN'),
-                'Người thực hiện': d.user_email || 'System',
-                'Hành động': d.action.toUpperCase(),
-                'Tài nguyên': d.resource,
-                'ID Records': d.resource_id || '',
-                'Content thay đổi': changesStr,
-                'Address IP': d.ip_address || '',
+                'No.': index + 1,
+                'Time': new Date(d.created_at).toLocaleString('en-US'),
+                'Actor': d.user_email || 'System',
+                'Action': d.action.toUpperCase(),
+                'Resource': d.resource,
+                'Record ID': d.resource_id || '',
+                'Change Content': changesStr,
+                'IP Address': d.ip_address || '',
                 'User Agent': d.user_agent || '',
             };
         });
@@ -115,18 +115,18 @@ export function AuditExportDialog({ tenantId, currentFilters }: AuditExportDialo
         const wscols = [
             { wch: 5 },  // STT
             { wch: 20 }, // Time
-            { wch: 25 }, // Người thực hiện
-            { wch: 15 }, // Hành động
-            { wch: 20 }, // Tài nguyên
-            { wch: 36 }, // ID Records
-            { wch: 60 }, // Content thay đổi
+            { wch: 25 }, // Actor
+            { wch: 15 }, // Action
+            { wch: 20 }, // Resource
+            { wch: 36 }, // Record ID
+            { wch: 60 }, // Change Content
             { wch: 15 }, // IP
             { wch: 40 }, // User Agent
         ];
         ws['!cols'] = wscols;
 
         XLSX.utils.book_append_sheet(wb, ws, 'Audit Logs');
-        XLSX.writeFile(wb, `nhat-ky-hoat-dong-${new Date().toISOString().split('T')[0]}.xlsx`);
+        XLSX.writeFile(wb, `audit-logs-${new Date().toISOString().split('T')[0]}.xlsx`);
     };
 
     return (
@@ -134,21 +134,21 @@ export function AuditExportDialog({ tenantId, currentFilters }: AuditExportDialo
             <DialogTrigger asChild>
                 <Button variant="outline" className="!border !border-indigo-500/30 !text-indigo-200 !bg-indigo-500/10 hover:!bg-indigo-500/20 hover:!text-white transition-all shadow-[0_0_15px_rgba(99,102,241,0.15)] font-semibold">
                     <FileDown className="mr-2 h-4 w-4" />
-                    Xuất Excel
+                    Export Excel
                 </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Xuất log system</DialogTitle>
+                    <DialogTitle className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Export System Logs</DialogTitle>
                     <DialogDescription>
-                        Select khoảng time để tải về lịch sử hoạt động. Bộ filter current (Email/Resource/Action) sẽ được áp dụng tự động.
+                        Select a time range to download the activity history. The current filters (Email/Resource/Action) will be automatically applied.
                     </DialogDescription>
                 </DialogHeader>
  
                 <div className="grid gap-4 py-4">
                     <div className="grid grid-cols-2 gap-4">
                         <div className="flex flex-col gap-2">
-                            <Label htmlFor="start">Từ ngày</Label>
+                            <Label htmlFor="start">From Date</Label>
                             <Input
                                 id="start"
                                 type="date"
@@ -157,7 +157,7 @@ export function AuditExportDialog({ tenantId, currentFilters }: AuditExportDialo
                             />
                         </div>
                         <div className="flex flex-col gap-2">
-                            <Label htmlFor="end">Đến ngày</Label>
+                            <Label htmlFor="end">To Date</Label>
                             <Input
                                 id="end"
                                 type="date"
@@ -169,11 +169,11 @@ export function AuditExportDialog({ tenantId, currentFilters }: AuditExportDialo
                     
                     {currentFilters && (currentFilters.resource || currentFilters.action || currentFilters.search) && (
                         <div className="bg-slate-50 dark:bg-slate-950 p-3 rounded-lg text-xs text-slate-500 dark:text-slate-400 border border-slate-100 dark:border-slate-800">
-                            <strong>Đang áp dụng filter:</strong>
+                            <strong>Applied Filters:</strong>
                             <ul className="mt-1 list-disc list-inside space-y-0.5">
                                 {currentFilters.search && <li>Search: {currentFilters.search}</li>}
-                                {currentFilters.resource && currentFilters.resource !== 'all' && <li>Tài nguyên: {currentFilters.resource}</li>}
-                                {currentFilters.action && currentFilters.action !== 'all' && <li>Hành động: {currentFilters.action}</li>}
+                                {currentFilters.resource && currentFilters.resource !== 'all' && <li>Resource: {currentFilters.resource}</li>}
+                                {currentFilters.action && currentFilters.action !== 'all' && <li>Action: {currentFilters.action}</li>}
                             </ul>
                         </div>
                     )}
@@ -191,7 +191,7 @@ export function AuditExportDialog({ tenantId, currentFilters }: AuditExportDialo
                         {isLoading ? (
                             <>
                                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                Đang process...
+                                Processing...
                             </>
                         ) : (
                             'Download Excel'

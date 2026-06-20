@@ -24,12 +24,12 @@ export function DomainForm({ tenantId, currentDomain }: DomainFormProps) {
         e.preventDefault();
 
         if (!domain.trim()) {
-            toast.error('Please nhập name miền');
+            toast.error('Please enter a domain name');
             return;
         }
 
         if (domain === currentDomain) {
-            toast.info('Name miền none thay đổi');
+            toast.info('Domain name has not changed');
             return;
         }
 
@@ -38,14 +38,14 @@ export function DomainForm({ tenantId, currentDomain }: DomainFormProps) {
             const { success, error } = await updateTenantDomain(tenantId, domain);
 
             if (success) {
-                toast.success('Đã update name miền successfully!');
+                toast.success('Domain name updated successfully!');
                 router.refresh();
             } else {
-                toast.error(error || 'Đã có error xảy ra khi update name miền');
+                toast.error(error || 'An error occurred while updating the domain name');
             }
         } catch (err) {
             console.error(err);
-            toast.error('Error connect. Please try again.');
+            toast.error('Connection error. Please try again.');
         } finally {
             setIsLoading(false);
         }
@@ -60,10 +60,10 @@ export function DomainForm({ tenantId, currentDomain }: DomainFormProps) {
                     </div>
                     <div>
                         <CardTitle className="text-xl font-bold font-playfair text-coffee-dark">
-                            Name Miền Tùy Chỉnh (Custom Domain)
+                            Custom Domain Name
                         </CardTitle>
                         <CardDescription>
-                            Configuration address truy cập cho portal của organization
+                            Configure the access address for your organization portal
                         </CardDescription>
                     </div>
                 </div>
@@ -71,20 +71,20 @@ export function DomainForm({ tenantId, currentDomain }: DomainFormProps) {
 
             <form onSubmit={handleSubmit}>
                 <CardContent className="pt-6 space-y-6">
-                    {/* Hướng dẫn */}
+                    {/* Instructions */}
                     <Alert className="bg-blue-50 border-blue-200">
                         <InfoIcon className="h-4 w-4 text-blue-600" />
-                        <AlertTitle className="text-blue-800 font-semibold">Name miền là gì?</AlertTitle>
+                        <AlertTitle className="text-blue-800 font-semibold">What is a domain name?</AlertTitle>
                         <AlertDescription className="text-blue-700 mt-1">
-                            Name miền là address để nhân sự, đối tác truy cập portal (VD: <b>ten-to-chuc.vn</b>).
-                            Bạn cần trỏ DNS của name miền về server system trước khi website có thể hoạt động qua name miền này.
+                            A domain name is the address for personnel and partners to access the portal (e.g. <b>your-organization.com</b>).
+                            You need to point the domain's DNS to the system server before the website can operate under this domain.
                         </AlertDescription>
                     </Alert>
 
                     {/* Input Field */}
                     <div className="space-y-3">
                         <label htmlFor="domain" className="block text-sm font-medium text-gray-700 font-bold">
-                            Name miền current
+                            Current Domain Name
                         </label>
                         <div className="relative">
                             <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
@@ -96,12 +96,12 @@ export function DomainForm({ tenantId, currentDomain }: DomainFormProps) {
                                 value={domain}
                                 onChange={(e) => setDomain(e.target.value)}
                                 className="pl-16 font-mono text-lg border-gray-300 focus:ring-gold-primary focus:border-gold-primary"
-                                placeholder="congtycuaban.com"
+                                placeholder="yourcompany.com"
                             />
                         </div>
                         <p className="text-sm text-gray-500 flex items-center gap-1.5 pt-1">
                             <CheckCircle2 className="w-4 h-4 text-green-500" />
-                            Đã loại bỏ tự động <i>http://</i> và <i>https://</i>
+                            Automatically removed <i>http://</i> and <i>https://</i>
                         </p>
                     </div>
 
@@ -111,11 +111,11 @@ export function DomainForm({ tenantId, currentDomain }: DomainFormProps) {
                             <div className="flex gap-3">
                                 <AlertTriangle className="w-6 h-6 text-orange-600 shrink-0" />
                                 <div>
-                                    <h4 className="font-semibold text-orange-800">Save ý khi đổi name miền</h4>
+                                    <h4 className="font-semibold text-orange-800">Important notes when changing domain name</h4>
                                     <ul className="text-sm text-orange-700 mt-2 space-y-2 list-disc pl-4">
-                                        <li>Name miền cũ <b><a href={`https://${currentDomain}`} className="underline">{currentDomain}</a></b> sẽ không còn trỏ về website này.</li>
-                                        <li>Đảm bảo name miền <b>{domain}</b> đã được configuration trỏ DNS (A Record / CNAME) đúng system.</li>
-                                        <li>Sau khi save, website có thể mất vài phút để system update SSL tự động.</li>
+                                        <li>The old domain name <b><a href={`https://${currentDomain}`} className="underline">{currentDomain}</a></b> will no longer point to this website.</li>
+                                        <li>Ensure the domain <b>{domain}</b> has been configured to point DNS (A Record / CNAME) to the correct server.</li>
+                                        <li>After saving, the website may take a few minutes for the system to automatically update the SSL certificate.</li>
                                     </ul>
                                 </div>
                             </div>
@@ -124,7 +124,7 @@ export function DomainForm({ tenantId, currentDomain }: DomainFormProps) {
                 </CardContent>
                 <CardFooter className="bg-gray-50 px-6 py-4 flex items-center justify-between border-t border-gray-100 rounded-b-lg">
                     <div className="flex items-center gap-2">
-                        <span className="text-sm text-gray-500">Website sẽ khả dụng tại:</span>
+                        <span className="text-sm text-gray-500">The website will be available at:</span>
                         <a
                             href={`https://${domain || currentDomain}`}
                             target="_blank"
@@ -140,7 +140,7 @@ export function DomainForm({ tenantId, currentDomain }: DomainFormProps) {
                         disabled={isLoading || domain === currentDomain || !domain.trim()}
                         className="bg-gold-primary hover:bg-gold-dark text-white font-medium px-6 shadow-sm"
                     >
-                        {isLoading ? 'Đang save...' : 'Save Thay Đổi'}
+                        {isLoading ? 'Saving...' : 'Save Changes'}
                     </Button>
                 </CardFooter>
             </form>
@@ -166,5 +166,5 @@ function InfoIcon(props: any) {
             <path d="M12 16v-4" />
             <path d="M12 8h.01" />
         </svg>
-    )
+    );
 }

@@ -12,18 +12,18 @@ const resourceLabels: Record<string, string> = {
     news: 'Media / Communications',
     events: 'Events & Calendar',
     media: 'Media Library / E-Learning',
-    users: 'Account user',
-    settings: 'Configuration system',
-    site_settings: 'Thiết lập Workspace',
-    transactions: 'Quản lý Finance',
-    transaction_projects: 'Project & Ngân sách',
-    bank_accounts: 'Cổng payment',
-    registrations: 'Registration dịch vụ',
-    event_registrations: 'Registration event',
-    contact_messages: 'Phản hồi tenant',
-    organizations: 'Mạng lưới đối tác',
-    tenants: 'Quản lý Organization (Tenants)',
-    user_roles: 'Authorization system (RBAC)',
+    users: 'User Account',
+    settings: 'System Configuration',
+    site_settings: 'Workspace Settings',
+    transactions: 'Financial Transactions',
+    transaction_projects: 'Projects & Budgets',
+    bank_accounts: 'Payment Gateways',
+    registrations: 'Service Registrations',
+    event_registrations: 'Event Registrations',
+    contact_messages: 'Contact Messages',
+    organizations: 'Partner Network',
+    tenants: 'Organization Management (Tenants)',
+    user_roles: 'System Authorization (RBAC)',
 };
 
 const actions = [
@@ -54,7 +54,7 @@ export function AuditFilters() {
             }
         });
         
-        // Luôn reset về page 1 khi filter
+        // Always reset to page 1 when filtering
         params.delete('page');
         
         router.push(`${basePath}?${params.toString()}`);
@@ -79,7 +79,7 @@ export function AuditFilters() {
                     <div className="relative">
                         <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
                         <Input
-                            placeholder="Tìm theo email user..."
+                            placeholder="Search by user email..."
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
                             onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
@@ -95,10 +95,10 @@ export function AuditFilters() {
                         updateFilters({ resource: val });
                     }}>
                         <SelectTrigger>
-                            <SelectValue placeholder="Tài nguyên" />
+                            <SelectValue placeholder="Resource" />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="all">All tài nguyên</SelectItem>
+                            <SelectItem value="all">All Resources</SelectItem>
                             {Object.entries(resourceLabels).map(([id, label]) => (
                                 <SelectItem key={id} value={id}>{label}</SelectItem>
                             ))}
@@ -113,10 +113,10 @@ export function AuditFilters() {
                         updateFilters({ action: val });
                     }}>
                         <SelectTrigger>
-                            <SelectValue placeholder="Hành động" />
+                            <SelectValue placeholder="Action" />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="all">All hành động</SelectItem>
+                            <SelectItem value="all">All Actions</SelectItem>
                             {actions.map((act) => (
                                 <SelectItem key={act} value={act}>{act.toUpperCase()}</SelectItem>
                             ))}
@@ -128,7 +128,7 @@ export function AuditFilters() {
                     <Button variant="default" onClick={handleSearch}>
                         Filter
                     </Button>
-                    <Button variant="outline" onClick={handleReset} title="Delete bộ filter">
+                    <Button variant="outline" onClick={handleReset} title="Clear Filters">
                         <X className="h-4 w-4" />
                     </Button>
                 </div>

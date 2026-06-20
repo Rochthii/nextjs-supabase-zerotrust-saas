@@ -46,47 +46,47 @@ const groupedMenuItems: MenuGroup[] = [
         items: [
             {
                 href: '/admin/dashboard',
-                label: 'Dashboard System',
+                label: 'System Dashboard',
                 icon: LayoutDashboard,
                 resource: 'tenants',
-                desc: 'Chỉ số toàn mạng lưới',
+                desc: 'Global network metrics',
             },
             {
                 href: '/admin/analytics',
                 label: 'Analytics',
                 icon: BarChart3,
                 resource: 'analytics',
-                desc: 'Lưu lượng toàn system',
+                desc: 'Global system traffic',
             },
         ]
     },
     {
-        groupTitle: 'An ninh & Vận hành (SOC)',
+        groupTitle: 'Security & Operations (SOC)',
         items: [
             {
                 href: '/admin/security-center',
-                label: 'Giám sát SOC',
+                label: 'SOC Monitoring',
                 icon: ShieldAlert,
                 resource: 'settings',
-                desc: 'An ninh time thực',
+                desc: 'Real-time security',
             },
             {
                 href: '/admin/performance',
                 label: 'Benchmark RLS',
                 icon: Gauge,
                 resource: 'settings',
-                desc: 'Đo lường hiệu năng',
+                desc: 'Performance benchmark',
             },
             {
                 href: '/admin/audit-logs',
-                label: 'Nhật ký Kiểm toán',
+                label: 'Audit Logs',
                 icon: FileText,
                 resource: 'settings',
-                desc: 'Lịch sử hành động',
+                desc: 'Immutable action history',
             },
             {
                 href: '/admin/users',
-                label: 'Quản lý User',
+                label: 'User Management',
                 icon: Users,
                 resource: 'users',
                 desc: 'Authorization RBAC',
@@ -96,7 +96,7 @@ const groupedMenuItems: MenuGroup[] = [
                 label: 'Backup & Restore',
                 icon: Database,
                 resource: 'settings',
-                desc: 'Sao lưu system',
+                desc: 'System backups',
             },
         ]
     },
@@ -105,7 +105,7 @@ const groupedMenuItems: MenuGroup[] = [
         items: [
             {
                 href: '/admin/tenants',
-                label: 'Quản lý Workspace',
+                label: 'Workspace Management',
                 icon: Building2,
                 resource: 'tenants',
                 desc: 'Organization & Enterprise',
@@ -137,7 +137,7 @@ export function GlobalSidebar({ role = 'admin', email, permissions = {}, tenantT
         } catch { /* ignore */ }
     }, []);
 
-    // Tự động open menu nếu đang ở trong page con
+    // Automatically open parent menu if currently active route is a sub-item
     React.useEffect(() => {
         groupedMenuItems.forEach(group => {
             group.items.forEach(item => {
@@ -167,9 +167,9 @@ export function GlobalSidebar({ role = 'admin', email, permissions = {}, tenantT
     };
 
     const roleLabel: Record<string, string> = {
-        super_admin: '⚡ Super Admin',
-        company_editor: '📢 Company Editor',
-        admin: '🔧 Admin',
+        super_admin: 'Super Admin',
+        company_editor: 'Company Editor',
+        admin: 'Admin',
     };
 
     return (
@@ -182,7 +182,7 @@ export function GlobalSidebar({ role = 'admin', email, permissions = {}, tenantT
                     </div>
                     <div>
                         <h1 className="text-sm font-black text-white truncate tracking-tight uppercase">Control Center</h1>
-                        <p className="text-[10px] text-slate-400 font-bold tracking-wider uppercase">Quản trị Tổng</p>
+                        <p className="text-[10px] text-slate-400 font-bold tracking-wider uppercase">Global Admin</p>
                     </div>
                 </div>
                 <div className="flex items-center gap-2 px-3 py-1.5 bg-amber-900/50 rounded-lg border border-amber-700/50">
@@ -200,7 +200,7 @@ export function GlobalSidebar({ role = 'admin', email, permissions = {}, tenantT
                         className="flex items-center gap-2 w-full px-3 py-2 bg-amber-900/40 hover:bg-amber-800/60 rounded-xl text-amber-300 hover:text-amber-200 font-medium text-xs transition-all border border-amber-700/30 group"
                     >
                         <ArrowLeft className="w-3.5 h-3.5 shrink-0 group-hover:-translate-x-0.5 transition-transform" />
-                        <span className="truncate">↩ Workspace: {lastTenant.name}</span>
+                        <span className="truncate">Back to Workspace: {lastTenant.name}</span>
                     </Link>
                 )}
                 <Link
@@ -209,7 +209,7 @@ export function GlobalSidebar({ role = 'admin', email, permissions = {}, tenantT
                 >
                     <div className="flex items-center gap-2">
                         <Building2 className="w-4 h-4" />
-                        <span>CHỌN WORKSPACE</span>
+                        <span>SELECT WORKSPACE</span>
                     </div>
                     <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </Link>
@@ -319,7 +319,7 @@ export function GlobalSidebar({ role = 'admin', email, permissions = {}, tenantT
                     className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-500 hover:bg-slate-800 hover:text-slate-300 transition-all text-xs"
                 >
                     <Building2 className="h-4 w-4" />
-                    <span>Danh sách Workspace</span>
+                    <span>Workspace List</span>
                 </Link>
                 {lastTenant?.domain && (
                     <a
@@ -342,7 +342,7 @@ export function GlobalSidebar({ role = 'admin', email, permissions = {}, tenantT
                     className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-red-400 hover:bg-red-900/20 hover:text-red-300 transition-all w-full text-xs font-bold"
                 >
                     <LogOut className="h-4 w-4 shrink-0" />
-                    <span>ĐĂNG XUẤT</span>
+                    <span>SIGN OUT</span>
                 </button>
             </div>
         </aside>

@@ -27,17 +27,17 @@ const ALL_ROLES: Role[] = [
 ];
 
 const roleDescriptions: Partial<Record<Role, string>> = {
-    super_admin: 'Toàn quyền system — Platform Owner',
-    agency_admin: 'Agency Admin — Quản lý nhiều Workspace đối tác',
-    company_editor: 'Network Editor — Đăng content trên nhiều Workspace',
-    tenant_admin: 'Workspace Admin — Toàn quyền trong 1 Workspace',
-    tenant_editor: 'Content Editor — Tạo/edit content trong Workspace',
-    tenant_accountant: 'Accountant — View và quản lý dữ liệu finance',
-    admin: 'Duyệt bài, quản lý users, settings',
-    moderator: 'Moderator — Kiểm duyệt content',
-    editor: 'Editor — Tạo/edit news, event, upload ảnh',
-    volunteer: 'Contributor — Close góp content',
-    viewer: 'Viewer — Chỉ đọc content',
+    super_admin: 'Full system control — Platform Owner',
+    agency_admin: 'Agency Admin — Manage multiple partner Workspaces',
+    company_editor: 'Network Editor — Publish content across multiple Workspaces',
+    tenant_admin: 'Workspace Admin — Full control within 1 Workspace',
+    tenant_editor: 'Content Editor — Create/edit content within a Workspace',
+    tenant_accountant: 'Accountant — View and manage financial data',
+    admin: 'Approve posts, manage users, and adjust settings',
+    moderator: 'Moderator — Moderate community content',
+    editor: 'Editor — Create/edit news, events, and upload media',
+    volunteer: 'Contributor — Contribute and submit content drafts',
+    viewer: 'Viewer — Read-only access to content',
 };
 
 export function RoleSelector({ currentRole, onChange, disabled = false, allowedRoles }: RoleSelectorProps) {

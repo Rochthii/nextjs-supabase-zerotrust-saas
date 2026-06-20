@@ -38,7 +38,7 @@ export function UserForm({ userId, currentRole, currentTenantId, tenants = [], i
 
         const isTenantRole = ['tenant_admin', 'tenant_editor', 'tenant_accountant'].includes(role);
         if (isTenantRole && !tenantId) {
-            toast.error('Please select một ngôi branch (branch) cho quyền Tenant này.');
+            toast.error('Please select a branch for this Tenant permission.');
             return;
         }
 
@@ -47,10 +47,10 @@ export function UserForm({ userId, currentRole, currentTenantId, tenants = [], i
         const result = await updateUserRole(userId, role, isTenantRole ? tenantId : null);
 
         if (result.success) {
-            toast.success('Đã update role user successfully!');
+            toast.success('User role updated successfully!');
             router.refresh();
         } else {
-            toast.error(result.error || 'Không thể update role');
+            toast.error(result.error || 'Could not update role');
         }
 
         setLoading(false);
@@ -65,7 +65,7 @@ export function UserForm({ userId, currentRole, currentTenantId, tenants = [], i
 
         if (result.success) {
             setBanned(!banned);
-            toast.success(banned ? 'Đã activate user!' : 'Đã cấm user!');
+            toast.success(banned ? 'User activated successfully!' : 'User banned successfully!');
             router.refresh();
         } else {
             toast.error(result.error || 'Update status failed');
@@ -92,10 +92,10 @@ export function UserForm({ userId, currentRole, currentTenantId, tenants = [], i
                     <div className="flex items-start gap-3">
                         <CheckCircle className="h-5 w-5 text-blue-600 mt-1" />
                         <div>
-                            <p className="font-bold text-blue-900">Yêu cầu gia nhập mới</p>
+                            <p className="font-bold text-blue-900">New Join Request</p>
                             <AlertDescription className="text-blue-800">
-                                Member này registration từ page quản trị của: <span className="font-bold">{metadata.requested_tenant_name}</span>.
-                                <br />Please cấp quyền và select đúng branch tương ứng bên dưới.
+                                This member registered from the administration page of: <span className="font-bold">{metadata.requested_tenant_name}</span>.
+                                <br />Please grant permissions and select the corresponding branch below.
                             </AlertDescription>
                         </div>
                     </div>
@@ -117,7 +117,7 @@ export function UserForm({ userId, currentRole, currentTenantId, tenants = [], i
 
                     {['tenant_admin', 'tenant_editor', 'tenant_accountant'].includes(role) && (
                         <div className="space-y-2 mt-4">
-                            <Label>Select Ngôi Branch Quản Lý <span className="text-red-500">*</span></Label>
+                            <Label>Select Branch to Manage <span className="text-red-500">*</span></Label>
                             <Select
                                 value={tenantId}
                                 onValueChange={setTenantId}
@@ -129,7 +129,7 @@ export function UserForm({ userId, currentRole, currentTenantId, tenants = [], i
                                 <SelectContent>
                                     {currentUserRole === 'tenant_admin' ? (
                                         <SelectItem key={tenantId} value={tenantId}>
-                                            {tenants.find(t => t.id === tenantId)?.name || 'Branch của bạn'}
+                                            {tenants.find(t => t.id === tenantId)?.name || 'Your Branch'}
                                         </SelectItem>
                                     ) : (
                                         tenants.map(t => (

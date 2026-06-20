@@ -15,19 +15,19 @@ export function SocRealtimeListener() {
     const speakAlert = (text: string) => {
         if (isMuted) return;
         if ('speechSynthesis' in window) {
-            // Cancel các giọng nói đang phát dở để tránh xếp hàng quá lâu
+            // Cancel active speech to avoid long queues
             window.speechSynthesis.cancel();
             
             const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = 'vi-VN';
-            utterance.rate = 0.95; // Tốc độ đĩnh đạc
+            utterance.lang = 'en-US';
+            utterance.rate = 0.95; // Stately speed
             utterance.pitch = 1.0;
             window.speechSynthesis.speak(utterance);
         }
     };
 
     useEffect(() => {
-        // Registration kênh Realtime lắng nghe bảng audit_logs
+        // Register Realtime channel to listen to audit_logs table
         const channel = supabase
             .channel('soc-realtime-logs')
             .on(
@@ -36,27 +36,27 @@ export function SocRealtimeListener() {
                 (payload) => {
                     const newLog = payload.new as any;
                     
-                    // Chỉ activate warning giọng nói với vi phạm an ninh nghiêm trọng hoặc CRS cao
+                    // Only activate voice warning for critical security violations or high CRS
                     if (
                         newLog.risk_score >= 75 || 
                         ['sql_injection_attempt', 'cross_tenant_violation', 'cache_pollution_attempt', 'audit_log_tampering_attempt', 'honeypot_decoy_triggered'].includes(newLog.action)
                     ) {
-                        let actionLabel = 'truy cập bất thường';
-                        if (newLog.action === 'sql_injection_attempt') actionLabel = 'tấn công chèn mã sql injection';
-                        else if (newLog.action === 'cross_tenant_violation') actionLabel = 'vi phạm truy cập dữ liệu chéo';
-                        else if (newLog.action === 'cache_pollution_attempt') actionLabel = 'tấn công noisy neighbor làm nghẽn tài nguyên';
-                        else if (newLog.action === 'audit_log_tampering_attempt') actionLabel = 'cố ý phá hoại file sổ cái';
-                        else if (newLog.action === 'honeypot_decoy_triggered') actionLabel = 'sập bẫy dữ liệu mật ngọt active honeypot';
+                        let actionLabel = 'suspicious activity';
+                        if (newLog.action === 'sql_injection_attempt') actionLabel = 'SQL injection attempt';
+                        else if (newLog.action === 'cross_tenant_violation') actionLabel = 'cross tenant data violation';
+                        else if (newLog.action === 'cache_pollution_attempt') actionLabel = 'cache pollution attempt';
+                        else if (newLog.action === 'audit_log_tampering_attempt') actionLabel = 'audit log tampering attempt';
+                        else if (newLog.action === 'honeypot_decoy_triggered') actionLabel = 'honeypot decoy triggered';
 
                         const alertText = newLog.action === 'honeypot_decoy_triggered'
-                            ? `Báo động cấp đỏ! Phát hiện tác nhân xâm nhập đã sập bẫy Honeypot mật ngọt từ address IP ${newLog.ip_address || 'lạ'}. Động cơ SOAR activate phong tỏa và cô lập toàn diện lập tức tại Edge Middleware!`
-                            : `Warning an ninh mạng! Phát hiện hành vi ${actionLabel} từ address IP ${newLog.ip_address || 'lạ'}. System SOAR đã tự động activate cơ chế Edge block, cô lập tác nhân successfully.`;
+                            ? `Red alert! Intruder triggered Honeypot trap from IP address ${newLog.ip_address || 'unknown'}. SOAR engine has activated immediate edge isolation at the Edge Middleware!`
+                            : `Security warning! Detected ${actionLabel} from IP address ${newLog.ip_address || 'unknown'}. SOAR engine has automatically blocked and isolated the threat at the network edge.`;
                         
                         setLastAlert(`[${new Date().toLocaleTimeString()}] ${newLog.action.toUpperCase()} detected from ${newLog.ip_address}`);
                         speakAlert(alertText);
                     }
 
-                    // Sync hóa status Server Component ngay lập tức trên UI
+                    // Synchronize Server Component status immediately on the UI
                     router.refresh();
                 }
             )
@@ -90,7 +90,7 @@ export function SocRealtimeListener() {
                     const newMute = !isMuted;
                     setIsMuted(newMute);
                     if (!newMute) {
-                        speakAlert('Đã activate system warning âm thanh Cyber SOC.');
+                        speakAlert('Cyber SOC audio warnings enabled.');
                     }
                 }}
                 className={`p-1.5 rounded-lg border transition-all flex items-center justify-center gap-1.5 ${
@@ -98,7 +98,7 @@ export function SocRealtimeListener() {
                         ? 'bg-rose-500/10 text-rose-400 border-rose-500/20 hover:bg-rose-500/20'
                         : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/20'
                 }`}
-                title={isMuted ? "Enable âm thanh warning" : "Disable âm thanh warning"}
+                title={isMuted ? "Enable audio warning" : "Disable audio warning"}
             >
                 {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
                 <span className="text-[10px] font-bold uppercase tracking-wider">{isMuted ? 'Muted' : 'Audio On'}</span>

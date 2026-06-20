@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { formatDate } from 'date-fns';
-import { vi } from 'date-fns/locale';
+import { enUS } from 'date-fns/locale';
 import { UserPlus } from 'lucide-react';
 // @ts-ignore
 import { SearchInput, FilterSelect } from '@/components/admin/data-filters';
@@ -178,16 +178,16 @@ export default async function UsersPage(props: UsersPageProps) {
                             <UserPlus className="w-8 h-8" />
                         </div>
                         <div>
-                            <h1 className="text-3xl md:text-4xl font-black bg-gradient-to-r from-amber-200 via-amber-400 to-amber-200 bg-clip-text text-transparent tracking-tight">Quản trị Danh tính</h1>
+                            <h1 className="text-3xl md:text-4xl font-black bg-gradient-to-r from-amber-200 via-amber-400 to-amber-200 bg-clip-text text-transparent tracking-tight">Identity Management</h1>
                             <p className="text-slate-400 mt-1.5 text-sm">
-                                Quản lý authorization RBAC và kiểm soát truy cập system đa tenant. Total: <strong className="text-amber-400 font-black">{users?.length || 0}</strong> nhân sự.
+                                Manage RBAC authorization and control system access for multi-tenants. Total: <strong className="text-amber-400 font-black">{users?.length || 0}</strong> staff.
                             </p>
                         </div>
                     </div>
                     <Button asChild className="bg-amber-500 hover:bg-amber-400 text-slate-900 font-black rounded-xl shadow-lg shadow-amber-500/25 px-6 transition-all duration-200">
                         <Link href="/admin/users/invite">
                             <UserPlus className="h-4 w-4 mr-2" />
-                            Add nhân sự mới
+                            Add New Staff
                         </Link>
                     </Button>
                 </div>
@@ -197,20 +197,20 @@ export default async function UsersPage(props: UsersPageProps) {
             <Card className="bg-white/80 dark:bg-slate-900/60 backdrop-blur-xl border border-slate-200 dark:border-slate-800/80 shadow-lg overflow-hidden rounded-2xl">
                 <CardContent className="p-5 flex flex-col md:flex-row gap-4 items-center flex-wrap">
                     <div className="flex-1 min-w-[250px]">
-                        <SearchInput placeholder="Tìm theo định danh (email, last name name)..." />
+                        <SearchInput placeholder="Search by email, name..." />
                     </div>
 
                     <div className="flex items-center gap-4">
                         <FilterSelect
-                            label="Cấp bậc"
+                            label="Role"
                             paramName="role"
                             options={[
-                                { label: 'Quản trị Workspace (Agency)', value: 'agency_admin' },
+                                { label: 'Workspace Admin (Agency)', value: 'agency_admin' },
                                 { label: 'Administrator (Admin)', value: 'admin' },
-                                { label: 'Người kiểm duyệt (Moderator)', value: 'moderator' },
-                                { label: 'Editor (Editor)', value: 'editor' },
-                                { label: 'Cộng tác viên (Partner)', value: 'volunteer' },
-                                { label: 'Người view (Viewer)', value: 'viewer' },
+                                { label: 'Moderator', value: 'moderator' },
+                                { label: 'Editor', value: 'editor' },
+                                { label: 'Partner', value: 'volunteer' },
+                                { label: 'Viewer', value: 'viewer' },
                             ]}
                         />
 
@@ -219,7 +219,7 @@ export default async function UsersPage(props: UsersPageProps) {
                             paramName="status"
                             options={[
                                 { label: 'Active', value: 'active' },
-                                { label: 'Bị tạm khóa', value: 'banned' },
+                                { label: 'Suspended', value: 'banned' },
                             ]}
                         />
                     </div>
@@ -231,7 +231,7 @@ export default async function UsersPage(props: UsersPageProps) {
                 <Card className="bg-white/85 dark:bg-slate-900/60 backdrop-blur-xl border border-slate-200 dark:border-slate-800/80 shadow-xl overflow-hidden group transition-all duration-300 hover:border-amber-500/30 rounded-2xl">
                     <CardHeader className="pb-2">
                         <CardTitle className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">
-                            Total Nhân sự
+                            Total Staff
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
@@ -242,7 +242,7 @@ export default async function UsersPage(props: UsersPageProps) {
                     <div className="absolute top-0 right-0 w-24 h-24 bg-amber-500/10 rounded-full blur-2xl -mr-8 -mt-8 pointer-events-none"></div>
                     <CardHeader className="pb-2">
                         <CardTitle className="text-[10px] font-bold text-amber-400 uppercase tracking-widest">
-                            Administrator (Admin)
+                            Administrators
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
@@ -254,7 +254,7 @@ export default async function UsersPage(props: UsersPageProps) {
                 <Card className="bg-white/85 dark:bg-slate-900/60 backdrop-blur-xl border border-slate-200 dark:border-slate-800/80 shadow-xl overflow-hidden group transition-all duration-300 hover:border-amber-500/30 rounded-2xl">
                     <CardHeader className="pb-2">
                         <CardTitle className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">
-                            Biên tập & Content
+                            Editors & Moderators
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
@@ -267,7 +267,7 @@ export default async function UsersPage(props: UsersPageProps) {
                     <div className="absolute top-0 right-0 w-16 h-16 bg-rose-500/10 blur-xl pointer-events-none"></div>
                     <CardHeader className="pb-2 relative z-10">
                         <CardTitle className="text-[10px] font-bold text-rose-500 dark:text-rose-400 uppercase tracking-widest">
-                            Account Bị khóa
+                            Suspended Accounts
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="relative z-10">
@@ -286,19 +286,19 @@ export default async function UsersPage(props: UsersPageProps) {
                             <thead className="bg-slate-50/80 dark:bg-slate-950/50 border-b border-slate-100 dark:border-slate-800">
                                 <tr>
                                     <th className="px-8 py-5 text-left text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                                        Định danh (Email)
+                                        Identity (Email)
                                     </th>
                                     <th className="px-8 py-5 text-left text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                                         Role (RBAC)
                                     </th>
                                     <th className="px-8 py-5 text-left text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                                        Phạm vi Workspace
+                                        Workspace Scope
                                     </th>
                                     <th className="px-8 py-5 text-left text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                                         Status
                                     </th>
                                     <th className="px-8 py-5 text-left text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                                        Ngày tham gia
+                                        Joined Date
                                     </th>
                                     <th className="px-8 py-5 text-right text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                                         Actions
@@ -326,7 +326,7 @@ export default async function UsersPage(props: UsersPageProps) {
                                                 <StatusBadge isBanned={!!user.banned_until} />
                                             </td>
                                             <td className="px-8 py-5 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400 font-mono">
-                                                {formatDate(new Date(user.created_at), 'dd/MM/yyyy', { locale: vi })}
+                                                {formatDate(new Date(user.created_at), 'MM/dd/yyyy', { locale: enUS })}
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                                 <Link
@@ -341,7 +341,7 @@ export default async function UsersPage(props: UsersPageProps) {
                                 ) : (
                                     <tr>
                                         <td colSpan={7} className="px-6 py-12 text-center text-slate-400 dark:text-slate-500 italic">
-                                            Not found user nào.
+                                            No users found.
                                         </td>
                                     </tr>
                                 )}

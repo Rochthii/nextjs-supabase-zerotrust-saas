@@ -27,7 +27,7 @@ export default async function SelectTenantPage() {
                     </div>
                 </div>
                 <p className="text-slate-400 text-sm leading-relaxed max-w-xl">
-                    Bạn đang sign in với tư cách <span className="text-violet-400 font-bold">Super Admin</span>. Select một workspace bên dưới để quản lý content, settings và dữ liệu của unit đó.
+                    You are signed in as a <span className="text-violet-400 font-bold">Super Admin</span>. Select a workspace below to manage content, settings, and data for that organization.
                 </p>
 
                 {/* Security indicator */}
@@ -40,7 +40,7 @@ export default async function SelectTenantPage() {
             {/* ── Error ──────────────────────────────────────────────────── */}
             {error && (
                 <div className="w-full max-w-4xl mb-6 bg-red-500/10 border border-red-500/20 text-red-400 px-5 py-3 rounded-xl text-sm font-medium">
-                    ⚠ Error tải dữ liệu: {error}
+                    Error loading data: {error}
                 </div>
             )}
 
@@ -49,9 +49,9 @@ export default async function SelectTenantPage() {
                 {tenants.length === 0 ? (
                     <div className="flex flex-col items-center justify-center py-24 bg-white/[0.02] border border-white/[0.06] rounded-3xl text-slate-500">
                         <Building2 className="w-12 h-12 mb-4 opacity-30" />
-                        <p className="font-medium">System not yet workspace nào.</p>
+                        <p className="font-medium">No workspaces found in the system.</p>
                         <Link href="/admin/tenants/new" className="mt-4 text-violet-400 hover:text-violet-300 text-sm font-bold hover:underline transition-colors">
-                            + Tạo workspace đầu tiên
+                            + Create your first workspace
                         </Link>
                     </div>
                 ) : (
@@ -117,7 +117,7 @@ export default async function SelectTenantPage() {
                         href="/admin/dashboard"
                         className="text-xs text-slate-600 hover:text-slate-400 transition-colors font-medium"
                     >
-                        ← Back Control Center
+                        ← Back to Dashboard
                     </Link>
                 </div>
             </div>

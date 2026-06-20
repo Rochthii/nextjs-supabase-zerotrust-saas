@@ -16,7 +16,7 @@ interface TenantFilterProps {
     placeholder?: string;
 }
 
-export function TenantFilter({ tenants, placeholder = "All các branch" }: TenantFilterProps) {
+export function TenantFilter({ tenants, placeholder = "All Branches" }: TenantFilterProps) {
     const router = useRouter();
     const searchParams = useSearchParams();
 

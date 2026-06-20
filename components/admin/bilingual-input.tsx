@@ -27,8 +27,8 @@ export function BilingualInput({
     valueKm,
     onChangeVi,
     onChangeKm,
-    placeholderVi = 'Nhập content tiếng Việt...',
-    placeholderKm = 'Nhập content tiếng Khmer...',
+    placeholderVi = 'Enter Vietnamese content...',
+    placeholderKm = 'Enter Khmer content...',
     multiline = false,
     className,
     required = false,
@@ -45,8 +45,8 @@ export function BilingualInput({
                 </Label>
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="w-[200px]">
                     <TabsList className="grid w-full grid-cols-2 h-8">
-                        <TabsTrigger value="vi" className="text-xs">Tiếng Việt</TabsTrigger>
-                        <TabsTrigger value="km" className="text-xs font-khmer">ភាsaa Khmer</TabsTrigger>
+                        <TabsTrigger value="vi" className="text-xs">Vietnamese</TabsTrigger>
+                        <TabsTrigger value="km" className="text-xs font-khmer">Khmer</TabsTrigger>
                     </TabsList>
                 </Tabs>
             </div>

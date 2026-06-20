@@ -15,12 +15,12 @@ interface FeatureTogglesClientProps {
 }
 
 const MODULE_DEF = [
-    { id: 'news_events', name: 'News & Article', icon: Newspaper, desc: 'Quản lý và display news, bài đăng.' },
-    { id: 'dharma_talks', name: 'Document & SOP Đào tạo', icon: Heart, desc: 'Phân hệ quản lý các document hướng dẫn, video SOP và document đào tạo internally.' },
-    { id: 'transactions', name: 'Transaction (Payment)', icon: CreditCard, desc: 'Cho phép payment, donation. TẮT NẾU CÓ SỰ CỐ BẢO MẬT (Incident).', isCritical: true },
-    { id: 'digital_library', name: 'Thư viện số', icon: Library, desc: 'Document, kinh sách, tài nguyên media.' },
-    { id: 'registrations', name: 'Form Registration', icon: CalendarCheck, desc: 'Registration tham gia event, làm công quả.' },
-    { id: 'monk_profiles', name: 'Hồ sơ Tăng Ni', icon: Users, desc: 'Quản lý và display thông tin Tăng Ni, nhân sự.' },
+    { id: 'news_events', name: 'News & Article', icon: Newspaper, desc: 'Manage and display news and articles.' },
+    { id: 'dharma_talks', name: 'Documents & SOP Training', icon: Heart, desc: 'Module managing instructional documents, video SOPs, and internal training resources.' },
+    { id: 'transactions', name: 'Transaction (Payment)', icon: CreditCard, desc: 'Allows payments and donations. DISABLE IF THERE IS A SECURITY INCIDENT.', isCritical: true },
+    { id: 'digital_library', name: 'Digital Library', icon: Library, desc: 'Documents, textbooks, and digital media resources.' },
+    { id: 'registrations', name: 'Registration Forms', icon: CalendarCheck, desc: 'Registration for events and volunteering.' },
+    { id: 'monk_profiles', name: 'Staff Profiles', icon: Users, desc: 'Manage and display monastic and organizational staff profiles.' },
 ];
 
 export function FeatureTogglesClient({ tenantId, initialConfig }: FeatureTogglesClientProps) {
@@ -42,10 +42,10 @@ export function FeatureTogglesClient({ tenantId, initialConfig }: FeatureToggles
             const result = await updateTenantConfig(formData);
             if (result.error) throw new Error(result.error);
             
-            toast.success('Đã save configuration module successfully!');
+            toast.success('Saved module configuration successfully!');
             router.refresh();
         } catch (err: any) {
-            toast.error(err.message || 'An error occurred khi save configuration');
+            toast.error(err.message || 'An error occurred while saving configuration');
         } finally {
             setIsSaving(false);
         }
@@ -54,9 +54,9 @@ export function FeatureTogglesClient({ tenantId, initialConfig }: FeatureToggles
     return (
         <Card className="border-white/[0.08] bg-slate-900/60 backdrop-blur-xl">
             <CardHeader>
-                <CardTitle className="text-white">Danh sách Modules</CardTitle>
+                <CardTitle className="text-white">Module List</CardTitle>
                 <CardDescription className="text-slate-400">
-                    Enable/disable các tính năng system. Khi disable, các API endpoint và UI component tương ứng sẽ bị vô hiệu hoá.
+                    Enable/disable system modules. When disabled, the corresponding API endpoints and UI components will be deactivated.
                 </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -98,7 +98,7 @@ export function FeatureTogglesClient({ tenantId, initialConfig }: FeatureToggles
                         className="bg-emerald-600 hover:bg-emerald-500 text-white gap-2 font-bold min-w-[140px]"
                     >
                         {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-                        Save Cấu Hình
+                        Save Configuration
                     </Button>
                 </div>
             </CardContent>

@@ -37,43 +37,43 @@ const THEME_PRESETS: ThemePreset[] = [
     {
         name: 'Royal Crimson',
         colors: {
-            primary: '#D4AF37',  // Vàng kim
-            secondary: '#8B1E1E', // Đỏ sẫm
-            accent: '#C59A28',   // Vàng đậm
-            text: '#3A1F1F',     // Text đỏ nâu đậm
-            bgStart: '#F5F0E6',  // Trắng ngà
-            bgEnd: '#EBE2CD',    // Trắng ngà đậm hơn
+            primary: '#D4AF37',  // Gold
+            secondary: '#8B1E1E', // Dark red
+            accent: '#C59A28',   // Dark gold
+            text: '#3A1F1F',     // Dark red-brown text
+            bgStart: '#F5F0E6',  // Ivory white
+            bgEnd: '#EBE2CD',    // Darker ivory white
             opacity: '0.05',
-            hero: '#280F0F',     // Đỏ đen sẫm
-            surface: '#F8F5EE',  // Ngà vàng nhạt
+            hero: '#280F0F',     // Dark red-black
+            surface: '#F8F5EE',  // Pale ivory yellow
         }
     },
     {
         name: 'Forest Emerald',
         colors: {
-            primary: '#2F6F4E',   // Xanh lá đậm
-            secondary: '#E8C547', // Vàng nhạt
+            primary: '#2F6F4E',   // Dark green
+            secondary: '#E8C547', // Pale yellow
             accent: '#E8C547',
-            text: '#132B1E',      // Text xanh đậm đen
+            text: '#132B1E',      // Dark green-black text
             bgStart: '#FFFFFF',
-            bgEnd: '#F0F5F2',     // Trắng ngả ánh xanh lá
+            bgEnd: '#F0F5F2',     // White with greenish tint
             opacity: '0.03',
-            hero: '#0A1F14',      // Xanh đen đậm
-            surface: '#F4F9F6',   // Trắng ngả xanh nhẹ
+            hero: '#0A1F14',      // Dark green-black
+            surface: '#F4F9F6',   // White with slight green tint
         }
     },
     {
         name: 'Royal Violet',
         colors: {
-            primary: '#5A3E8E',   // Tím chủ đạo
-            secondary: '#F2D16B', // Vàng nhạt
+            primary: '#5A3E8E',   // Primary purple
+            secondary: '#F2D16B', // Pale yellow
             accent: '#F2D16B',
-            text: '#271744',      // Text tím đen chìm
+            text: '#271744',      // Deep purple-black text
             bgStart: '#F5F0E6',
             bgEnd: '#EBE2D0',
             opacity: '0.04',
-            hero: '#150C28',      // Tím đen đậm
-            surface: '#F7F4F0',   // Kem trắng nhẹ
+            hero: '#150C28',      // Dark purple-black
+            surface: '#F7F4F0',   // Soft cream white
         }
     }
 ];
@@ -104,7 +104,7 @@ export function ThemePresets() {
 
     return (
         <div className="mb-6">
-            <h3 className="text-sm font-medium mb-3">Gợi ý chuyển đổi nhanh (Áp dụng 1 chạm):</h3>
+            <h3 className="text-sm font-medium mb-3">Quick presets (Apply with 1-click):</h3>
             <div className="flex flex-wrap gap-2">
                 {THEME_PRESETS.map((preset) => (
                     <Button
@@ -128,7 +128,7 @@ export function ThemePresets() {
                     </Button>
                 ))}
             </div>
-            <p className="text-xs text-amber-600 mt-2">*Save ý: Sau khi bấm select mục ở trên, bạn vẫn phải kéo xuống dưới cùng bấm nút "Save settings" thì website mới đổi màu.</p>
+            <p className="text-xs text-amber-600 mt-2">*Note: After choosing a preset above, you must scroll down and click "Save settings" for the color changes to take effect on the website.</p>
         </div>
     );
 }

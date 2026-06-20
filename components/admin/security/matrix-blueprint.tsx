@@ -37,9 +37,9 @@ const LAYERS_DATA: Record<SecurityLayer, LayerInfo> = {
         accentColor: 'blue',
         complexity: 'O(1) Edge Cache Lookup',
         isoControl: 'ISO 27017 CLD.9.5.1',
-        academicTitle: 'Tối ưu hóa tài nguyên mạng biên (Edge Computing)',
-        academicText: 'Middleware hoạt động tại Edge Runtime của Next.js với độ trễ < 3ms. Bằng cách save trữ IP bị block và configuration Tenant vào bộ đệm Redis (hoặc RAM local), system triệt tiêu 100% tải truy cập trái phép hoặc dò quét tự động trước khi chạm tới Database Gateway. Cơ chế Negative Caching save trữ status an toàn/error trong 15s để triệt tiêu hoàn toàn nguy cơ DDoS spam connect PostgreSQL.',
-        sourceCode: `// middleware.ts - Trích xuất check Edge Cache
+        academicTitle: 'Edge Computing Network Resource Optimization',
+        academicText: 'Middleware operates at Next.js Edge Runtime with < 3ms latency. By storing blocked IPs and Tenant configurations in the Redis cache (or local RAM), the system eliminates 100% of unauthorized access load or automated vulnerability scanning before reaching the Database Gateway. Negative Caching caches secure/error states for 15 seconds to mitigate DDoS connection flooding to PostgreSQL.',
+        sourceCode: `// middleware.ts - Extract Edge Cache check
 const redisBlockKey = \`blocklist:\${clientIp}\`;
 const cachedBlock = await redisClient.get<any>(redisBlockKey);
 
@@ -50,10 +50,10 @@ if (cachedBlock !== null) {
             { status: 403 }
         );
     }
-    // cachedBlock === false -> IP an toàn (Negative Cache Hit)
+    // cachedBlock === false -> Safe IP (Negative Cache Hit)
 }`,
-        isoTitle: 'CLD.9.5.1 - Cô lập và bảo vệ mạng ảo',
-        isoText: 'Kiểm soát chặt chẽ biên giới mạng của từng branch (tenant). Chỉ allowed các luồng traffic thuộc dải IP configuration trong whitelist của tenant đó được phép đi sâu vào lõi dịch vụ, cô lập hoàn toàn tài nguyên ảo hóa giữa các tenant.'
+        isoTitle: 'CLD.9.5.1 - Virtual Network Isolation and Protection',
+        isoText: 'Strictly controls network boundaries for each tenant. Only traffic within configured IP whitelists is permitted to access the core services, ensuring complete virtualization resource isolation between tenants.'
     },
     jwt: {
         id: 'jwt',
@@ -66,9 +66,9 @@ if (cachedBlock !== null) {
         accentColor: 'amber',
         complexity: 'O(1) Constant-Time RAM Read',
         isoControl: 'ISO 27002 9.2',
-        academicTitle: 'Constant-time Context Resolution trong RAM Session',
-        academicText: 'Thông thường để filter chéo tenant, CSDL phải thực hiện phép JOIN chéo giữa bảng nghiệp vụ và bảng account/tenant để validate quyền. Giải pháp của đề tài là nhúng directly tenant_id và role định danh vào structure Custom Claims của JWT. PostgreSQL sẽ đọc directly claims này từ biến bộ nhớ RAM Session (hằng số O(1)) thay vì execute JOIN query vật lý trên đĩa cứng, giúp triệt tiêu hoàn toàn chi phí Overhead security.',
-        sourceCode: `-- PostgreSQL đọc Claims directly từ bộ đệm RAM của Session
+        academicTitle: 'Constant-Time Context Resolution in RAM Session',
+        academicText: 'Normally, cross-tenant isolation requires database JOIN operations between business tables and tenant/user tables. This architecture embeds the tenant_id and role metadata directly into custom JWT claims. PostgreSQL reads these claims from session memory variables (O(1) complexity) instead of executing disk-based JOINs, eliminating authentication security overhead.',
+        sourceCode: `-- PostgreSQL reads Claims directly from Session RAM buffer
 CREATE OR REPLACE FUNCTION get_tenant_id_from_session() 
 RETURNS uuid AS $$
 BEGIN
@@ -77,8 +77,8 @@ EXCEPTION
   WHEN OTHERS THEN RETURN NULL;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;`,
-        isoTitle: 'ISO 27002 9.2 - Quản lý quyền truy cập user',
-        isoText: 'Thiết lập định danh phiên làm việc an toàn. Khóa chặt định danh tenant_id directly trong chữ ký mật mã last namec của JWT do Supabase Auth phát hành. User không thể tự thay đổi hoặc bypass tham số tenant_id để leo thang đặc quyền chéo.'
+        isoTitle: 'ISO 27002 9.2 - User Access Control Management',
+        isoText: 'Establishes secure session identities. The tenant_id metadata is cryptographically bound inside the custom JWT claims issued by Supabase Auth. Users cannot alter or bypass the tenant_id parameter to escalate privileges.'
     },
     rls: {
         id: 'rls',
@@ -91,18 +91,18 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;`,
         accentColor: 'emerald',
         complexity: 'O(log N_tenant) B-Tree Index Scan',
         isoControl: 'ISO 27017 CLD.6.3.1',
-        academicTitle: 'Lưới filter cô lập dòng dữ liệu cứng tầng CSDL',
-        academicText: 'RLS được áp dụng cứng tại mức PostgreSQL. Mọi câu lệnh SQL từ ứng dụng đều được Query Planner của Postgres tự động rewrite để gán add bộ filter tenant_id. Nhờ có chỉ mục B-Tree Index trên cột tenant_id, database không thực hiện quét tuần tự toàn bảng O(N) mà thực hiện quét cây chỉ mục B-Tree với độ phức tạp tối ưu O(log N_tenant) (với N_tenant là dung lượng riêng cực nhỏ của tenant current), đảm bảo hiệu năng maximum.',
-        sourceCode: `-- Activate RLS cứng trên bảng nghiệp vụ
+        academicTitle: 'Database-Level Row Isolation Layer',
+        academicText: 'Row-Level Security (RLS) is strictly enforced at the PostgreSQL level. All database queries from the application are automatically rewritten by the Postgres Query Planner to include tenant_id filters. Utilizing B-Tree Indexing on the tenant_id column, the database performs index scans with O(log N_tenant) complexity instead of sequential O(N) scans, ensuring maximum performance.',
+        sourceCode: `-- Activate hard RLS on business tables
 ALTER TABLE public.news ENABLE ROW LEVEL SECURITY;
 
--- Tạo chính sách filter tự động
+-- Create automatic filter policy
 CREATE POLICY "Tenant isolation news filter" ON public.news
 AS RESTRICTIVE USING (
     tenant_id = get_tenant_id_from_session()
 );`,
-        isoTitle: 'CLD.6.3.1 - Cô lập trong môi trường ảo hóa dùng chung',
-        isoText: 'Đảm bảo dữ liệu của tenant này hoàn toàn vô hình trước tenant khác. RLS Policies được biên dịch và execute ngay tại nhân CSDL, triệt tiêu nguy cơ rò rỉ thông tin ngay cả khi ứng dụng trung gian bị chiếm quyền kiểm soát.'
+        isoTitle: 'CLD.6.3.1 - Shared Virtual Environment Isolation',
+        isoText: 'Ensures one tenant\'s data remains entirely invisible to others. RLS policies are compiled and executed inside the database kernel, preventing data leakage even if the application layer is compromised.'
     },
     abac: {
         id: 'abac',
@@ -115,21 +115,21 @@ AS RESTRICTIVE USING (
         accentColor: 'rose',
         complexity: 'O(1) Dynamic Trigger Evaluation',
         isoControl: 'ISO 27002 9.4',
-        academicTitle: 'Kiểm soát truy cập thuộc tính động (ABAC Engine)',
-        academicText: 'Bên cạnh phân vai tĩnh (RBAC), system áp dụng bộ filter thuộc tính động (Attribute-Based Access Control) thông qua các database triggers chạy BEFORE INSERT/UPDATE/DELETE. Triggers tự động analytics các yếu tố ngữ cảnh: time thực hiện (ngăn block thao tác ngoài giờ hành chính đối với nhân sự thông thường) và address IP thực hiện để bảo vệ maximum các tài nguyên dữ liệu nhạy cảm.',
-        sourceCode: `-- Trigger kiểm soát ABAC động
+        academicTitle: 'Attribute-Based Access Control (ABAC) Engine',
+        academicText: 'Alongside Role-Based Access Control (RBAC), the system enforces Attribute-Based Access Control (ABAC) using BEFORE INSERT/UPDATE/DELETE triggers. These database triggers evaluate dynamic contextual attributes (such as business hours and access IP addresses) to protect sensitive data resources.',
+        sourceCode: `-- Trigger dynamic ABAC control
 CREATE OR REPLACE FUNCTION enforce_context_abac_policy()
 RETURNS trigger AS $$
 BEGIN
-    -- Ngăn block update dữ liệu ngoài giờ hành chính
+    -- Prevent updating data outside business hours
     IF NOT is_within_business_hours() AND get_user_role() != 'super_admin' THEN
-        RAISE EXCEPTION 'SECURITY VIOLATION [ABAC]: Chỉnh edit ngoài giờ hành chính bị cấm.';
+        RAISE EXCEPTION 'SECURITY VIOLATION [ABAC]: Editing outside business hours is forbidden.';
     END IF;
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;`,
-        isoTitle: 'ISO 27002 9.4 - Kiểm soát truy cập thông tin',
-        isoText: 'Execute các constrained phi structure dựa trên ngữ cảnh actual của yêu cầu (time làm việc, vị trí IP connect). Đảm bảo nhân sự internally có quyền hợp pháp cũng không thể lấy cắp hoặc phá hoại dữ liệu ngoài giờ làm việc.'
+        isoTitle: 'ISO 27002 9.4 - Information Access Control',
+        isoText: 'Enforces contextual constraints based on the actual request attributes (working hours, originating IP). This ensures that even authenticated personnel cannot steal or damage data outside authorized operating constraints.'
     }
 };
 
@@ -145,10 +145,10 @@ export function TechnicalAcademicMatrix() {
             <div className="lg:col-span-5 space-y-4">
                 <div className="space-y-1">
                     <h3 className="text-white font-black text-sm uppercase tracking-wider">
-                        📈 Ma Trận Kiến Trúc Zero Trust Phân Tầng
+                        Zero Trust Defense Matrix Blueprint
                     </h3>
                     <p className="text-slate-400 text-xs">
-                        Select một lớp security để tra cứu details last namec thuật, mã nguồn actual và tuân thủ ISO.
+                        Select a security layer to view its academic analysis, production code, and ISO compliance.
                     </p>
                 </div>
 
@@ -226,7 +226,7 @@ export function TechnicalAcademicMatrix() {
                                 }`}
                             >
                                 <BookOpen className="w-3.5 h-3.5" />
-                                Phân Tích Last namec Thuật
+                                Academic Analysis
                             </button>
                             <button
                                 onClick={() => setActiveTab('source')}
@@ -237,7 +237,7 @@ export function TechnicalAcademicMatrix() {
                                 }`}
                             >
                                 <Code className="w-3.5 h-3.5" />
-                                Mã Nguồn Thực Tế
+                                Production Code
                             </button>
                             <button
                                 onClick={() => setActiveTab('iso')}
@@ -248,7 +248,7 @@ export function TechnicalAcademicMatrix() {
                                 }`}
                             >
                                 <FileCheck className="w-3.5 h-3.5" />
-                                Kiểm Toán ISO 27017
+                                ISO 27017 Audit
                             </button>
                         </div>
                     </CardHeader>
@@ -262,7 +262,7 @@ export function TechnicalAcademicMatrix() {
                                         {layer.academicTitle}
                                     </h4>
                                     <span className="text-[10px] text-amber-400 font-bold bg-amber-500/10 border border-amber-500/20 px-2.5 py-0.5 rounded mt-1.5 inline-block">
-                                        Độ phức tạp: {layer.complexity}
+                                        Complexity: {layer.complexity}
                                     </span>
                                 </div>
                                 <p className="text-xs text-slate-350 leading-relaxed font-sans">
@@ -271,10 +271,10 @@ export function TechnicalAcademicMatrix() {
                                 <div className="p-4 rounded-xl bg-slate-950/80 border border-slate-800 text-[10px] text-slate-400 leading-relaxed font-mono">
                                     <div className="flex items-center gap-1.5 text-amber-400 font-bold uppercase tracking-wider text-[9px] mb-2 font-sans">
                                         <CheckCircle2 className="w-3.5 h-3.5 text-amber-400" />
-                                        <span>Đo lường thực nghiệm khoa last namec</span>
+                                        <span>Empirical Scientific Measurement</span>
                                     </div>
-                                    - Overhead process đạt O(1) nhờ Custom Claims trích xuất directly trong RAM Session.<br />
-                                    - Filter CSDL đạt O(log N_tenant) nhờ cây chỉ mục B-Tree tối ưu thay vì seq scan O(N).
+                                    - Processing overhead is O(1) due to custom claims read directly from RAM Session memory.<br />
+                                    - Database filtering is O(log N_tenant) using optimized B-Tree index scans instead of O(N) sequential scans.
                                 </div>
                             </div>
                         )}
@@ -284,7 +284,7 @@ export function TechnicalAcademicMatrix() {
                             <div className="space-y-3 animate-in fade-in duration-300">
                                 <div className="flex items-center justify-between">
                                     <h4 className="text-xs font-black text-emerald-400 uppercase tracking-widest">
-                                        Mã nguồn execute cốt lõi (Production Code)
+                                        Core Execution Source Code
                                     </h4>
                                     <span className="text-[9px] text-slate-500 font-mono">TypeScript / PL/pgSQL</span>
                                 </div>
@@ -302,14 +302,14 @@ export function TechnicalAcademicMatrix() {
                                         {layer.isoTitle}
                                     </h4>
                                     <span className="text-[10px] text-blue-400 font-bold bg-blue-500/10 border border-blue-500/20 px-2.5 py-0.5 rounded mt-1.5 inline-block">
-                                        Chứng nhận: ISO/IEC 27017 Cloud Control
+                                        Certification: ISO/IEC 27017 Cloud Control
                                     </span>
                                 </div>
                                 <p className="text-xs text-slate-350 leading-relaxed font-sans">
                                     {layer.isoText}
                                 </p>
                                 <div className="p-4 rounded-xl bg-blue-950/10 border border-blue-500/20 text-[10px] text-slate-300 leading-relaxed">
-                                    <strong>Minh chứng audit:</strong> Mọi hành vi vi phạm lớp bảo vệ này đều được SOAR tự động bắt ngoại lệ và ghi nhận log audit bất biến (WORM Vault) standard structure CLD.12.4.1 để phục vụ công tác giám định pháp lý.
+                                    <strong>Audit Evidence:</strong> Any violation attempts bypassing this shield are automatically intercepted by SOAR and written to the WORM Vault ledger (compliant with CLD.12.4.1) for forensic examination.
                                 </div>
                             </div>
                         )}

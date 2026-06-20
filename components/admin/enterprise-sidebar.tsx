@@ -147,27 +147,27 @@ export function EnterpriseSidebar({
                 icon: LayoutDashboard,
                 standalone: true,
             },
-            // ── Hệ thống Security & Audit ──────────────────────────────────
+            // -- Security & Audit System ----------------------------------
             {
                 id: 'security_group',
                 label: 'Security & Audit',
                 icon: Shield,
                 resource: 'users',
                 children: [
-                    { href: `${base}/users`, label: 'Danh sách Nhân sự', icon: Users, resource: 'users' },
-                    { href: `${base}/audit-logs`, label: 'Nhật ký hoạt động', icon: FileText, resource: 'analytics' },
-                    { href: `${base}/security`, label: 'Trung tâm Security', icon: ShieldAlert, resource: 'users' },
+                    { href: `${base}/users`, label: 'Team Members', icon: Users, resource: 'users' },
+                    { href: `${base}/audit-logs`, label: 'Activity Logs', icon: FileText, resource: 'analytics' },
+                    { href: `${base}/security`, label: 'Security Center', icon: ShieldAlert, resource: 'users' },
                 ],
             },
-            // ── Cài đặt chi nhánh ──────────────────────────────────────────
+            // -- System Settings ------------------------------------------
             {
                 id: 'settings_group',
-                label: 'Cài đặt hệ thống',
+                label: 'System Settings',
                 icon: Settings,
                 resource: 'settings',
                 children: [
-                    { href: `${base}/settings/domain`, label: 'Tên miền (Domain)', icon: Globe, resource: 'settings' },
-                    { href: `${base}/settings`, label: 'Cấu hình chi nhánh', icon: Settings, resource: 'settings' },
+                    { href: `${base}/settings/domain`, label: 'Custom Domain', icon: Globe, resource: 'settings' },
+                    { href: `${base}/settings`, label: 'Workspace Settings', icon: Settings, resource: 'settings' },
                 ],
             },
         ];
@@ -255,7 +255,7 @@ export function EnterpriseSidebar({
                             className="flex items-center gap-2 text-[11px] px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-slate-400 hover:text-white hover:bg-white/10 transition-all"
                         >
                             <ArrowLeft className="w-3 h-3" />
-                            <span>Chuyển Workspace</span>
+                            <span>Switch Workspace</span>
                         </Link>
                     </div>
                 )}
@@ -354,7 +354,7 @@ export function EnterpriseSidebar({
                         className="flex items-center gap-3 px-3 py-2 rounded-xl text-slate-500 hover:bg-white/5 hover:text-white transition-all text-[13px]"
                     >
                         <ExternalLink className="h-3.5 w-3.5" />
-                        <span>View page công ty</span>
+                        <span>View Public Site</span>
                     </a>
                 </div>
             </nav>

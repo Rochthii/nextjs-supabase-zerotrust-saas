@@ -20,7 +20,7 @@ export function LifecycleActions({ tenantId, currentStatus, tenantName }: Lifecy
 
     const handleSuspend = () => {
         const confirmed = window.confirm(
-            `Bạn có chắc muốn ĐÌNH CHỈ workspace "${tenantName}"?\n\nHành động này sẽ đánh dấu workspace là tạm ngừng hoạt động và write log audit.`
+            `Are you sure you want to SUSPEND the workspace "${tenantName}"?\n\nThis action will mark the workspace as suspended and write an audit log.`
         );
         if (!confirmed) return;
 
@@ -29,17 +29,17 @@ export function LifecycleActions({ tenantId, currentStatus, tenantName }: Lifecy
         startTransition(async () => {
             const result = await suspendTenant(tenantId);
             if (result.success) {
-                setSuccessMsg('Workspace đã được đình chỉ successfully.');
+                setSuccessMsg('Workspace suspended successfully.');
                 router.refresh();
             } else {
-                setError(result.error || 'Error unknown.');
+                setError(result.error || 'Unknown error.');
             }
         });
     };
 
     const handleReactivate = () => {
         const confirmed = window.confirm(
-            `Bạn có chắc muốn KÍCH HOẠT LẠI workspace "${tenantName}"?\n\nWorkspace sẽ trở về status hoạt động bình thường.`
+            `Are you sure you want to REACTIVATE the workspace "${tenantName}"?\n\nThe workspace will return to normal operational status.`
         );
         if (!confirmed) return;
 
@@ -48,10 +48,10 @@ export function LifecycleActions({ tenantId, currentStatus, tenantName }: Lifecy
         startTransition(async () => {
             const result = await reactivateTenant(tenantId);
             if (result.success) {
-                setSuccessMsg('Workspace đã được activate lại successfully.');
+                setSuccessMsg('Workspace reactivated successfully.');
                 router.refresh();
             } else {
-                setError(result.error || 'Error unknown.');
+                setError(result.error || 'Unknown error.');
             }
         });
     };
@@ -86,14 +86,14 @@ export function LifecycleActions({ tenantId, currentStatus, tenantName }: Lifecy
                                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                                 </svg>
-                                Đang process...
+                                Processing...
                             </>
                         ) : (
                             <>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                     <circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
                                 </svg>
-                                Đình chỉ Workspace
+                                Suspend Workspace
                             </>
                         )}
                     </button>
@@ -111,14 +111,14 @@ export function LifecycleActions({ tenantId, currentStatus, tenantName }: Lifecy
                                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                                 </svg>
-                                Đang process...
+                                Processing...
                             </>
                         ) : (
                             <>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                     <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
                                 </svg>
-                                Activate lại Workspace
+                                Reactivate Workspace
                             </>
                         )}
                     </button>

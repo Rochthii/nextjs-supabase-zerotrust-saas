@@ -26,7 +26,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { formatDate } from 'date-fns';
-import { vi } from 'date-fns/locale';
+import { enUS } from 'date-fns/locale';
 
 interface EnterpriseDashboardUIProps {
     tenantId: string;
@@ -70,10 +70,10 @@ export function EnterpriseDashboardUI({
             glow: 'shadow-indigo-500/10',
         },
         {
-            title: 'Event & Lịch trình',
+            title: 'Events & Schedules',
             value: eventsCount,
             icon: Activity,
-            change: 'Update time thực',
+            change: 'Real-time updates',
             accent: 'from-sky-600 to-blue-600',
             bg: 'bg-sky-500/10',
             border: 'border-sky-500/30',
@@ -81,10 +81,10 @@ export function EnterpriseDashboardUI({
             glow: 'shadow-sky-500/10',
         },
         {
-            title: 'Tenant & Leads',
+            title: 'Tenants & Leads',
             value: pendingRegistrations,
             icon: UserCheck,
-            change: 'Tổng registration event',
+            change: 'Total event registrations',
             accent: 'from-emerald-600 to-teal-600',
             bg: 'bg-emerald-500/10',
             border: 'border-emerald-500/30',
@@ -92,10 +92,10 @@ export function EnterpriseDashboardUI({
             glow: 'shadow-emerald-500/10',
         },
         {
-            title: 'Nhật ký An ninh',
+            title: 'Security Logs',
             value: auditLogsCount,
             icon: Shield,
-            change: 'Hành động được audit',
+            change: 'Audited system actions',
             accent: 'from-violet-600 to-purple-600',
             bg: 'bg-violet-500/10',
             border: 'border-violet-500/30',
@@ -105,12 +105,12 @@ export function EnterpriseDashboardUI({
     ];
 
     const quickActions = [
-        { href: `${base}/news/new`, label: 'Đăng content mới', icon: Newspaper, desc: 'News, thông cáo báo chí' },
-        { href: `${base}/events/new`, label: 'Tạo event', icon: Activity, desc: 'Hội thảo, webinar, gặp gỡ' },
-        { href: `${base}/pages`, label: 'Quản lý page', icon: FileText, desc: 'Landing page, about' },
-        { href: `${base}/messages`, label: 'Phản hồi tenant', icon: Mail, desc: 'CRM & Tin nhắn contact' },
-        { href: `${base}/organizations`, label: 'Mạng lưới đối tác', icon: Boxes, desc: 'Quản lý hệ sinh thái' },
-        { href: `${base}/homepage`, label: 'Website Builder', icon: Sparkles, desc: 'Tùy biến homepage' },
+        { href: `${base}/news/new`, label: 'Publish new content', icon: Newspaper, desc: 'News, announcements' },
+        { href: `${base}/events/new`, label: 'Create event', icon: Activity, desc: 'Workshops, webinars, meetups' },
+        { href: `${base}/pages`, label: 'Manage pages', icon: FileText, desc: 'Landing pages, about page' },
+        { href: `${base}/messages`, label: 'Tenant messages', icon: Mail, desc: 'CRM & Contact inquiries' },
+        { href: `${base}/organizations`, label: 'Partner network', icon: Boxes, desc: 'Ecosystem management' },
+        { href: `${base}/homepage`, label: 'Website Builder', icon: Sparkles, desc: 'Customize homepages' },
     ];
 
     const statusBadge = (status: string) => {
@@ -119,7 +119,7 @@ export function EnterpriseDashboardUI({
             case 'published':
                 return (
                     <span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/20">
-                        <CheckCircle2 className="w-2.5 h-2.5" /> Đã confirm
+                        <CheckCircle2 className="w-2.5 h-2.5" /> Confirmed
                     </span>
                 );
             case 'pending':
@@ -177,7 +177,7 @@ export function EnterpriseDashboardUI({
                             </span>
                         </div>
                         <p className="text-slate-400 max-w-xl text-sm leading-relaxed">
-                            Trung tâm điều hành content & vận hành doanh nghiệp. Theo dõi hoạt động, quản lý nhân sự và tương tác tenant theo time thực.
+                            Central control hub for content & business operations. Monitor activities, manage team members, and interact with tenants in real time.
                         </p>
                     </div>
 
@@ -197,15 +197,15 @@ export function EnterpriseDashboardUI({
                         <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-4 border bg-indigo-500/10 border-indigo-500/30">
                             <Mail className="h-5 w-5 text-indigo-400" />
                         </div>
-                        <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Tin nhắn chưa đọc</p>
+                        <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Unread Messages</p>
                         <h3 className="text-3xl font-black text-indigo-400 tracking-tight">{unreadCount}</h3>
                         <p className="text-[11px] mt-1.5 text-indigo-400 opacity-70">
                             {unreadCount > 0 ? (
                                 <Link href={`${base}/messages?status=unread`} className="hover:underline font-bold">
-                                    View {unreadCount} tin nhắn mới
+                                    View {unreadCount} new messages
                                 </Link>
                             ) : (
-                                'None tin nhắn mới'
+                                'No new messages'
                             )}
                         </p>
                     </div>
@@ -246,7 +246,7 @@ export function EnterpriseDashboardUI({
                                 <div className="p-2 bg-indigo-500/15 rounded-lg border border-indigo-500/20">
                                     <Newspaper className="w-4 h-4 text-indigo-400" />
                                 </div>
-                                <h2 className="text-sm font-black text-white">News latest</h2>
+                                <h2 className="text-sm font-black text-white">Latest News</h2>
                             </div>
                             <Link href={`${base}/news`} className="text-xs font-bold text-indigo-400 hover:text-indigo-300 transition-colors flex items-center gap-1">
                                 View all <ArrowRight className="w-3 h-3" />
@@ -254,14 +254,14 @@ export function EnterpriseDashboardUI({
                         </div>
                         <div className="divide-y divide-slate-800/60">
                             {recentNews.length === 0 ? (
-                                <p className="px-6 py-6 text-sm text-slate-500 italic">Chưa có news nào.</p>
+                                <p className="px-6 py-6 text-sm text-slate-500 italic">No news published yet.</p>
                             ) : recentNews.map((item: any) => (
                                 <div key={item.id} className="flex items-start gap-3 px-6 py-4 hover:bg-slate-800/30 transition-colors">
                                     <div className="w-1.5 h-1.5 rounded-full bg-indigo-400 mt-2 shrink-0" />
                                     <div className="flex-1 min-w-0">
                                         <p className="text-sm font-semibold text-slate-200 line-clamp-1">{item.title_vi}</p>
                                         <p className="text-[11px] text-slate-500 mt-0.5">
-                                            {formatDate(new Date(item.created_at), 'dd/MM/yyyy HH:mm', { locale: vi })}
+                                            {formatDate(new Date(item.created_at), 'dd/MM/yyyy HH:mm', { locale: enUS })}
                                         </p>
                                     </div>
                                     {statusBadge(item.status)}
@@ -278,7 +278,7 @@ export function EnterpriseDashboardUI({
                                     <Users className="w-4 h-4 text-emerald-400" />
                                 </div>
                                 <div>
-                                    <h2 className="text-sm font-black text-white">Registration Event Recent</h2>
+                                    <h2 className="text-sm font-black text-white">Recent Event Registrations</h2>
                                     <p className="text-[10px] text-slate-500">CRM & Leads Management</p>
                                 </div>
                             </div>
@@ -288,7 +288,7 @@ export function EnterpriseDashboardUI({
                         </div>
                         <div className="divide-y divide-slate-800/60">
                             {recentRegistrations.length === 0 ? (
-                                <p className="px-6 py-6 text-sm text-slate-500 italic">Chưa có registration nào.</p>
+                                <p className="px-6 py-6 text-sm text-slate-500 italic">No registrations yet.</p>
                             ) : recentRegistrations.map((reg: any) => (
                                 <div key={reg.id} className="flex items-start gap-3 px-6 py-4 hover:bg-slate-800/30 transition-colors">
                                     <div className="w-8 h-8 rounded-lg bg-emerald-500/15 border border-emerald-500/20 flex items-center justify-center shrink-0">
@@ -304,7 +304,7 @@ export function EnterpriseDashboardUI({
                                     <div className="flex flex-col items-end gap-1">
                                         {statusBadge(reg.status)}
                                         <span className="text-[10px] text-slate-600">
-                                            {formatDate(new Date(reg.created_at), 'dd/MM HH:mm', { locale: vi })}
+                                            {formatDate(new Date(reg.created_at), 'dd/MM HH:mm', { locale: enUS })}
                                         </span>
                                     </div>
                                 </div>
@@ -324,7 +324,7 @@ export function EnterpriseDashboardUI({
                                 <div className="p-2 bg-indigo-500/15 rounded-lg border border-indigo-500/20">
                                     <Zap className="w-4 h-4 text-indigo-400" />
                                 </div>
-                                <h2 className="text-sm font-black text-white">Actions nhanh</h2>
+                                <h2 className="text-sm font-black text-white">Quick Actions</h2>
                             </div>
                             <ul className="p-3 space-y-1.5">
                                 {quickActions.map((action, idx) => (
@@ -358,7 +358,7 @@ export function EnterpriseDashboardUI({
                                         <ShieldCheck className="w-4 h-4 text-violet-400" />
                                     </div>
                                     <div>
-                                        <h2 className="text-sm font-black text-white">Nhật ký Security</h2>
+                                        <h2 className="text-sm font-black text-white">Security Logs</h2>
                                         <p className="text-[10px] text-slate-500">Workspace Audit Trail</p>
                                     </div>
                                 </div>
@@ -368,21 +368,21 @@ export function EnterpriseDashboardUI({
                             </div>
                             <div className="divide-y divide-slate-800/60">
                                 {recentAuditLogs.length === 0 ? (
-                                    <p className="px-5 py-5 text-sm text-slate-500 italic">Chưa có log nào.</p>
+                                    <p className="px-5 py-5 text-sm text-slate-500 italic">No logs recorded.</p>
                                 ) : recentAuditLogs.map((log: any) => (
                                     <div key={log.id} className="flex items-start gap-3 px-5 py-3 hover:bg-slate-800/30 transition-colors">
                                         <div className="w-1.5 h-1.5 rounded-full bg-violet-400 mt-1.5 shrink-0" />
                                         <div className="flex-1 min-w-0">
                                             <div className="flex items-center gap-1.5 mb-0.5">
                                                 {auditActionLabel(log.action)}
-                                                <span className="text-[10px] text-slate-600">trên</span>
+                                                <span className="text-[10px] text-slate-600">on</span>
                                                 <span className="text-[10px] font-mono text-slate-500 truncate">{log.table_name}</span>
                                             </div>
                                             <p className="text-[10px] text-slate-500 truncate">{log.user_email ?? 'System'}</p>
                                         </div>
                                         <span className="text-[10px] text-slate-600 shrink-0 flex items-center gap-1">
                                             <Clock className="w-2.5 h-2.5" />
-                                            {formatDate(new Date(log.created_at), 'dd/MM HH:mm', { locale: vi })}
+                                            {formatDate(new Date(log.created_at), 'dd/MM HH:mm', { locale: enUS })}
                                         </span>
                                     </div>
                                 ))}

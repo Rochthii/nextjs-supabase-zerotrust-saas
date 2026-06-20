@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Globe, Building2, CheckSquare } from 'lucide-react';
+import { Globe, Building2, CheckSquare, AlertTriangle } from 'lucide-react';
 
 interface Tenant {
     id: string;
@@ -40,7 +40,7 @@ export function TenantBroadcastSelect({
             <div className="flex items-center justify-between">
                 <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
                     <Globe className="w-4 h-4 text-indigo-500" />
-                    Xuất bản đến branch
+                    Publish to branch
                     <span className="px-1.5 py-0.5 bg-indigo-100 text-indigo-700 text-xs rounded-full font-medium">
                         Super Admin
                     </span>
@@ -51,7 +51,7 @@ export function TenantBroadcastSelect({
                         onClick={selectAll}
                         className="text-indigo-600 hover:text-indigo-800 font-medium underline-offset-2 hover:underline"
                     >
-                        All
+                        Select All
                     </button>
                     <span className="text-gray-300">|</span>
                     <button
@@ -59,17 +59,17 @@ export function TenantBroadcastSelect({
                         onClick={clearAll}
                         className="text-gray-500 hover:text-gray-700 font-medium underline-offset-2 hover:underline"
                     >
-                        Delete
+                        Clear All
                     </button>
                 </div>
             </div>
 
             <div className="flex flex-col gap-2 max-h-[400px] overflow-y-auto pr-1 custom-scrollbar">
                 {sortedTenants.map(tenant => {
-                    const isOwner = tenant.id === ownerTenantId;
-                    const isSelected = selectedTenantIds.includes(tenant.id);
+                     const isOwner = tenant.id === ownerTenantId;
+                     const isSelected = selectedTenantIds.includes(tenant.id);
 
-                    return (
+                     return (
                         <label
                             key={tenant.id}
                             className={`
@@ -102,7 +102,7 @@ export function TenantBroadcastSelect({
 
                             {isOwner && (
                                 <span className="shrink-0 text-[10px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">
-                                    Sở hữu
+                                    Owner
                                 </span>
                             )}
 
@@ -110,13 +110,13 @@ export function TenantBroadcastSelect({
                                 <CheckSquare className="w-4 h-4 text-indigo-500 shrink-0" />
                             )}
                         </label>
-                    );
+                     );
                 })}
             </div>
 
             {selectedTenantIds.length === 0 && (
                 <p className="text-xs text-amber-600 flex items-center gap-1">
-                    ⚠️ Chưa select branch nào — bài sẽ không display ở bất kỳ đâu!
+                    <AlertTriangle className="h-4 w-4" /> No branch selected — the post will not be displayed anywhere!
                 </p>
             )}
         </div>

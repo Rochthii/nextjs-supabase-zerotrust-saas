@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label';
 // @ts-ignore - Module import cache
 import { UserForm } from '@/components/admin/user-form';
 import Link from 'next/link';
-import { ArrowLeft, Settings, Shield } from 'lucide-react';
+import { ArrowLeft, Settings } from 'lucide-react';
 import { notFound } from 'next/navigation';
 
 interface TenantUserEditPageProps {
@@ -86,7 +86,6 @@ export default async function TenantUserEditPage({ params }: TenantUserEditPageP
     }
 
     const activeTenantId = membershipData?.tenant_id ?? null;
-    const customPermissions = null;
 
     // Security Guard: tenant_admin can ONLY edit users within their own tenant
     const ctx = await getUserContext();
@@ -119,7 +118,7 @@ export default async function TenantUserEditPage({ params }: TenantUserEditPageP
                 <div>
                     <h1 className="text-3xl font-bold text-white tracking-tight flex items-center gap-2">
                         <Settings className="w-8 h-8 text-amber-400" />
-                        Quản lý Account
+                        Manage Account
                     </h1>
                     <p className="text-slate-400 mt-1 text-sm">{user.email}</p>
                 </div>
@@ -128,30 +127,30 @@ export default async function TenantUserEditPage({ params }: TenantUserEditPageP
             {/* User Details Card */}
             <Card className="border-white/[0.08] bg-slate-900/40 backdrop-blur-xl">
                 <CardHeader className="flex flex-row justify-between items-center border-b border-white/5 pb-4">
-                    <CardTitle className="text-white font-bold text-lg">Thông tin account</CardTitle>
+                    <CardTitle className="text-white font-bold text-lg">Account Information</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4 pt-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <Label className="text-slate-400">Email sign in</Label>
+                            <Label className="text-slate-400">Login Email</Label>
                             <Input value={user.email || ''} disabled className="mt-1.5 bg-slate-950/40 border-white/[0.08] text-slate-300 rounded-xl" />
                         </div>
                         <div>
-                            <Label className="text-slate-400">Mã định danh (User ID)</Label>
+                            <Label className="text-slate-400">Identifier (User ID)</Label>
                             <Input value={user.id} disabled className="mt-1.5 bg-slate-950/40 border-white/[0.08] text-slate-300 rounded-xl font-mono text-xs" />
                         </div>
                         <div>
-                            <Label className="text-slate-400">Ngày initialize</Label>
+                            <Label className="text-slate-400">Creation Date</Label>
                             <Input
-                                value={new Date(user.created_at).toLocaleString('vi-VN')}
+                                value={new Date(user.created_at).toLocaleString('en-US')}
                                 disabled
                                 className="mt-1.5 bg-slate-950/40 border-white/[0.08] text-slate-300 rounded-xl"
                             />
                         </div>
                         <div>
-                            <Label className="text-slate-400 font-sans">Sign in cuối</Label>
+                            <Label className="text-slate-400 font-sans">Last Sign In</Label>
                             <Input
-                                value={user.last_sign_in_at ? new Date(user.last_sign_in_at).toLocaleString('vi-VN') : 'Chưa từng sign in'}
+                                value={user.last_sign_in_at ? new Date(user.last_sign_in_at).toLocaleString('en-US') : 'Never signed in'}
                                 disabled
                                 className="mt-1.5 bg-slate-950/40 border-white/[0.08] text-slate-300 rounded-xl"
                             />

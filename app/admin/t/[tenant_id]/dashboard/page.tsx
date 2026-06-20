@@ -18,10 +18,8 @@ export default async function AdminDashboard({ params }: { params: Promise<{ ten
     // Get tenant type and config
     const tenantConfig = await getTenantConfig(tenant_id);
     const tenantName = (tenantConfig as any)?.name ?? 'Workspace';
-    const tenantType: string = (tenantConfig as any)?.tenant_type ?? 'company';
-    const tenantDomain = (tenantConfig as any)?.domain ?? 'N/A';
-    const tenantSubdomain = (tenantConfig as any)?.subdomain ?? 'N/A';
     const tenantStatus = (tenantConfig as any)?.lifecycle_status ?? 'active';
+    const tenantDomain = (tenantConfig as any)?.domain ?? 'N/A';
 
     const supabase = await createClient();
 
@@ -46,7 +44,7 @@ export default async function AdminDashboard({ params }: { params: Promise<{ ten
 
     const stats = [
         {
-            title: 'Tổng Nhân Sự',
+            title: 'Total Members',
             value: userCount ?? 0,
             icon: Users,
             color: 'text-indigo-400',
@@ -54,7 +52,7 @@ export default async function AdminDashboard({ params }: { params: Promise<{ ten
             border: 'border-indigo-500/20'
         },
         {
-            title: 'Nhật Ký Audit',
+            title: 'Audit Logs',
             value: auditCount ?? 0,
             icon: FileText,
             color: 'text-violet-400',
@@ -63,7 +61,7 @@ export default async function AdminDashboard({ params }: { params: Promise<{ ten
         },
         {
             title: 'Custom Domain',
-            value: tenantDomain !== 'N/A' ? 'Đã gán' : 'Chưa gán',
+            value: tenantDomain !== 'N/A' ? 'Assigned' : 'Not Assigned',
             icon: Globe,
             color: 'text-emerald-400',
             bg: 'bg-emerald-500/10',
@@ -90,12 +88,12 @@ export default async function AdminDashboard({ params }: { params: Promise<{ ten
                             </span>
                         </div>
                         <p className="text-slate-400 max-w-xl text-xs sm:text-sm leading-relaxed">
-                            Cơ sở hạ tầng B2B cô lập dữ liệu. Giám sát các sự kiện an ninh, nhật ký truy cập và cấu hình phân quyền tenant theo thời gian thực.
+                            B2B data isolation infrastructure. Monitor security events, access logs, and tenant authorization configurations in real time.
                         </p>
                     </div>
                     
                     <div className="flex flex-col px-5 py-3 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10">
-                        <span className="text-[9px] text-slate-400 uppercase font-black tracking-widest mb-1">Hạ Tầng Lõi</span>
+                        <span className="text-[9px] text-slate-400 uppercase font-black tracking-widest mb-1">Core Infrastructure</span>
                         <div className="flex items-center gap-2">
                             <Shield className="w-4 h-4 text-emerald-400" />
                             <span className="text-xs font-bold text-emerald-400 tracking-wide">Zero Trust Tenant Isolation</span>
@@ -132,12 +130,12 @@ export default async function AdminDashboard({ params }: { params: Promise<{ ten
                                 <div>
                                     <CardTitle className="text-sm font-bold flex items-center gap-2 text-slate-100">
                                         <Activity className="w-4.5 h-4.5 text-violet-400" />
-                                        Hoạt động An ninh Gần đây
+                                        Recent Security Activity
                                     </CardTitle>
-                                    <CardDescription className="text-[11px] text-slate-400 mt-1">5 hoạt động log audit gần nhất của workspace này</CardDescription>
+                                    <CardDescription className="text-[11px] text-slate-400 mt-1">5 most recent audit logs for this workspace</CardDescription>
                                 </div>
                                 <Link href={`${base}/audit-logs`} className="text-[10px] text-violet-400 hover:text-violet-300 font-bold border border-violet-500/20 bg-violet-500/5 px-3 py-1.5 rounded-xl transition-all">
-                                    Xem tất cả
+                                    View All
                                 </Link>
                             </div>
                         </CardHeader>
@@ -146,17 +144,17 @@ export default async function AdminDashboard({ params }: { params: Promise<{ ten
                                 <table className="w-full text-xs text-left">
                                     <thead className="bg-slate-950/20 text-slate-400 border-b border-slate-800">
                                         <tr>
-                                            <th className="px-5 py-3">Thời gian</th>
-                                            <th className="px-5 py-3">Nhân sự</th>
-                                            <th className="px-5 py-3">Hành động</th>
-                                            <th className="px-5 py-3">Bảng dữ liệu</th>
+                                            <th className="px-5 py-3">Timestamp</th>
+                                            <th className="px-5 py-3">Staff / Member</th>
+                                            <th className="px-5 py-3">Action</th>
+                                            <th className="px-5 py-3">Table</th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-slate-800">
                                         {(recentLogs || []).map((log) => (
                                             <tr key={log.id} className="hover:bg-slate-800/20 transition-colors">
                                                 <td className="px-5 py-3 text-[10px] font-mono text-slate-450">
-                                                    {new Date(log.created_at).toLocaleString('vi-VN')}
+                                                    {new Date(log.created_at).toLocaleString('en-US')}
                                                 </td>
                                                 <td className="px-5 py-3 font-semibold text-slate-200">
                                                     {log.user_email || 'System'}
@@ -179,7 +177,7 @@ export default async function AdminDashboard({ params }: { params: Promise<{ ten
                                         {(!recentLogs || recentLogs.length === 0) && (
                                             <tr>
                                                 <td colSpan={4} className="px-5 py-8 text-center text-slate-500">
-                                                    Không có hoạt động logs nào.
+                                                    No audit log activity.
                                                 </td>
                                             </tr>
                                         )}
@@ -197,7 +195,7 @@ export default async function AdminDashboard({ params }: { params: Promise<{ ten
                         <CardHeader className="py-5 px-6 border-b border-slate-800/80 bg-slate-900/50 relative z-10">
                             <CardTitle className="text-sm font-bold flex items-center gap-2">
                                 <ShieldAlert className="w-4.5 h-4.5 text-blue-400" />
-                                Cấu hình & Vận hành
+                                Configuration & Operations
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="p-5 relative z-10">
@@ -206,19 +204,19 @@ export default async function AdminDashboard({ params }: { params: Promise<{ ten
                                     {
                                         href: `${base}/security`,
                                         title: 'Security Center',
-                                        desc: 'Giám sát và gỡ block IP',
+                                        desc: 'Monitor and unblock IPs',
                                         icon: Shield
                                     },
                                     {
                                         href: `${base}/settings/domain`,
                                         title: 'Custom Domain',
-                                        desc: 'Cài đặt tên miền riêng',
+                                        desc: 'Configure custom domains',
                                         icon: Globe
                                     },
                                     {
                                         href: `${base}/settings`,
-                                        title: 'Cấu hình Chi nhánh',
-                                        desc: 'Thiết lập tham số workspace',
+                                        title: 'Workspace Settings',
+                                        desc: 'Set workspace parameters',
                                         icon: Settings
                                     }
                                 ].map((link, idx) => (

@@ -5,7 +5,7 @@ import { formatAuditChanges, getResourceLabel, getActionColor } from '@/lib/audi
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { formatDate } from 'date-fns';
-import { vi } from 'date-fns/locale';
+import { enUS } from 'date-fns/locale';
 import { AuditExportDialog } from '@/components/admin/audit/audit-export-dialog';
 
 // Formatting utilities moved to lib/audit/formatters.ts
@@ -13,7 +13,7 @@ import { AuditExportDialog } from '@/components/admin/audit/audit-export-dialog'
 import { AuditFilters } from './AuditFilters';
 import { Button as UIButton } from '@/components/ui/button';
 import Link from 'next/link';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Building2 } from 'lucide-react';
 
 export default async function AuditLogsPage({
     searchParams
@@ -62,7 +62,7 @@ export default async function AuditLogsPage({
                             <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
                         </div>
                         <div>
-                            <h1 className="text-3xl md:text-4xl font-black bg-gradient-to-r from-amber-200 via-amber-400 to-amber-200 bg-clip-text text-transparent tracking-tight">System Giám sát Audit Trail</h1>
+                            <h1 className="text-3xl md:text-4xl font-black bg-gradient-to-r from-amber-200 via-amber-400 to-amber-200 bg-clip-text text-transparent tracking-tight">Audit Trail Monitoring System</h1>
                             <p className="text-slate-400 mt-1.5 text-sm flex items-center gap-2">
                                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                                 Real-time protection — ISO 27017 §CLD.12.4.1 — Total: <strong className="text-amber-400 font-black">{count}</strong> records
@@ -83,7 +83,7 @@ export default async function AuditLogsPage({
                 <Card className="bg-white/80 dark:bg-slate-900/60 backdrop-blur-xl border border-slate-200 dark:border-slate-800/80 shadow-lg rounded-2xl">
                     <CardHeader className="pb-2">
                         <CardTitle className="text-[10px] font-bold text-slate-450 dark:text-slate-500 uppercase tracking-wider">
-                            Records found
+                            Records Found
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
@@ -93,7 +93,7 @@ export default async function AuditLogsPage({
                 <Card className="bg-white/80 dark:bg-slate-900/60 backdrop-blur-xl border border-slate-200 dark:border-slate-800/80 shadow-lg rounded-2xl">
                     <CardHeader className="pb-2">
                         <CardTitle className="text-[10px] font-bold text-slate-450 dark:text-slate-500 uppercase tracking-wider">
-                            Page current
+                            Current Page
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
@@ -106,7 +106,7 @@ export default async function AuditLogsPage({
                     <div className="absolute top-0 right-0 w-16 h-16 bg-emerald-500/10 blur-xl"></div>
                     <CardHeader className="pb-2 relative z-10">
                         <CardTitle className="text-[10px] font-bold text-emerald-600 dark:text-emerald-500 uppercase tracking-wider">
-                            Hành động CREATE (An toàn)
+                            CREATE Action (Safe)
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="relative z-10">
@@ -119,11 +119,11 @@ export default async function AuditLogsPage({
                     <div className="absolute top-0 right-0 w-16 h-16 bg-rose-500/10 blur-xl"></div>
                     <CardHeader className="pb-2 relative z-10">
                         <CardTitle className="text-[10px] font-bold text-rose-600 dark:text-rose-500 uppercase tracking-wider">
-                            Hành động DELETE (Rủi ro)
+                            DELETE Action (Risk)
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="relative z-10">
-                        <div className="text-3xl font-black text-rose-600 dark:text-rose-450">
+                        <div className="text-3xl font-black text-rose-600 dark:text-rose-455">
                             {logs.filter(l => l.action === 'delete').length}
                         </div>
                     </CardContent>
@@ -141,19 +141,19 @@ export default async function AuditLogsPage({
                                         Time
                                     </th>
                                     <th className="px-5 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                                        Định danh (User)
+                                        Identity (User)
                                     </th>
                                     <th className="px-5 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                                        Hành động
+                                        Action
                                     </th>
                                     <th className="px-5 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                                        Tài nguyên
+                                        Resource
                                     </th>
                                     <th className="px-5 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                                        Dấu vết (IP/Agent)
+                                        Trace (IP/Agent)
                                     </th>
                                     <th className="px-5 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                                        Details thay đổi
+                                        Change Details
                                     </th>
                                 </tr>
                             </thead>
@@ -164,7 +164,7 @@ export default async function AuditLogsPage({
                                         return (
                                         <tr key={log.id} className={`hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors ${isDelete ? 'bg-rose-50/50 dark:bg-rose-950/20' : ''}`}>
                                             <td className="px-5 py-4 text-xs text-slate-500 dark:text-slate-400 font-mono">
-                                                {new Date(log.created_at).toLocaleString('vi-VN', {
+                                                {new Date(log.created_at).toLocaleString('en-US', {
                                                     timeZone: 'Asia/Ho_Chi_Minh',
                                                     day: '2-digit', month: '2-digit', year: 'numeric',
                                                     hour: '2-digit', minute: '2-digit', second: '2-digit'
@@ -172,7 +172,7 @@ export default async function AuditLogsPage({
                                             </td>
                                             <td className="px-5 py-4 text-sm font-medium">
                                                 {log.user_email === 'guest@anonymous' ? (
-                                                    <Badge variant="outline" className="font-mono text-[10px] border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-800">GUEST</Badge>
+                                                    <Badge variant="outline" className="font-mono text-[10px] border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-850">GUEST</Badge>
                                                 ) : (
                                                     <span className="text-amber-600 dark:text-amber-400 font-mono">{log.user_email || 'System'}</span>
                                                 )}
@@ -190,7 +190,7 @@ export default async function AuditLogsPage({
                                             <td className="px-5 py-4 text-sm text-slate-800 dark:text-slate-300 font-medium">
                                                 <div>{getResourceLabel(log.resource)}</div>
                                                 <div className="text-[11px] text-slate-400 dark:text-slate-500 font-normal mt-1 flex items-center gap-1">
-                                                    <span className="text-xs">🏢</span>
+                                                    <Building2 className="h-3.5 w-3.5 text-slate-400" />
                                                     <span>{log.tenant_name || 'System (Global)'}</span>
                                                 </div>
                                             </td>
@@ -213,7 +213,7 @@ export default async function AuditLogsPage({
                                 ) : (
                                     <tr>
                                         <td colSpan={6} className="px-5 py-12 text-center text-slate-500 dark:text-slate-400">
-                                            Not found dấu vết nào.
+                                            No audit logs found.
                                         </td>
                                     </tr>
                                 )}
@@ -227,8 +227,8 @@ export default async function AuditLogsPage({
             {totalPages > 1 && (
                 <div className="flex items-center justify-between bg-white/80 dark:bg-slate-900/60 backdrop-blur-xl px-5 py-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-lg relative z-10">
                     <div className="text-sm text-slate-500 dark:text-slate-400 font-mono">
-                        Display từ <span className="font-bold text-slate-900 dark:text-white">{(page - 1) * limit + 1}</span> đến{' '}
-                        <span className="font-bold text-slate-900 dark:text-white">{Math.min(page * limit, count)}</span> trong total{' '}
+                        Showing <span className="font-bold text-slate-900 dark:text-white">{(page - 1) * limit + 1}</span> to{' '}
+                        <span className="font-bold text-slate-900 dark:text-white">{Math.min(page * limit, count)}</span> of{' '}
                         <span className="font-bold text-slate-900 dark:text-white">{count}</span> records
                     </div>
                     <div className="flex gap-2 items-center">
@@ -242,7 +242,7 @@ export default async function AuditLogsPage({
                             <ChevronLeft className="h-5 w-5" />
                         </Link>
                         <div className="flex items-center px-4 text-sm font-bold text-amber-600 dark:text-amber-400 font-mono">
-                            TRANG {page} / {totalPages}
+                            PAGE {page} / {totalPages}
                         </div>
                         <Link
                             href={{

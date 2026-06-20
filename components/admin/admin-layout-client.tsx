@@ -35,14 +35,14 @@ export function AdminLayoutClient({
     const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
     const params = useParams();
 
-    // tenant_id trong URL — nếu có thì đang ở Tenant Context
+    // tenant_id in URL — if present, we are in Tenant Context
     const urlTenantId = params?.tenant_id as string | undefined;
     const isTenantContext = mounted ? !!urlTenantId : false;
 
-    // Khi super_admin view branch khác: urlTenantId !== tenantId
-    // → BusinessSidebar cần fetch name từ DB theo urlTenantId, không dùng prop từ user context
+    // When super_admin views another tenant: urlTenantId !== tenantId
+    // -> EnterpriseSidebar needs to fetch name from DB by urlTenantId, not user context props
     const isViewingOwnTenant = !urlTenantId || urlTenantId === tenantId;
-    const sidebarTenantName = isViewingOwnTenant ? tenantName : null; // null → trigger fetch in sidebar
+    const sidebarTenantName = isViewingOwnTenant ? tenantName : null; // null -> trigger fetch in sidebar
     const sidebarThemeColor = isViewingOwnTenant ? themeColor : null;
 
     useEffect(() => {
@@ -61,7 +61,7 @@ export function AdminLayoutClient({
 
     return (
         <div className="flex min-h-screen bg-slate-950 text-slate-100 transition-colors duration-300">
-            {/* Sidebar — hidden hoàn toàn khi collapsed */}
+            {/* Sidebar — completely hidden when collapsed */}
             <div
                 className={`
                     transition-all duration-300 ease-in-out shrink-0 overflow-hidden
@@ -103,7 +103,8 @@ export function AdminLayoutClient({
                 <button
                     type="button"
                     onClick={toggleSidebar}
-                    title={sidebarCollapsed ? 'Open thanh điều hướng' : 'Hide thanh điều hướng'}
+                    title={sidebarCollapsed ? 'Open sidebar' : 'Hide sidebar'}
+                    translate="no"
                     className="
                         fixed top-3 left-3 z-50
                         flex items-center justify-center

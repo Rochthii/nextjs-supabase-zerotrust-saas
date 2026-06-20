@@ -27,7 +27,7 @@ export function ImageUpload({ label, value, onChange, disabled, trim }: ImageUpl
 
         // Validate file type
         if (!file.type.startsWith('image/')) {
-            setError('Please select file image');
+            setError('Please select an image file');
             return;
         }
 
@@ -35,7 +35,7 @@ export function ImageUpload({ label, value, onChange, disabled, trim }: ImageUpl
         setError('');
 
         try {
-            // Nén ảnh → WebP trước khi upload tiết kiệm dung lượng Supabase
+            // Compress image to WebP before upload to save Supabase storage space
             const compressed = await compressImageToWebP(file, { trim });
             const formData = new FormData();
             formData.append('file', compressed);
@@ -48,7 +48,7 @@ export function ImageUpload({ label, value, onChange, disabled, trim }: ImageUpl
             }
         } catch (err) {
             console.error(err);
-            setError('An error occurred khi upload');
+            setError('An error occurred during upload');
         } finally {
             setUploading(false);
         }
@@ -92,13 +92,13 @@ export function ImageUpload({ label, value, onChange, disabled, trim }: ImageUpl
                             {uploading ? (
                                 <>
                                     <Loader2 className="w-8 h-8 mb-3 text-gray-400 animate-spin" />
-                                    <p className="text-sm text-gray-500">Đang upload...</p>
+                                    <p className="text-sm text-gray-500">Uploading...</p>
                                 </>
                             ) : (
                                 <>
                                     <Upload className="w-8 h-8 mb-3 text-gray-400" />
-                                    <p className="text-sm text-gray-500">Nhấn để tải ảnh lên</p>
-                                    <p className="text-xs text-gray-400 mt-1">Mọi định dạng ảnh · Tự động nén WebP</p>
+                                    <p className="text-sm text-gray-500">Click to upload image</p>
+                                    <p className="text-xs text-gray-400 mt-1">All image formats · Auto WebP compression</p>
                                 </>
                             )}
                         </div>

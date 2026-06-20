@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-// Phân cấp role — phải khớp với lib/auth/require-admin.ts
+// Role hierarchy - must match lib/auth/require-admin.ts
 const ROLE_LEVEL: Record<string, number> = {
     viewer: 1,
     volunteer: 1,
@@ -32,8 +32,8 @@ const ROLE_LEVEL: Record<string, number> = {
 };
 
 /**
- * minRole: role TỐI THIỂU cần có để thấy menu item.
- * Role cao hơn sẽ LUÔN thấy item của role thấp hơn.
+ * minRole: MINIMUM role required to see the menu item.
+ * Higher roles will ALWAYS see items of lower roles.
  */
 const menuItems = [
     { href: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard, minRole: 'editor' },
@@ -42,7 +42,7 @@ const menuItems = [
     { href: '/admin/users', label: 'User', icon: Users, minRole: 'admin' },
     { href: '/admin/settings', label: 'Settings', icon: Settings, minRole: 'admin' },
     { href: '/admin/backup', label: 'Backup', icon: Database, minRole: 'super_admin' },
-    { href: '/admin/tenants', label: 'Quản lý Branch', icon: Building2, minRole: 'super_admin' },
+    { href: '/admin/tenants', label: 'Workspace Management', icon: Building2, minRole: 'super_admin' },
 ];
 
 interface AdminSidebarProps {
@@ -102,7 +102,7 @@ export function AdminSidebar({ role = 'editor' }: AdminSidebarProps) {
                     </div>
                     <div>
                         <h1 className="text-lg font-playfair font-bold text-gold-primary group-hover:text-white transition-colors truncate max-w-[150px]">
-                            {tenantId ? 'Quản lý Branch' : 'Global Admin'}
+                            {tenantId ? 'Tenant Admin' : 'Global Admin'}
                         </h1>
                         <p className="text-xs text-gray-400 truncate">
                             {tenantId ? `ID: ${tenantId.slice(0, 8)}...` : 'Multi-tenant Ecosystem'}
@@ -124,7 +124,7 @@ export function AdminSidebar({ role = 'editor' }: AdminSidebarProps) {
                             <div className="p-1 rounded bg-white/5 group-hover:bg-gold-primary group-hover:text-coffee-dark transition-colors">
                                 <LogOut className="h-4 w-4 rotate-180" />
                             </div>
-                            <span className="font-medium">View Page Chủ</span>
+                            <span className="font-medium">View Homepage</span>
                         </Link>
                     </li>
 
@@ -136,7 +136,7 @@ export function AdminSidebar({ role = 'editor' }: AdminSidebarProps) {
                                 className="flex items-center gap-3 px-4 py-3 rounded-lg text-amber-400 hover:bg-amber-400/10 transition-all font-semibold"
                             >
                                 <Building2 className="h-5 w-5" />
-                                <span>Đổi Branch Quản Trị</span>
+                                <span>Switch Workspace</span>
                             </Link>
                         </li>
                     )}

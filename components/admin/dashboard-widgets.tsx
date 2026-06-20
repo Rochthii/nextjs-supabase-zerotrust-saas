@@ -3,7 +3,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { formatDate } from 'date-fns';
-import { vi } from 'date-fns/locale';
+import { enUS } from 'date-fns/locale';
 import { formatCurrency } from '@/lib/constants/transaction';
 import { Newspaper, DollarSign } from 'lucide-react';
 import Link from 'next/link';
@@ -21,7 +21,7 @@ export function RecentActivity({ news, transactions }: RecentActivityProps) {
                 <CardHeader className="flex flex-row items-center justify-between">
                     <CardTitle className="text-base font-playfair flex items-center gap-2">
                         <Newspaper className="h-5 w-5 text-blue-600" />
-                        News latest
+                        Latest News
                     </CardTitle>
                     <Link href="/admin/news" className="text-sm text-blue-600 hover:underline">
                         View all
@@ -30,7 +30,7 @@ export function RecentActivity({ news, transactions }: RecentActivityProps) {
                 <CardContent>
                     <div className="space-y-4">
                         {news.length === 0 ? (
-                            <p className="text-sm text-gray-500">Chưa có news nào.</p>
+                            <p className="text-sm text-gray-500">No news found.</p>
                         ) : (
                             news.map((item) => (
                                 <div key={item.id} className="flex items-start gap-3 pb-3 border-b last:border-0 last:pb-0">
@@ -40,11 +40,11 @@ export function RecentActivity({ news, transactions }: RecentActivityProps) {
                                             {item.title_vi}
                                         </p>
                                         <p className="text-[11px] text-gray-500">
-                                            {formatDate(new Date(item.created_at), 'dd/MM/yyyy HH:mm', { locale: vi })}
+                                            {formatDate(new Date(item.created_at), 'dd/MM/yyyy HH:mm', { locale: enUS })}
                                             <span className={`ml-2 px-1.5 py-0.5 rounded-full text-[10px] ${item.status === 'published' ? 'bg-green-100 text-green-700' :
                                                 item.status === 'draft' ? 'bg-gray-100 text-gray-700' : 'bg-red-100 text-red-700'
                                                 }`}>
-                                                {item.status === 'published' ? 'Published' : item.status === 'draft' ? 'Draft' : 'Save trữ'}
+                                                {item.status === 'published' ? 'Published' : item.status === 'draft' ? 'Draft' : 'Archived'}
                                             </span>
                                         </p>
                                     </div>
@@ -60,7 +60,7 @@ export function RecentActivity({ news, transactions }: RecentActivityProps) {
                 <CardHeader className="flex flex-row items-center justify-between">
                     <CardTitle className="text-base font-playfair flex items-center gap-2">
                         <DollarSign className="h-5 w-5 text-gold-primary" />
-                        Payment latest
+                        Latest Payments
                     </CardTitle>
                     <Link href="/admin/transactions" className="text-sm text-gold-primary hover:underline">
                         View all
@@ -69,7 +69,7 @@ export function RecentActivity({ news, transactions }: RecentActivityProps) {
                 <CardContent>
                     <div className="space-y-4">
                         {transactions.length === 0 ? (
-                            <p className="text-sm text-gray-500">Chưa có khoản payment nào.</p>
+                            <p className="text-sm text-gray-500">No transactions found.</p>
                         ) : (
                             transactions.map((item) => (
                                 <div key={item.id} className="flex items-start gap-3 pb-3 border-b last:border-0 last:pb-0">
@@ -84,15 +84,15 @@ export function RecentActivity({ news, transactions }: RecentActivityProps) {
                                             </span>
                                         </div>
                                         <p className="text-[11px] text-gray-500">
-                                            {formatDate(new Date(item.created_at), 'dd/MM/yyyy HH:mm', { locale: vi })} -
+                                            {formatDate(new Date(item.created_at), 'dd/MM/yyyy HH:mm', { locale: enUS })} -
                                             <span className="ml-1 italic">
-                                                {item.transaction_projects?.title_vi || (
+                                                {item.transaction_projects?.title_en || item.transaction_projects?.title_vi || (
                                                     <>
-                                                        {item.purpose === 'construction' && 'Xây dựng'}
-                                                        {item.purpose === 'education' && 'Giáo dục'}
-                                                        {item.purpose === 'charity' && 'Từ thiện'}
-                                                        {item.purpose === 'general' && 'Chung'}
-                                                        {!item.purpose && 'Category chung'}
+                                                        {item.purpose === 'construction' && 'Construction'}
+                                                        {item.purpose === 'education' && 'Education'}
+                                                        {item.purpose === 'charity' && 'Charity'}
+                                                        {item.purpose === 'general' && 'General'}
+                                                        {!item.purpose && 'General Category'}
                                                     </>
                                                 )}
                                             </span>

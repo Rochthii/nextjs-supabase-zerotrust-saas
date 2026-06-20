@@ -21,8 +21,8 @@ const playfair = Playfair_Display({
 });
 
 export const metadata = {
-    title: 'System Quản trị',
-    description: 'Bảng điều khiển quản trị content website',
+    title: 'Admin Control Center',
+    description: 'Centralized administration dashboard',
 };
 
 import { redirect } from 'next/navigation';

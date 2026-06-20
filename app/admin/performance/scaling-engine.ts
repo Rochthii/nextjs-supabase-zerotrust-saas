@@ -1,14 +1,14 @@
 /**
  * Scaling Benchmark Engine (v2.0)
- * Đồ án Tốt nghiệp PTIT - Chăm Rốch Thi
- * Purpose: Đo lường độ trễ execute (Latency) và tính toán phân vị (Percentiles - P50, P95, P99)
- *   khi quy mô dữ liệu growth (1k -> 10k -> 100k).
+ * PTIT Graduation Thesis - Cham Roch Thi
+ * Purpose: Measure execution latency and calculate percentiles (P50, P95, P99)
+ *   as dataset size scales (1k -> 10k -> 100k).
  */
 
 export type PercentileData = {
-    p50: number; // Median (50% user có độ trễ dưới mức này)
-    p95: number; // 95th Percentile (Phản ánh độ trễ phổ biến ở tải cao)
-    p99: number; // 99th Percentile (Đuôi độ trễ - Worst case scenario)
+    p50: number; // Median (50% of users experience latency below this level)
+    p95: number; // 95th Percentile (Reflects common latency under high load)
+    p99: number; // 99th Percentile (Tail latency - Worst case scenario)
 };
 
 export type BenchmarkResult = {
@@ -19,27 +19,27 @@ export type BenchmarkResult = {
 };
 
 /**
- * Hàm tiện ích tính toán giá trị phân vị từ mảng dữ liệu độ trễ
+ * Helper function to calculate percentile value from latency data array
  */
 function calculatePercentile(latencies: number[], percentile: number): number {
     if (!latencies || latencies.length === 0) return 0;
     
-    // Sort mảng độ trễ tăng dần
+    // Sort latency array in ascending order
     const sorted = [...latencies].sort((a, b) => a - b);
     const index = Math.ceil((percentile / 100) * sorted.length) - 1;
     const clampedIndex = Math.max(0, Math.min(index, sorted.length - 1));
     
-    // Làm tròn đến 3 chữ số thập phân
+    // Round to 3 decimal places
     return Number(sorted[clampedIndex].toFixed(3));
 }
 
 /**
- * Động cơ đo lường và tính toán statistics phân vị hiệu năng
- * Chạy lặp lại mỗi phép đo 50 lần để đảm bảo tính hội tụ statistics standard khoa last namec.
+ * Performance percentile statistics measurement engine.
+ * Run each measurement 50 times to ensure scientific statistical convergence.
  */
 export async function runScalingBenchmark(supabase: any): Promise<BenchmarkResult[]> {
     const sizes = [1000, 10000, 100000];
-    const iterations = 50; // Số lần chạy lặp lại để fetch data statistics
+    const iterations = 50; // Number of iterations to fetch statistical data
     const results: BenchmarkResult[] = [];
 
     for (const size of sizes) {
@@ -49,11 +49,11 @@ export async function runScalingBenchmark(supabase: any): Promise<BenchmarkResul
 
         for (let i = 0; i < iterations; i++) {
             // ==============================================================================
-            // 1. ĐO LƯỜNG APP-SIDE FILTERING (Filter ở tầng Client Next.js)
-            // Đo lường time fetch và filter actual ở Client.
-            // Để tránh Vercel Serverless Timeout (10s) khi tải 100k dòng,
-            // chỉ thực hiện query thật 3 lần cho quy mô ≥ 10.000 dòng,
-            // các count còn lại tái sử dụng ngẫu nhiên giá trị đã đo.
+            // 1. MEASURE APP-SIDE FILTERING (Filtering at Next.js Client layer)
+            // Measure fetch time and actual client-side filtering.
+            // To avoid Vercel Serverless Timeout (10s) when loading 100k rows,
+            // only perform actual query 3 times for scale >= 10,000 rows,
+            // the remaining iterations reuse measured values randomly.
             // ==============================================================================
             if (size < 10000 || i < 3) {
                 const startApp = performance.now();
@@ -62,7 +62,7 @@ export async function runScalingBenchmark(supabase: any): Promise<BenchmarkResul
                     .select('id, tenant_id')
                     .limit(size);
                 
-                // Filter trên RAM
+                // Filter in RAM
                 const filtered = allData?.filter((item: any) => item.tenant_id === '55555555-5555-5555-5555-555555555555');
                 const endApp = performance.now();
                 appLatencies.push(endApp - startApp);
@@ -72,8 +72,8 @@ export async function runScalingBenchmark(supabase: any): Promise<BenchmarkResul
             }
 
             // ==============================================================================
-            // 2. ĐO LƯỜNG RLS JOIN (Legacy - Đo directly Execution Time ở Database-side)
-            // Gọi RPC đo lường bằng clock_timestamp() để triệt tiêu nhiễu mạng HTTP.
+            // 2. MEASURE RLS JOIN (Legacy - Measure database-side execution time directly)
+            // Call measurement RPC using clock_timestamp() to eliminate HTTP network noise.
             // ==============================================================================
             const joinStart = performance.now();
             const { data: joinTime, error: joinErr } = await supabase.rpc('measure_db_rls_join', { 
@@ -81,9 +81,9 @@ export async function runScalingBenchmark(supabase: any): Promise<BenchmarkResul
             });
             const joinEnd = performance.now();
             if (joinErr) {
-                // RPC không tồn tại trên server (chưa migrate) → fallback sang đo client-side
+                // RPC does not exist on server (not migrated yet) -> fallback to client-side measurement
                 console.error('[Benchmark] measure_db_rls_join error:', joinErr.message);
-                // Fallback: đo time round-trip query JOIN tương đương
+                // Fallback: measure equivalent JOIN query round-trip time
                 const fbStart = performance.now();
                 await supabase
                     .from('benchmark_legacy')
@@ -94,14 +94,14 @@ export async function runScalingBenchmark(supabase: any): Promise<BenchmarkResul
             } else if (joinTime !== null && Number(joinTime) > 0) {
                 joinLatencies.push(Number(joinTime));
             } else if (joinTime !== null && Number(joinTime) === 0) {
-                // RPC return 0 → bảng trống hoặc quá nhanh, fallback sang client timing
-                console.warn('[Benchmark] measure_db_rls_join returned 0ms → fallback to client timing');
+                // RPC returned 0 -> empty table or too fast, fallback to client timing
+                console.warn('[Benchmark] measure_db_rls_join returned 0ms -> fallback to client timing');
                 joinLatencies.push(joinEnd - joinStart);
             }
 
             // ==============================================================================
-            // 3. ĐO LƯỜNG RLS CLAIMS (Optimized JWT - Đo directly Execution Time ở Database-side)
-            // Gọi RPC đo lường bằng clock_timestamp() để triệt tiêu nhiễu mạng HTTP.
+            // 3. MEASURE RLS CLAIMS (Optimized JWT - Measure database-side execution time directly)
+            // Call measurement RPC using clock_timestamp() to eliminate HTTP network noise.
             // ==============================================================================
             const claimsStart = performance.now();
             const { data: claimsTime, error: claimsErr } = await supabase.rpc('measure_db_rls_claims', { 
@@ -109,7 +109,7 @@ export async function runScalingBenchmark(supabase: any): Promise<BenchmarkResul
             });
             const claimsEnd = performance.now();
             if (claimsErr) {
-                // RPC không tồn tại → fallback sang đo client-side
+                // RPC does not exist -> fallback to client-side measurement
                 console.error('[Benchmark] measure_db_rls_claims error:', claimsErr.message);
                 const fbStart = performance.now();
                 await supabase
@@ -121,12 +121,12 @@ export async function runScalingBenchmark(supabase: any): Promise<BenchmarkResul
             } else if (claimsTime !== null && Number(claimsTime) > 0) {
                 claimsLatencies.push(Number(claimsTime));
             } else if (claimsTime !== null && Number(claimsTime) === 0) {
-                console.warn('[Benchmark] measure_db_rls_claims returned 0ms → fallback to client timing');
+                console.warn('[Benchmark] measure_db_rls_claims returned 0ms -> fallback to client timing');
                 claimsLatencies.push(claimsEnd - claimsStart);
             }
         }
 
-        // Tính toán các chỉ số phân vị P50, P95, P99
+        // Calculate P50, P95, and P99 percentiles
         results.push({
             datasetSize: size,
             appFilter: {

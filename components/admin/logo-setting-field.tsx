@@ -13,7 +13,7 @@ export function LogoSettingField({ defaultValue = '' }: LogoSettingFieldProps) {
 
     return (
         <div className="space-y-4">
-            <Label>Logo chính của website</Label>
+            <Label>Primary Website Logo</Label>
             <div className="max-w-xs">
                 <ImageUpload
                     value={logoUrl}
@@ -24,7 +24,7 @@ export function LogoSettingField({ defaultValue = '' }: LogoSettingFieldProps) {
             {/* Hidden input to pass value to Server Action FormData */}
             <input type="hidden" name="site_logo" value={logoUrl} />
             <p className="text-xs text-gray-500">
-                Upload ảnh có định dạng PNG trong suốt (khuyên dùng) hoặc JPG. Tỉ lệ khuyên dùng 1:1 hoặc ngang tỷ lệ vừa phải.
+                Upload transparent PNG (recommended) or JPG format image. Recommended ratio is 1:1 or moderate landscape aspect ratio.
             </p>
         </div>
     );

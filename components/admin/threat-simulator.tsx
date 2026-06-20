@@ -40,28 +40,28 @@ const ATTACK_FLOWS: Record<Scenario, string[]> = {
         'Next.js Router',
         'JWT Claims Check (Tenant A)',
         'PostgreSQL DB (RLS: tenant_id = auth.jwt())',
-        'BLOCKED ❌ (0 rows returned)'
+        'BLOCKED (0 rows returned)'
     ],
     cache_pollution: [
         'Hacker Request (Tenant B cache key)',
         'Next.js App Router (Cache Lookup)',
         'Cache Key Miss (Isolated Namespace)',
         'PostgreSQL DB RLS (Fallback Validation)',
-        'BLOCKED ❌ (0 leakage)'
+        'BLOCKED (0 leakage)'
     ],
     sql_injection: [
         'Hacker Payload (1\' OR \'1\'=\'1)',
         'Next.js API Handler',
         'Supabase Driver (Parameterized: $1)',
         'PostgreSQL DB Engine (String literal escape)',
-        'BLOCKED ❌ (Parsed as literal string)'
+        'BLOCKED (Parsed as literal string)'
     ],
     noisy_neighbor: [
         'Hacker Request Flood (8 concurrent queries)',
         'Next.js Route Handler',
         'Application Slot Pooler (Check slot availability)',
         'DB Connection Pool slots full (3/3 free tier slots)',
-        'BLOCKED ❌ (429 Too Many Requests - Protected DB resource)'
+        'BLOCKED (429 Too Many Requests - Protected DB resource)'
     ]
 };
 
@@ -75,35 +75,35 @@ const SCENARIOS: Record<Scenario, {
 }> = {
     cross_tenant_read: {
         label: 'Cross-Tenant Read',
-        description: 'User Tenant A cố đọc data Tenant B qua RLS',
+        description: 'User in Tenant A attempts to read Tenant B data via RLS',
         icon: <ShieldX className="w-4 h-4" />,
         color: 'rose',
-        phase1: 'Tenant A đang cố truy cập dữ liệu Tenant B...',
-        phase2: 'PostgreSQL RLS đang process check quyền...',
+        phase1: 'Tenant A is attempting to access Tenant B data...',
+        phase2: 'PostgreSQL RLS is processing permission checks...',
     },
     cache_pollution: {
         label: 'Cross-Tenant Cache Poisoning',
-        description: 'Thử làm rò rỉ dữ liệu qua cache chéo tenant',
+        description: 'Test data leaks via cross-tenant cached namespaces',
         icon: <Database className="w-4 h-4" />,
         color: 'amber',
-        phase1: 'Kẻ tấn công đang submit HTTP header giả mạo Cache Key...',
-        phase2: 'Check Tenant-aware Cache Isolation...',
+        phase1: 'Intruder submitting forged HTTP cache key headers...',
+        phase2: 'Verifying Tenant-aware Cache Isolation...',
     },
     sql_injection: {
         label: 'SQL Injection',
-        description: 'Thử bypass RLS bằng SQL Injection payload',
+        description: 'Attempt to bypass RLS using SQL injection payloads',
         icon: <Search className="w-4 h-4" />,
         color: 'violet',
-        phase1: 'Submit SQL Injection payload vào query parameter...',
-        phase2: 'Parameterized Query đang process escape input...',
+        phase1: 'Submitting SQL injection payload to query parameters...',
+        phase2: 'Parameterized query escaping input tokens...',
     },
     noisy_neighbor: {
         label: 'Noisy Neighbor connection limits',
-        description: 'Submit dồn dập truy vấn chiếm dụng DB connection pool',
+        description: 'Saturate database connection pool with concurrent queries',
         icon: <Zap className="w-4 h-4" />,
         color: 'rose',
-        phase1: 'Tenant A (Free) submit dồn dập 8 truy vấn đồng thời...',
-        phase2: 'Check connection slot limits bảo vệ tài nguyên branch khác...',
+        phase1: 'Tenant A (Free plan) submitting 8 concurrent queries...',
+        phase2: 'Verifying connection slot limits to protect other workspaces...',
     },
 };
 
@@ -118,61 +118,61 @@ const CODE_TEMPLATES: Record<Scenario, {
 }> = {
     cross_tenant_read: {
         attack: {
-            title: '🥷 Hacker Code (TypeScript Client Bypass)',
-            code: `// Hacker từ Tenant A cố truy cập data của Tenant B\nconst { data } = await supabase\n  .from('news')\n  .select('id, title, tenant_id')\n  .eq('tenant_id', 'TENANT_B_UUID'); // Cố tình truyền UUID của Tenant B`
+            title: 'Hacker Code (TypeScript Client Bypass)',
+            code: `// Hacker from Tenant A attempts to access Tenant B data\nconst { data } = await supabase\n  .from('news')\n  .select('id, title, tenant_id')\n  .eq('tenant_id', 'TENANT_B_UUID'); // Maliciously passing Tenant B UUID`
         },
         defense: {
-            title: '🛡️ PostgreSQL RLS Policy (Database Layer)',
-            code: `-- Enable chính sách cô lập Row-Level Security\nALTER TABLE public.news ENABLE ROW LEVEL SECURITY;\n\n-- Lưới filter tự động áp dụng dưới PostgreSQL DB\nCREATE POLICY "Authenticated users read own tenant news" ON public.news \nFOR SELECT USING (\n    tenant_id = (auth.jwt()->>'tenant_id')::uuid\n);`
+            title: 'PostgreSQL RLS Policy (Database Layer)',
+            code: `-- Enable Row-Level Security policy\nALTER TABLE public.news ENABLE ROW LEVEL SECURITY;\n\n-- Security filter automatically enforced by PostgreSQL DB\nCREATE POLICY "Authenticated users read own tenant news" ON public.news \nFOR SELECT USING (\n    tenant_id = (auth.jwt()->>'tenant_id')::uuid\n);`
         },
         performance: {
-            cache: { latency: '1 - 3 ms', complexity: 'O(1) (RAM lookup)', security: 'Edge Validation (Tĩnh)' },
-            rls: { latency: '10 - 25 ms', complexity: 'O(log N) optimized (Index Scan)', security: 'Database Level (Bất biến)' },
-            app: { latency: '80 - 150 ms', complexity: 'O(N) (Duyệt mảng)', security: 'Application Level (Dễ lọt RLS)' }
+            cache: { latency: '1 - 3 ms', complexity: 'O(1) (RAM lookup)', security: 'Edge Validation (Static)' },
+            rls: { latency: '10 - 25 ms', complexity: 'O(log N) optimized (Index Scan)', security: 'Database Level (Immutable)' },
+            app: { latency: '80 - 150 ms', complexity: 'O(N) (Array iteration)', security: 'Application Level (Prone to RLS leaks)' }
         }
     },
     cache_pollution: {
         attack: {
-            title: '🥷 Hacker Payload (HTTP Cache Poisoning)',
-            code: `// Hacker đoán định dạng Cache Key chung và submit HTTP Header giả mạo\nGET /api/sections/news-events HTTP/1.1\nHost: tenant-a.saas.com\nX-Nextjs-Cache-Key: news-list-TENANT_B_UUID // Cố tình nạp Cache Key Tenant B`
+            title: 'Hacker Payload (HTTP Cache Poisoning)',
+            code: `// Hacker guesses cache key pattern and submits forged HTTP Headers\nGET /api/sections/news-events HTTP/1.1\nHost: tenant-a.saas.com\nX-Nextjs-Cache-Key: news-list-TENANT_B_UUID // Maliciously forging Tenant B cache key`
         },
         defense: {
-            title: '🛡️ Next.js Tenant-isolated Cache (Application Layer)',
-            code: `// Sử dụng Tenant-isolated Cache Keys kết hợp RLS Double-check\nconst cacheKey = \`tenant:\${tenantId}:news-list\`;\nconst data = await unstable_cache(\n  async () => fetchNewsFromDB(tenantId),\n  [cacheKey],\n  { tags: [\`tenant:\${tenantId}\`] }\n)();`
+            title: 'Next.js Tenant-isolated Cache (Application Layer)',
+            code: `// Utilizing Tenant-isolated Cache Keys combined with RLS verification\nconst cacheKey = \`tenant:\${tenantId}:news-list\`;\nconst data = await unstable_cache(\n  async () => fetchNewsFromDB(tenantId),\n  [cacheKey],\n  { tags: [\`tenant:\${tenantId}\`] }\n)();`
         },
         performance: {
             cache: { latency: '0 - 2 ms (Cache Hit)', complexity: 'O(1) (Cache Store lookup)', security: 'Isolate Cache Store' },
             rls: { latency: '12 - 30 ms (Cache Miss)', complexity: 'O(log N) optimized (Index Scan)', security: 'DB RLS Fallback Protection' },
-            app: { latency: '95 - 200 ms', complexity: 'O(N)', security: 'Shared Memory (Dễ nhiễm độc)' }
+            app: { latency: '95 - 200 ms', complexity: 'O(N)', security: 'Shared Memory (Vulnerable to Poisoning)' }
         }
     },
     sql_injection: {
         attack: {
-            title: '🥷 Vulnerable Code (Raw SQL Concat - Rủi ro cao)',
-            code: `// Sử dụng nối chuỗi truy vấn directly (Dễ bị SQL Injection)\nconst query = \`SELECT * FROM news WHERE title = '\${payload}'\`;\nconst { rows } = await db.raw(query);\n// Payload chèn: "1' OR '1'='1; DROP TABLE news; --"`
+            title: 'Vulnerable Code (Raw SQL Concat - High Risk)',
+            code: `// Direct SQL query string concatenation (Highly Vulnerable to SQL Injection)\nconst query = \`SELECT * FROM news WHERE title = '\${payload}'\`;\nconst { rows } = await db.raw(query);\n// Injected payload: "1' OR '1'='1; DROP TABLE news; --"`
         },
         defense: {
-            title: '🛡️ Secure Code (Supabase Client / Parameterized Query)',
-            code: `// Sử dụng parameterized query hoặc query builder tự động escape\nconst { data } = await supabase\n  .from('news')\n  .select('*')\n  .eq('title', payload); // Parameterized: SELECT * FROM news WHERE title = $1;`
+            title: 'Secure Code (Supabase Client / Parameterized Query)',
+            code: `// Using parameterized queries or Query Builder to auto-escape inputs\nconst { data } = await supabase\n  .from('news')\n  .select('*')\n  .eq('title', payload); // Parameterized: SELECT * FROM news WHERE title = $1;`
         },
         performance: {
             cache: { latency: 'N/A (Bypassed)', complexity: 'N/A', security: 'N/A' },
             rls: { latency: '15 - 35 ms', complexity: 'O(log N) optimized', security: 'SQL Parameter Sanitization' },
-            app: { latency: '110 - 280 ms', complexity: 'O(N)', security: 'Manual replace (Rất nguy hiểm)' }
+            app: { latency: '110 - 280 ms', complexity: 'O(N)', security: 'Manual Sanitization (Highly Dangerous)' }
         }
     },
     noisy_neighbor: {
         attack: {
-            title: '🥷 Hacker Code (Parallel Query Exhaustion)',
-            code: `// Submit dồn dập hàng loạt query ghi/đọc đồng thời để vắt kiệt connection pool\nconst requests = Array(8).fill(0).map(() => \n  supabase.from('news').select('id, title')\n);\nawait Promise.all(requests);`
+            title: 'Hacker Code (Parallel Query Exhaustion)',
+            code: `// Flooding parallel read/write queries to exhaust database connection pool\nconst requests = Array(8).fill(0).map(() => \n  supabase.from('news').select('id, title')\n);\nawait Promise.all(requests);`
         },
         defense: {
-            title: '🛡️ Connection Slot Pooler (Supavisor Sandbox)',
-            code: `// Configuration Connection Limit động theo từng phân cấp Tenant\nconst poolLimits = { free: 3, pro: 10, enterprise: 40 };\nconst currentActive = await activeConnectionRegistry.get(tenantId);\nif (currentActive >= poolLimits[plan]) {\n  return rejectRequest(429, "Noisy Neighbor protection slot limit exceeded");\n}`
+            title: 'Connection Slot Pooler (Supavisor Sandbox)',
+            code: `// Dynamically configure connection pool limits per tenant tier\nconst poolLimits = { free: 3, pro: 10, enterprise: 40 };\nconst currentActive = await activeConnectionRegistry.get(tenantId);\nif (currentActive >= poolLimits[plan]) {\n  return rejectRequest(429, "Noisy Neighbor protection slot limit exceeded");\n}`
         },
         performance: {
             cache: { latency: 'N/A (Bypassed)', complexity: 'N/A', security: 'N/A' },
-            rls: { latency: '12 - 25 ms', complexity: 'O(log N) optimized', security: 'Slot Containment (Bảo toàn DB)' },
+            rls: { latency: '12 - 25 ms', complexity: 'O(log N) optimized', security: 'Slot Containment (DB Preservation)' },
             app: { latency: '85 - 190 ms', complexity: 'O(1) Slot Lookup', security: 'Isolated Pool Limits' }
         }
     }
@@ -192,7 +192,7 @@ export function ThreatSimulator() {
         setResult(null);
 
         const scenarioConfig = SCENARIOS[scenario];
-        setPhase('Initialize cuộc tấn công giả định...');
+        setPhase('Initializing simulated attack...');
 
         try {
             await delay(500);
@@ -213,22 +213,22 @@ export function ThreatSimulator() {
                 throw new Error(err.error || 'Simulation failed');
             }
 
-            setPhase('Đang analytics results & ghi audit log...');
+            setPhase('Analyzing results and writing audit logs...');
             await delay(400);
 
             const data = await res.json();
             setResult({ ...data, latency_ms: latency });
 
-            // Refresh các Server Component trên page (Audit Logs & Stats)
+            // Refresh Server Components on the page (Audit Logs & Stats)
             router.refresh();
 
             if (data.blocked) {
-                toast.success(`✅ [${scenarioConfig.label}] Tấn công bị block đứng!`);
+                toast.success(`[${scenarioConfig.label}] Attack blocked successfully!`);
             } else {
-                toast.error(`⚠️ [${scenarioConfig.label}] Phát hiện rủi ro security!`);
+                toast.error(`[${scenarioConfig.label}] Security risk detected!`);
             }
         } catch (err: any) {
-            toast.error(err.message || 'Error khi chạy simulation');
+            toast.error(err.message || 'Error running simulation');
         } finally {
             setRunning(false);
             setPhase('');
@@ -271,10 +271,10 @@ export function ThreatSimulator() {
                     </div>
                     <div>
                         <CardTitle className="text-white font-black flex items-center gap-2">
-                            🔴 Threat Simulation Engine
+                            Threat Simulation Engine
                         </CardTitle>
                         <CardDescription className="text-slate-400 text-xs mt-0.5">
-                            Giả lập tấn công & Trình diễn cơ chế phòng thủ actual (Chương 5 Đồ án)
+                            Simulate attacks and demonstrate real-time defense layers
                         </CardDescription>
                     </div>
                 </div>
@@ -309,7 +309,7 @@ export function ThreatSimulator() {
 
                 {/* Dynamic Attack Flow */}
                 <div className="space-y-1.5 border-b border-slate-800/50 pb-2">
-                    <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Luồng Tấn Công & Chốt Block (Attack Flow)</span>
+                    <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Attack Flow and Mitigation Points</span>
                     <div className="flex items-center gap-1.5 overflow-x-auto py-1 text-[10px]">
                         {ATTACK_FLOWS[activeScenario].map((step, i) => (
                             <React.Fragment key={i}>
@@ -340,12 +340,12 @@ export function ThreatSimulator() {
                     ) : (
                         <div className="flex items-center gap-2">
                             <ShieldAlert className="w-5 h-5" />
-                            🔴 KÍCH HOẠT: {SCENARIOS[activeScenario].label.toUpperCase()}
+                            TRIGGER: {SCENARIOS[activeScenario].label.toUpperCase()}
                         </div>
                     )}
                 </Button>
 
-                {/* Bản Đồ Luồng Tấn Công Động */}
+                {/* Dynamic Attack Flow Map */}
                 <AttackFlowMap
                     activeScenario={activeScenario}
                     running={running}
@@ -363,7 +363,7 @@ export function ThreatSimulator() {
                             }`}
                         >
                             <BarChart2 className="w-3.5 h-3.5" />
-                            Hiệu Năng
+                            Performance
                         </button>
                         <button
                             onClick={() => setActiveTab('attack')}
@@ -372,7 +372,7 @@ export function ThreatSimulator() {
                             }`}
                         >
                             <Code className="w-3.5 h-3.5" />
-                            Mã Tấn Công
+                            Attack Code
                         </button>
                         <button
                             onClick={() => setActiveTab('defense')}
@@ -381,7 +381,7 @@ export function ThreatSimulator() {
                             }`}
                         >
                             <Lock className="w-3.5 h-3.5" />
-                            Mã Phòng Thủ
+                            Defense Code
                         </button>
                         <button
                             onClick={() => setActiveTab('explain')}
@@ -398,16 +398,16 @@ export function ThreatSimulator() {
                     {activeTab === 'performance' && (
                         <div className="space-y-3">
                             <div className="flex items-center justify-between">
-                                <span className="text-xs font-black text-slate-300 uppercase tracking-wider">Bảng so sánh đo lường hiệu năng</span>
-                                <span className="text-[10px] text-amber-400 font-bold bg-amber-500/5 px-2 py-0.5 border border-amber-500/10 rounded">Test thực nghiệm</span>
+                                <span className="text-xs font-black text-slate-300 uppercase tracking-wider">Performance Measurement Comparison Table</span>
+                                <span className="text-[10px] text-amber-400 font-bold bg-amber-500/5 px-2 py-0.5 border border-amber-500/10 rounded">Empirical testing</span>
                             </div>
                             <div className="overflow-x-auto">
                                 <table className="w-full text-left text-[11px]">
                                     <thead>
                                         <tr className="text-slate-500 border-b border-slate-800">
-                                            <th className="pb-2 font-bold uppercase">Giải pháp</th>
-                                            <th className="pb-2 font-bold uppercase">Độ trễ (Latency)</th>
-                                            <th className="pb-2 font-bold uppercase">Độ phức tạp</th>
+                                            <th className="pb-2 font-bold uppercase">Solution</th>
+                                            <th className="pb-2 font-bold uppercase">Latency</th>
+                                            <th className="pb-2 font-bold uppercase">Complexity</th>
                                             <th className="pb-2 font-bold uppercase">Security</th>
                                         </tr>
                                     </thead>
@@ -434,7 +434,7 @@ export function ThreatSimulator() {
                                 </table>
                             </div>
                             <p className="text-[10px] text-slate-500 leading-relaxed italic">
-                                * Ước tính thực nghiệm dưới tải giả lập (10,000 requests, DB Index size: 50,000 rows). Results chứng minh: Trích xuất context JWT đạt O(1) RAM lookup và RLS đạt O(log N) optimized nhờ B-Tree Index Scan, tối ưu vượt trội so với vòng quét tuần tự O(N) ở tầng ứng dụng.
+                                * Empirical estimate under simulated load (10,000 requests, DB Index size: 50,000 rows). Results prove: JWT context extraction reaches O(1) RAM lookup and RLS reaches O(log N) optimized via B-Tree Index Scan, outperforming O(N) sequential scans at the application level.
                             </p>
                         </div>
                     )}
@@ -487,9 +487,9 @@ export function ThreatSimulator() {
                                   <>
                                       <CheckCircle2 className="w-8 h-8 text-emerald-400 shrink-0" />
                                       <div>
-                                          <p className="font-black text-emerald-300 text-base">CHẶN THÀNH CÔNG ✅</p>
+                                          <p className="font-black text-emerald-300 text-base">MITIGATION SUCCESSFUL</p>
                                           <p className="text-emerald-500 text-xs">
-                                              [{SCENARIOS[result.scenario]?.label}] — Kiến trúc phòng thủ hoạt động đúng thiết kế
+                                              [{SCENARIOS[result.scenario]?.label}] — Defense architecture operating as designed
                                           </p>
                                       </div>
                                   </>
@@ -497,8 +497,8 @@ export function ThreatSimulator() {
                                   <>
                                       <AlertTriangle className="w-8 h-8 text-rose-400 shrink-0" />
                                       <div>
-                                          <p className="font-black text-rose-300 text-base">CẢNH BÁO RỦI RO ⚠️</p>
-                                          <p className="text-rose-500 text-xs">Phát hiện dữ liệu bị rò rỉ — Cần điều tra ngay!</p>
+                                          <p className="font-black text-rose-300 text-base">SECURITY RISK WARNING</p>
+                                          <p className="text-rose-500 text-xs">Data leak detected - Investigation required!</p>
                                       </div>
                                   </>
                               )}
@@ -528,7 +528,7 @@ export function ThreatSimulator() {
                               <div className="p-4 rounded-xl bg-slate-950/80 border border-slate-800 font-mono text-[10px] text-emerald-400 leading-relaxed overflow-x-auto">
                                   <div className="flex items-center gap-2 mb-2 text-slate-400 font-sans font-bold uppercase tracking-wider text-[9px]">
                                       <ShieldAlert className="w-3.5 h-3.5 text-emerald-400" />
-                                      <span>🛡️ SOC REJECTION LOG (Why Blocked)</span>
+                                      <span>SOC REJECTION LOG (Why Blocked)</span>
                                   </div>
                                   <pre className="whitespace-pre">{result.why_blocked}</pre>
                               </div>
@@ -539,7 +539,7 @@ export function ThreatSimulator() {
                               <div className="p-4 rounded-xl bg-slate-900/40 border border-slate-700/20 text-xs space-y-2.5">
                                   <div className="flex items-center gap-2 text-slate-400 font-bold uppercase tracking-wider text-[9px]">
                                       <AlertTriangle className="w-3.5 h-3.5 text-amber-400" />
-                                      <span>⚠️ SECURITY IMPACT & CLASSIFICATION</span>
+                                      <span>SECURITY IMPACT & CLASSIFICATION</span>
                                   </div>
                                   <div className="grid grid-cols-2 gap-3 text-slate-300">
                                       <div>
@@ -575,7 +575,7 @@ export function ThreatSimulator() {
                           <div className="flex items-center gap-2 p-3 rounded-xl bg-amber-500/5 border border-amber-500/20">
                               <Lock className="w-4 h-4 text-amber-400 shrink-0" />
                               <p className="text-xs text-amber-300/80">
-                                  <strong>ISO 27017:</strong> Event giả lập này đã được ghi vào Immutable Audit Log với action <code className="text-amber-400">simulate:{result.scenario}</code>
+                                  <strong>ISO 27017:</strong> This simulated event has been written to the Immutable Audit Log with action <code className="text-amber-400">simulate:{result.scenario}</code>
                               </p>
                           </div>
                       </div>

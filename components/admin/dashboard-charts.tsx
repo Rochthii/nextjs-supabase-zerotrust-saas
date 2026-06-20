@@ -78,17 +78,17 @@ export function DashboardCharts({
         <div className="space-y-8">
             {/* Row 1: Resource Isolation Map & Module Adoption */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                {/* Ý tưởng A: Resource Isolation Weight Chart */}
+                {/* Concept A: Resource Isolation Weight Chart */}
                 <div className="border border-slate-200 dark:border-slate-800/60 shadow-2xl rounded-[2.5rem] bg-white dark:bg-slate-900/40 backdrop-blur-xl p-8 relative overflow-hidden group">
                     <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/5 rounded-full blur-3xl pointer-events-none" />
                     
                     <div className="flex justify-between items-start mb-6">
                         <div>
-                            <span className="text-[10px] font-bold text-indigo-500 uppercase tracking-widest flex items-center gap-1.5 mb-1.5">
-                                <Layers className="w-3.5 h-3.5" /> Ý tưởng A: Phân bổ dữ liệu
+                            <span translate="no" className="text-[10px] font-bold text-indigo-500 uppercase tracking-widest flex items-center gap-1.5 mb-1.5">
+                                <Layers className="w-3.5 h-3.5" /> Allocation metrics
                             </span>
-                            <h3 className="text-lg font-black text-slate-900 dark:text-white">Bản đồ Sự kiện An ninh Cô lập (Data Isolation)</h3>
-                            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Giám sát tổng lượng log an ninh và IP bị chặn của các doanh nghiệp hàng đầu</p>
+                            <h3 className="text-lg font-black text-slate-900 dark:text-white">Isolated Security Events Map (Data Isolation)</h3>
+                            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Monitor total security logs and blocked IPs across top workspaces</p>
                         </div>
                     </div>
 
@@ -125,17 +125,17 @@ export function DashboardCharts({
                     </div>
                 </div>
 
-                {/* Ý tưởng B: Module & Feature Adoption Rate Chart */}
+                {/* Concept B: Module & Feature Adoption Rate Chart */}
                 <div className="border border-slate-200 dark:border-slate-800/60 shadow-2xl rounded-[2.5rem] bg-white dark:bg-slate-900/40 backdrop-blur-xl p-8 relative overflow-hidden group">
                     <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/5 rounded-full blur-3xl pointer-events-none" />
                     
                     <div className="flex justify-between items-start mb-6">
                         <div>
-                            <span className="text-[10px] font-bold text-amber-500 uppercase tracking-widest flex items-center gap-1.5 mb-1.5">
-                                <LayoutGrid className="w-3.5 h-3.5" /> Ý tưởng B: Configuration authorization
+                            <span translate="no" className="text-[10px] font-bold text-amber-500 uppercase tracking-widest flex items-center gap-1.5 mb-1.5">
+                                <LayoutGrid className="w-3.5 h-3.5" /> Configuration authorization
                             </span>
-                            <h3 className="text-lg font-black text-slate-900 dark:text-white">Tỷ lệ Activate Module Tính năng</h3>
-                            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Tỷ lệ các doanh nghiệp đã activate các tính năng/tiện ích nâng cao</p>
+                            <h3 className="text-lg font-black text-slate-900 dark:text-white">Feature Module Adoption Rate</h3>
+                            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Percentage of workspaces with advanced feature modules enabled</p>
                         </div>
                     </div>
 
@@ -147,7 +147,7 @@ export function DashboardCharts({
                                     <div key={idx} className="space-y-1.5">
                                         <div className="flex justify-between items-center text-xs font-bold">
                                             <span className="text-slate-700 dark:text-slate-300">{item.name}</span>
-                                            <span className="text-slate-500 dark:text-slate-400">{item.value} doanh nghiệp ({item.percentage}%)</span>
+                                            <span className="text-slate-500 dark:text-slate-400">{item.value} workspaces ({item.percentage}%)</span>
                                         </div>
                                         <div className="h-3 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden border border-slate-200/50 dark:border-slate-800 shadow-inner">
                                             <div 
@@ -164,7 +164,7 @@ export function DashboardCharts({
                         <div className="mt-6 p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-800/80 flex items-center gap-3">
                             <ShieldCheck className="w-5 h-5 text-emerald-400 shrink-0" />
                             <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed">
-                                Chính sách security RLS bảo vệ cô lập dữ liệu 100% khi activate chéo các module giữa các organization khác nhau trên cùng database.
+                                Row-Level Security (RLS) policies guarantee 100% data isolation even when advanced feature modules are enabled across different organizations sharing the same database.
                             </p>
                         </div>
                     </div>
@@ -173,17 +173,17 @@ export function DashboardCharts({
 
             {/* Row 2: SOC Security Distribution & Tenant Lifecycle Distribution */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                {/* Ý tưởng C: SOC Security Activity Logs */}
+                {/* Concept C: SOC Security Activity Logs */}
                 <div className="border border-slate-200 dark:border-slate-800/60 shadow-2xl rounded-[2.5rem] bg-white dark:bg-slate-900/40 backdrop-blur-xl p-8 relative overflow-hidden group">
                     <div className="absolute top-0 right-0 w-64 h-64 bg-rose-500/5 rounded-full blur-3xl pointer-events-none" />
                     
                     <div className="flex justify-between items-start mb-6">
                         <div>
-                            <span className="text-[10px] font-bold text-rose-500 uppercase tracking-widest flex items-center gap-1.5 mb-1.5">
-                                <ShieldAlert className="w-3.5 h-3.5" /> Ý tưởng C: SOC Security Command
+                            <span translate="no" className="text-[10px] font-bold text-rose-500 uppercase tracking-widest flex items-center gap-1.5 mb-1.5">
+                                <ShieldAlert className="w-3.5 h-3.5" /> SOC Security Command
                             </span>
-                            <h3 className="text-lg font-black text-slate-900 dark:text-white">Cơ cấu Hành vi & Nhật ký SOC (24h)</h3>
-                            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Phân bổ hoạt động hành vi quản trị system đa tenant</p>
+                            <h3 className="text-lg font-black text-slate-900 dark:text-white">SOC Event & Operation Log Structure (24h)</h3>
+                            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Distribution of administrative operations in the multi-tenant system</p>
                         </div>
                     </div>
 
@@ -210,13 +210,13 @@ export function DashboardCharts({
                                 </ResponsiveContainer>
                             ) : (
                                 <div className="h-full flex items-center justify-center text-xs text-slate-400 italic">
-                                    None hoạt động logs trong 24h qua.
+                                    No activity logged in the past 24 hours.
                                 </div>
                             )}
                         </div>
 
                         <div className="w-full md:w-1/2 space-y-3">
-                            <h4 className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Chú giải hành vi giám sát</h4>
+                            <h4 className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Operation Types Legend</h4>
                             <div className="grid grid-cols-2 gap-3">
                                 {securityActionData.map((item, idx) => (
                                     <div key={idx} className="flex items-center gap-2">
@@ -231,23 +231,23 @@ export function DashboardCharts({
                                 ))}
                             </div>
                             <div className="pt-3 border-t border-slate-100 dark:border-slate-800/80 text-[10px] text-slate-500 font-semibold leading-relaxed">
-                                * Actions <strong className="text-rose-500 font-black">DELETE</strong> được system security SOC giám sát đặc quyền và ghi audit log bất biến.
+                                * <strong className="text-rose-500 font-black">DELETE</strong> actions are strictly monitored by the SOC security engine and written to immutable audit logs.
                             </div>
                         </div>
                     </div>
                 </div>
 
-                {/* Ý tưởng D: SaaS Subscription Lifecycle stacked bars */}
+                {/* Concept D: SaaS Subscription Lifecycle stacked bars */}
                 <div className="border border-slate-200 dark:border-slate-800/60 shadow-2xl rounded-[2.5rem] bg-white dark:bg-slate-900/40 backdrop-blur-xl p-8 relative overflow-hidden group">
                     <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
                     
                     <div className="flex justify-between items-start mb-6">
                         <div>
-                            <span className="text-[10px] font-bold text-emerald-500 uppercase tracking-widest flex items-center gap-1.5 mb-1.5">
-                                <Activity className="w-3.5 h-3.5" /> Ý tưởng D: Vòng đời tenant
+                            <span translate="no" className="text-[10px] font-bold text-emerald-500 uppercase tracking-widest flex items-center gap-1.5 mb-1.5">
+                                <Activity className="w-3.5 h-3.5" /> Tenant Lifecycle
                             </span>
-                            <h3 className="text-lg font-black text-slate-900 dark:text-white">Cơ cấu Subscription Plan & Vòng đời</h3>
-                            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Phân bổ doanh nghiệp theo gói registration lồng ghép với status hoạt động</p>
+                            <h3 className="text-lg font-black text-slate-900 dark:text-white">Subscription Plan & Lifecycle Structure</h3>
+                            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Distribution of organizations by subscription plan and operation status</p>
                         </div>
                     </div>
 
@@ -278,8 +278,8 @@ export function DashboardCharts({
                                     iconType="circle"
                                 />
                                 <Bar dataKey="active" name="Active" stackId="plan" fill={PLAN_COLORS.active} radius={[0, 0, 0, 0]} />
-                                <Bar dataKey="trial" name="Dùng thử (Trial)" stackId="plan" fill={PLAN_COLORS.trial} radius={[0, 0, 0, 0]} />
-                                <Bar dataKey="suspended" name="Bị khóa (Suspended)" stackId="plan" fill={PLAN_COLORS.suspended} radius={[6, 6, 0, 0]} />
+                                <Bar dataKey="trial" name="Trial" stackId="plan" fill={PLAN_COLORS.trial} radius={[0, 0, 0, 0]} />
+                                <Bar dataKey="suspended" name="Suspended" stackId="plan" fill={PLAN_COLORS.suspended} radius={[6, 6, 0, 0]} />
                             </BarChart>
                         </ResponsiveContainer>
                     </div>
@@ -294,15 +294,15 @@ export function DashboardCharts({
                 
                 <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8">
                     <div>
-                        <span className="text-[10px] font-bold text-indigo-400 uppercase tracking-widest flex items-center gap-1.5 mb-1.5">
-                            <Activity className="w-3.5 h-3.5 text-indigo-400 animate-pulse" /> GIÁM SÁT AN NINH TOÀN HỆ THỐNG
+                        <span translate="no" className="text-[10px] font-bold text-indigo-400 uppercase tracking-widest flex items-center gap-1.5 mb-1.5">
+                            <Activity className="w-3.5 h-3.5 text-indigo-400 animate-pulse" /> SYSTEM SECURITY MONITORING
                         </span>
-                        <h3 className="text-xl font-black text-white">Chart Nhật ký Active SOC (Audit Logs Hourly Timeline)</h3>
-                        <p className="text-xs text-slate-400 mt-1">Giám sát tổng tần suất hoạt động system theo khung giờ trong 24 giờ qua</p>
+                        <h3 className="text-xl font-black text-white">SOC Security Event Log Flow (Hourly Timeline)</h3>
+                        <p className="text-xs text-slate-400 mt-1">Monitor total frequency of system logs by hour over the past 24 hours</p>
                     </div>
                     <div className="flex items-center gap-2.5 px-4.5 py-2.5 bg-white/5 rounded-xl border border-white/10 shrink-0">
                         <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
-                        <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider">Theo dõi Realtime</span>
+                        <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider">Realtime Feed</span>
                     </div>
                 </div>
 
@@ -348,7 +348,7 @@ export function DashboardCharts({
                         </ResponsiveContainer>
                     ) : (
                         <div className="h-full flex items-center justify-center text-xs text-slate-400 italic">
-                            None hoạt động audit logs trong 24h qua.
+                            No audit log activity in the past 24 hours.
                         </div>
                     )}
                 </div>

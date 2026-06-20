@@ -10,7 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ChangePasswordForm } from '@/components/admin/change-password-form';
 import { LogoSettingField } from '@/components/admin/logo-setting-field';
 import { toast } from 'sonner';
-import { DEFAULT_SITE_NAME, BRAND_NAME_VI } from '@/lib/constants';
+import { DEFAULT_SITE_NAME } from '@/lib/constants';
 
 export function SettingsForm({ initialSettings, contextTenantId, isCompany }: { initialSettings: Record<string, string>, contextTenantId: string, isCompany?: boolean }) {
     const [isPending, startTransition] = useTransition();
@@ -29,7 +29,7 @@ export function SettingsForm({ initialSettings, contextTenantId, isCompany }: { 
                     toast.success('Save settings successfully!');
                 }
             } catch (error: any) {
-                toast.error(error.message || 'Đã xảy ra error unknown.');
+                toast.error(error.message || 'An unknown error occurred.');
             }
         });
     };
@@ -40,13 +40,13 @@ export function SettingsForm({ initialSettings, contextTenantId, isCompany }: { 
                 {/* Site Info */}
                 <Card>
                     <CardHeader>
-                        <CardTitle>{isCompany ? 'Thông tin doanh nghiệp' : 'Thông tin branch'}</CardTitle>
+                        <CardTitle>{isCompany ? 'Organization Information' : 'Branch Information'}</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <LogoSettingField defaultValue={initialSettings['site_logo'] || ''} />
 
                         <div className="pt-4 border-t">
-                            <Label htmlFor="site_name_vi">{isCompany ? 'Name doanh nghiệp / Organization (VI)' : 'Name branch (VI)'}</Label>
+                            <Label htmlFor="site_name_vi">{isCompany ? 'Organization Name (VI)' : 'Branch Name (VI)'}</Label>
                             <Input
                                 id="site_name_vi"
                                 name="site_name_vi"
@@ -56,7 +56,7 @@ export function SettingsForm({ initialSettings, contextTenantId, isCompany }: { 
                         </div>
 
                         <div>
-                            <Label htmlFor="site_name_en">{isCompany ? 'Organization Name (EN)' : 'Name branch (EN)'}</Label>
+                            <Label htmlFor="site_name_en">{isCompany ? 'Organization Name (EN)' : 'Branch Name (EN)'}</Label>
                             <Input
                                 id="site_name_en"
                                 name="site_name_en"
@@ -65,7 +65,7 @@ export function SettingsForm({ initialSettings, contextTenantId, isCompany }: { 
                         </div>
 
                         <div>
-                            <Label htmlFor="site_name_km">{isCompany ? 'Name organization (KM)' : 'Name branch (KM)'}</Label>
+                            <Label htmlFor="site_name_km">{isCompany ? 'Organization Name (KM)' : 'Branch Name (KM)'}</Label>
                             <Input
                                 id="site_name_km"
                                 name="site_name_km"
@@ -74,34 +74,34 @@ export function SettingsForm({ initialSettings, contextTenantId, isCompany }: { 
                         </div>
 
                         <div>
-                            <Label htmlFor="site_subtitle_vi">{isCompany ? 'Dòng chữ phụ (Ví dụ: Enterprise Xã hội)' : 'Dòng chữ phụ (Ví dụ: Branch Khmer)'}</Label>
+                            <Label htmlFor="site_subtitle_vi">{isCompany ? 'Subtitle (e.g. Social Enterprise)' : 'Subtitle (e.g. Khmer Branch)'}</Label>
                             <Input
                                 id="site_subtitle_vi"
                                 name="site_subtitle_vi"
-                                defaultValue={initialSettings['site_subtitle_vi'] || (isCompany ? 'Enterprise Xã hội' : 'Branch Khmer')}
+                                defaultValue={initialSettings['site_subtitle_vi'] || (isCompany ? 'Social Enterprise' : 'Khmer Branch')}
                             />
                         </div>
 
                         <div>
-                            <Label htmlFor="site_description">About ngắn</Label>
+                            <Label htmlFor="site_description">Short Description</Label>
                             <Textarea
                                 id="site_description"
                                 name="site_description"
                                 defaultValue={initialSettings['site_description'] || ''}
                                 rows={3}
-                                placeholder={isCompany ? "Description ngắn về doanh nghiệp..." : "Description ngắn về branch..."}
+                                placeholder={isCompany ? "Short description of the organization..." : "Short description of the branch..."}
                             />
                         </div>
 
                         <div className="pt-4 border-t">
-                            <Label htmlFor="site_og_image">Ảnh đại diện khi chia sẻ (Social OG Image URL)</Label>
+                            <Label htmlFor="site_og_image">Social Sharing Image (Social OG Image URL)</Label>
                             <Input
                                 id="site_og_image"
                                 name="site_og_image"
                                 defaultValue={initialSettings['site_og_image'] || ''}
                                 placeholder="https://.../og-image.jpg"
                             />
-                            <p className="text-xs text-gray-500 mt-1">Ảnh này sẽ hiện ra khi bạn submit link qua Facebook, Zalo, Telegram... (Size khuyên dùng: 1200x630px)</p>
+                            <p className="text-xs text-gray-500 mt-1">This image will appear when sharing the link via Facebook, Zalo, Telegram... (Recommended size: 1200x630px)</p>
                         </div>
                     </CardContent>
                 </Card>
@@ -110,12 +110,12 @@ export function SettingsForm({ initialSettings, contextTenantId, isCompany }: { 
                 {isCompany && (
                 <Card>
                     <CardHeader>
-                        <CardTitle>Thông tin Bank (VietQR)</CardTitle>
+                        <CardTitle>Bank Information (VietQR)</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <Label htmlFor="bank_name">Name Bank</Label>
+                                <Label htmlFor="bank_name">Bank Name</Label>
                                 <Input
                                     id="bank_name"
                                     name="bank.name"
@@ -124,19 +124,19 @@ export function SettingsForm({ initialSettings, contextTenantId, isCompany }: { 
                                 />
                             </div>
                             <div>
-                                <Label htmlFor="bank_id">Mã system (Bin ID)</Label>
+                                <Label htmlFor="bank_id">System Code (Bin ID)</Label>
                                 <Input
                                     id="bank_id"
                                     name="bank.id"
                                     defaultValue={initialSettings['bank.id'] || ''}
-                                    placeholder="VD: 970416 (ACB)"
+                                    placeholder="e.g. 970416 (ACB)"
                                 />
-                                <p className="text-xs text-gray-500 mt-1">Tra cứu tại vietqr.io (VD: VCB=970436, ACB=970416)</p>
+                                <p className="text-xs text-gray-500 mt-1">Lookup at vietqr.io (e.g. VCB=970436, ACB=970416)</p>
                             </div>
                         </div>
 
                         <div>
-                            <Label htmlFor="bank_account_no">Số account</Label>
+                            <Label htmlFor="bank_account_no">Account Number</Label>
                             <Input
                                 id="bank_account_no"
                                 name="bank.account_no"
@@ -146,27 +146,27 @@ export function SettingsForm({ initialSettings, contextTenantId, isCompany }: { 
                         </div>
 
                         <div>
-                            <Label htmlFor="bank_account_name">Name chủ account (Viết disable ko dấu)</Label>
+                            <Label htmlFor="bank_account_name">Account Holder Name (ALL CAPS, no accents)</Label>
                             <Input
                                 id="bank_account_name"
                                 name="bank.account_name"
                                 defaultValue={initialSettings['bank.account_name'] || ''}
-                                placeholder={isCompany ? "TÊN TỔ CHỨC / CÔNG TY" : "MULTI-TENANT ECOSYSTEM"}
+                                placeholder={isCompany ? "ORGANIZATION NAME" : "MULTI-TENANT ECOSYSTEM"}
                             />
                         </div>
 
                         <div>
-                            <Label htmlFor="bank_qr_template">Template QR</Label>
+                            <Label htmlFor="bank_qr_template">QR Template</Label>
                             <select
                                 id="bank_qr_template"
                                 name="bank.qr_template"
                                 className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                                 defaultValue={initialSettings['bank.qr_template'] || 'compact2'}
                             >
-                                <option value="compact">Compact (Đơn giản)</option>
-                                <option value="compact2">Compact 2 (Đẹp)</option>
-                                <option value="qr_only">QR Only (Chỉ mã QR)</option>
-                                <option value="print">Print (In ấn)</option>
+                                <option value="compact">Compact (Simple)</option>
+                                <option value="compact2">Compact 2 (Premium)</option>
+                                <option value="qr_only">QR Only</option>
+                                <option value="print">Print (For printing)</option>
                             </select>
                         </div>
                     </CardContent>
@@ -176,7 +176,7 @@ export function SettingsForm({ initialSettings, contextTenantId, isCompany }: { 
                 {/* Contact Info */}
                 <Card>
                     <CardHeader>
-                        <CardTitle>Thông tin contact</CardTitle>
+                        <CardTitle>Contact Information</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <div>
@@ -191,7 +191,7 @@ export function SettingsForm({ initialSettings, contextTenantId, isCompany }: { 
                         </div>
 
                         <div>
-                            <Label htmlFor="contact_phone">Phone number</Label>
+                            <Label htmlFor="contact_phone">Phone Number</Label>
                             <Input
                                 id="contact_phone"
                                 name="contact_phone"
@@ -207,23 +207,23 @@ export function SettingsForm({ initialSettings, contextTenantId, isCompany }: { 
                                 name="address"
                                 defaultValue={initialSettings['address'] || ''}
                                 rows={3}
-                                placeholder="Address complete..."
+                                placeholder="Full address..."
                             />
                         </div>
 
                         <div>
-                            <Label htmlFor="map_embed_url">Google Map Embed URL (Mã nhúng iframe src)</Label>
+                            <Label htmlFor="map_embed_url">Google Maps Embed URL (iframe src)</Label>
                             <Input
                                 id="map_embed_url"
                                 name="map_embed_url"
                                 defaultValue={initialSettings['map_embed_url'] || ''}
                                 placeholder="https://www.google.com/maps/embed?pb=..."
                             />
-                            <p className="text-xs text-gray-500 mt-1">Lấy link src trong mã nhúng iframe của Google Maps (chia sẻ &gt; nhúng bản đồ)</p>
+                            <p className="text-xs text-gray-500 mt-1">Get the src link inside the Google Maps embed iframe (Share &gt; Embed map)</p>
                         </div>
 
                         <div>
-                            <Label htmlFor="map_direction_url">Link chỉ đường Google Map</Label>
+                            <Label htmlFor="map_direction_url">Google Maps Directions Link</Label>
                             <Input
                                 id="map_direction_url"
                                 name="map_direction_url"
@@ -237,7 +237,7 @@ export function SettingsForm({ initialSettings, contextTenantId, isCompany }: { 
                 {/* Social Media */}
                 <Card>
                     <CardHeader>
-                        <CardTitle>Mạng xã hội</CardTitle>
+                        <CardTitle>Social Media</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <div>
@@ -269,12 +269,11 @@ export function SettingsForm({ initialSettings, contextTenantId, isCompany }: { 
 
                 {/* Save Button */}
                 <div className="flex gap-4">
-                    <Button type="submit" disabled={isPending} className="bg-gold-primary hover:bg-gold-dark">
-                        {isPending ? 'Đang save...' : 'Save settings'}
+                    <Button type="submit" disabled={isPending} className="bg-gold-primary hover:bg-gold-dark text-white">
+                        {isPending ? 'Saving...' : 'Save Settings'}
                     </Button>
                 </div>
             </div>
         </form>
     );
 }
-
