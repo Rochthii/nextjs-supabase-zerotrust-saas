@@ -32,7 +32,8 @@ export default async function TenantHomePage({
         tenantDomain === 'localhost' || 
         tenantDomain === '127.0.0.1' || 
         tenantDomain === 'nextsecure.dev' || 
-        tenantDomain === 'nextsecure-saas-starter-kit.vercel.app';
+        tenantDomain === 'nextsecure-saas-starter-kit.vercel.app' ||
+        tenantDomain === 'nextjs-supabase-zerotrust-saas-crt.vercel.app';
 
     if (isMainDomain) {
         // --- 1. GIAO DIỆN LANDING PAGE MARKETING (BÁN SOURCE CODE) ---
