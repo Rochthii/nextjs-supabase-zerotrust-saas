@@ -30,7 +30,7 @@ Upstash Redis stores active IP blocklists and tenant routing configurations at V
 
 1. Log in to the [Upstash Console](https://upstash.com/).
 2. Under the Redis tab, click **Create Database**:
-   - **Name**: `nextsecure-cache`
+   - **Name**: `tenantshield-cache`
    - **Region**: `ap-southeast-1` (Singapore - matching your Supabase region for minimal cross-service latency).
    - **Eviction**: Enabled (automatically clears expired keys when storage limit is reached).
    - Click **Create**.
