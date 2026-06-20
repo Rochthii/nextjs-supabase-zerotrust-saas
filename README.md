@@ -13,6 +13,7 @@ Ship a production-grade, secure B2B SaaS platform in under 15 minutes.
 [![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-3ECF8E?logo=supabase&logoColor=white)](https://supabase.com)
 [![Upstash](https://img.shields.io/badge/Upstash-Redis-00E9A3?logo=upstash&logoColor=black)](https://upstash.com)
 [![Vercel](https://img.shields.io/badge/Deploy-Vercel-black?logo=vercel&logoColor=white)](https://vercel.com)
+[![YouTube Video](https://img.shields.io/badge/Preview%20Video-Watch%20on%20YouTube-FF0000?logo=youtube&logoColor=white)](https://youtu.be/R5FtZ6kfNr4)
 
 </div>
 
@@ -97,18 +98,35 @@ One codebase serves both the main marketing platform and unlimited tenants. The 
 
 ## What's included (screenshots)
 
-| Screen | Path |
-| :--- | :--- |
-| Landing Page Marketing | `/` |
-| Real-Time SOC Dashboard | `/admin/security-center` |
-| Tenant & Lifecycle Management | `/admin/tenants` |
-| Immutable Audit Log Explorer | `/admin/audit-logs` |
-| Finance Ledger & Donations | `/admin/finance` |
-| AI Knowledge Base & Chat | `/admin/documents` |
-| CMS: News, Events, Media | `/admin/news`, `/admin/events`, `/admin/media` |
-| Role & User Management | `/admin/users` |
+| Screen | Path | Preview |
+| :--- | :--- | :--- |
+| Ecosystem Control Center | `/admin` | [View](public/images/screenshots/global-dashboard-1-top.png) |
+| Real-Time SOC Dashboard | `/admin/security-center` | [View](public/images/screenshots/soc-monitoring-1-main.png) |
+| Tenant & Lifecycle Management | `/admin/tenants` | [View](public/images/screenshots/workspace-management-tenants.png) |
+| Immutable Audit Log Explorer | `/admin/audit-logs` | [View](public/images/screenshots/audit-logs-trail.png) |
+| RLS Performance Benchmark | `/admin/performance` | [View](public/images/screenshots/benchmark-2-curve.png) |
+| Role & User Management | `/admin/users` | [View](public/images/screenshots/identity-management-users.png) |
+| Tenant Isolated Dashboard | `/admin/t/[tenant_id]/dashboard` | [View](public/images/screenshots/tenant-dashboard-overview.png) |
+| Tenant Security & 2FA Monitor | `/admin/t/[tenant_id]/security` | [View](public/images/screenshots/tenant-security-2fa-monitor.png) |
 
-> *Live demo screenshots available on the product page.*
+<details>
+<summary>📸 Click to view the Control Center Preview Gallery</summary>
+
+### 1. Global Ecosystem Control Center
+![Ecosystem Control Center](public/images/screenshots/global-dashboard-1-top.png)
+
+### 2. SOC Threat Intelligence & Live Feeds
+![SOC Threat Intelligence](public/images/screenshots/soc-monitoring-1-main.png)
+
+### 3. Compliance WORM Cryptographic Ledger
+![WORM Cryptographic Ledger](public/images/screenshots/soc-monitoring-5-worm.png)
+
+### 4. Zero Trust RLS Performance Benchmark
+![RLS Performance Benchmark](public/images/screenshots/benchmark-2-curve.png)
+
+</details>
+
+> *All screenshots showcase the actual product running with seeded data.*
 
 ---
 

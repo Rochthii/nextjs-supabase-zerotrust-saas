@@ -143,20 +143,20 @@ Reduce OpenAI/Gemini API billing by avoiding repetitive queries.
 *Note for creators: Replace these placeholders with your actual screenshots to maximize conversion rate on Gumroad.*
 
 ### 1. Real-time Security Operations Center (SOC) Dashboard
-`[PLACEHOLDER: Insert image of /admin/security-center showing: Active blocked IPs list, Anomaly warnings with CRS score, and real-time visitor activity]`
+![Real-time SOC Dashboard](../public/images/screenshots/soc-monitoring-1-main.png)
 * Features shown: Real-time logs stream, Block/Unblock buttons, RLS database coverage indicator.
 
 ### 2. Multi-Tenant Administration Panel
-`[PLACEHOLDER: Insert image of /admin/tenants dashboard]`
+![Multi-Tenant Administration Panel](../public/images/screenshots/workspace-management-tenants.png)
 * Features shown: List of tenants, lifecycle management (Active / Suspended switches), modules customization, and custom domain aliases mapping.
 
 ### 3. Compliance Audit Log Explorer
-`[PLACEHOLDER: Insert image of /admin/audit-logs]`
+![Compliance Audit Log Explorer](../public/images/screenshots/audit-logs-trail.png)
 * Features shown: Immutable ledger view, search & filters by table name or user, and visual risk indicators (CRS levels).
 
-### 4. Enterprise AI Chat Copilot
-`[PLACEHOLDER: Insert image of /admin/documents showing AI Knowledge Base upload and Chat Interface]`
-* Features shown: File ingestion, chunking viewer, vector status, and the semantic cache hit rate telemetry dashboard.
+### 4. Enterprise AI Chat Copilot (Threat Context)
+![Enterprise AI Chat Copilot (Threat Context)](../public/images/screenshots/soc-monitoring-7-simulator.png)
+* Features shown: Attack Simulation, WORM ledger controls, and auto-suspend response rules.
 
 ---
 

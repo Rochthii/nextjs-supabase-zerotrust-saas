@@ -37,6 +37,8 @@ Prepare a ZIP file of screenshots (`900 × 503 px` or larger) showcasing actual 
 ---
 
 ## 📹 3. PROMO VIDEO SCRIPT (60 SECONDS)
+> 🎬 **Active recorded Promo Video:** [Watch on YouTube](https://youtu.be/R5FtZ6kfNr4)
+
 A 60-second video demo showing rapid actions, sleek screen transitions, and a clear English voiceover. Use a tool like **OBS Studio** or **Loom** to record in 1080p, and edit with transitions.
 
 ### ⏱️ Time-by-Time Breakdown:
