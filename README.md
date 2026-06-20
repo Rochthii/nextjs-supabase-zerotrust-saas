@@ -14,6 +14,7 @@ Ship a production-grade, secure B2B SaaS platform in under 15 minutes.
 [![Upstash](https://img.shields.io/badge/Upstash-Redis-00E9A3?logo=upstash&logoColor=black)](https://upstash.com)
 [![Vercel](https://img.shields.io/badge/Deploy-Vercel-black?logo=vercel&logoColor=white)](https://vercel.com)
 [![YouTube Video](https://img.shields.io/badge/Preview%20Video-Watch%20on%20YouTube-FF0000?logo=youtube&logoColor=white)](https://youtu.be/R5FtZ6kfNr4)
+[![Purchase Boilerplate](https://img.shields.io/badge/Purchase-Lemon%20Squeezy-705FEA?logo=lemonsqueezy&logoColor=white)](https://crt-sotre.lemonsqueezy.com/checkout/buy/07d7904f-87b2-4a32-b960-e32d9c53dac0)
 
 </div>
 

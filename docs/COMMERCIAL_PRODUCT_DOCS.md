@@ -2,6 +2,9 @@
 > **Next.js 16 + Supabase FORCE RLS + WORM Audit Logs + Edge Active Defense**  
 > *Save 3+ months of complex engineering. Launch a secure B2B SaaS in weeks, not months.*
 
+[![Purchase Boilerplate](https://img.shields.io/badge/Purchase-Lemon%20Squeezy-705FEA?style=for-the-badge&logo=lemonsqueezy&logoColor=white)](https://crt-sotre.lemonsqueezy.com/checkout/buy/07d7904f-87b2-4a32-b960-e32d9c53dac0)
+[![YouTube Video](https://img.shields.io/badge/Preview%20Video-Watch%20on%20YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://youtu.be/R5FtZ6kfNr4)
+
 ---
 
 ## 💡 WHY CHOOSE TenantShield?

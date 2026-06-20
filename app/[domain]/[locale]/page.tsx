@@ -397,7 +397,7 @@ export default async function TenantHomePage({
                                     <h3 className="text-base font-extrabold text-slate-200 mb-1">Starter License</h3>
                                     <p className="text-slate-400 text-[11px] mb-6">For single indie founders launching a secure multi-tenant project.</p>
                                     <div className="flex items-baseline gap-1 mb-8">
-                                        <span className="text-3xl font-black text-white">$89</span>
+                                        <span className="text-3xl font-black text-white">$79</span>
                                         <span className="text-slate-500 text-xs font-medium">/ lifetime one-time</span>
                                     </div>
                                     <ul className="space-y-3.5 text-xs text-slate-300 mb-8 border-t border-slate-900 pt-6">
@@ -424,10 +424,12 @@ export default async function TenantHomePage({
                                     </ul>
                                 </div>
                                 <a 
-                                    href="/login" 
+                                    href="https://crt-sotre.lemonsqueezy.com/checkout/buy/07d7904f-87b2-4a32-b960-e32d9c53dac0" 
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                     className="w-full bg-slate-950 hover:bg-slate-900 border border-slate-800 hover:border-slate-700 py-3 rounded-xl text-center font-bold text-xs text-slate-300 transition-colors"
                                 >
-                                    Explore Core Features
+                                    Purchase Starter License
                                 </a>
                             </div>
 
@@ -467,10 +469,12 @@ export default async function TenantHomePage({
                                     </ul>
                                 </div>
                                 <a 
-                                    href="/login" 
+                                    href="https://crt-sotre.lemonsqueezy.com/checkout/buy/07d7904f-87b2-4a32-b960-e32d9c53dac0" 
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                     className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl text-center font-bold text-xs shadow-lg shadow-indigo-600/10 hover:shadow-indigo-600/25 transition-colors"
                                 >
-                                    Get Professional Access
+                                    Purchase Professional License
                                 </a>
                             </div>
 
@@ -507,10 +511,12 @@ export default async function TenantHomePage({
                                     </ul>
                                 </div>
                                 <a 
-                                    href="/login" 
+                                    href="https://crt-sotre.lemonsqueezy.com/checkout/buy/07d7904f-87b2-4a32-b960-e32d9c53dac0" 
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                     className="w-full bg-slate-950 hover:bg-slate-900 border border-slate-800 hover:border-slate-700 py-3 rounded-xl text-center font-bold text-xs text-slate-300 transition-colors"
                                 >
-                                    Get Unlimited License
+                                    Purchase Enterprise License
                                 </a>
                             </div>
                         </div>
