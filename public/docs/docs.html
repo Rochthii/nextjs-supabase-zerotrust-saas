@@ -290,6 +290,16 @@
                 padding: 2rem 1.5rem;
             }
         }
+
+        .mermaid {
+            background-color: var(--code-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: center;
+        }
     </style>
 </head>
 <body>
@@ -313,6 +323,8 @@
 
         <h3 class="menu-title">Architecture</h3>
         <ul class="menu-list">
+            <li class="menu-item"><a href="#system-architecture" class="menu-link">System Topology</a></li>
+            <li class="menu-item"><a href="#database-erd" class="menu-link">Database ERD Schema</a></li>
             <li class="menu-item"><a href="#architecture-rls" class="menu-link">FORCE RLS (Multi-Tenancy)</a></li>
             <li class="menu-item"><a href="#architecture-worm" class="menu-link">WORM Audit Logs</a></li>
             <li class="menu-item"><a href="#architecture-edge" class="menu-link">Edge Active Defense</a></li>
@@ -461,6 +473,118 @@ TELEGRAM_CHAT_ID=[your-telegram-chat-id]</code></pre>
             </ol>
         </section>
 
+        <!-- System Architecture Section -->
+        <section id="system-architecture">
+            <h2>🌐 System Topology & Data Flow</h2>
+            <p>TenantShield utilizes a high-performance, edge-first architecture. Traffic flows through Next.js Edge Middleware, querying a global Upstash Redis cache for rate limits and tenant states in less than 4ms, before forwarding sanitized requests to the Supabase PostgreSQL database where FORCE RLS and triggers ensure security.</p>
+            
+            <div class="mermaid">
+graph TD
+    Client[Client Request] -->|Route: tenant.domain.com| Edge[Vercel Edge Runtime]
+    Edge -->|1. Check Rate Limits & IP Blocks| Redis[(Upstash Redis Cache)]
+    Redis -->|Blocked / 403 Forbidden| BlockPage[Instant Edge Block - 4ms]
+    Redis -->|Allowed| Routing[Subdomain Rewrite Engine]
+    Routing -->|2. Resolve Tenant & Subdomain| App[Next.js App Serverless]
+    App -->|3. Establish Session & Custom JWT| Supabase[Supabase API / Auth]
+    App -->|4. Execute SQL Query| DB[(PostgreSQL Database)]
+    DB -->|5. Apply Row-Level Security| RLS{FORCE RLS Policy}
+    RLS -->|Bypassed / Foreign Tenant| Error[Access Denied]
+    RLS -->|Matched Tenant ID Claim| AllowedQuery[Execute Query]
+    AllowedQuery -->|6. Trigger Log Event| Audit[WORM Audit Ledger]
+    Audit -->|Block Update/Delete| TriggerCheck{Audit Log Trigger}
+    TriggerCheck -->|INSERT ONLY| Success[Write to Audit Log]
+    TriggerCheck -->|UPDATE or DELETE| ThrowError[Exception Raised: Tampering Prevented]
+    App -->|On Threat Detection| Alert[Telegram SOAR Notifier]
+    Alert -->|Real-time alert| Telegram[Telegram Channel / SOC Chat]
+            </div>
+            
+            <div class="callout success">
+                <div class="callout-title">💡 Performance Optimization</div>
+                <p>Upstash Redis caches tenant whitelist states and IP health flags at Edge locations. Benign IPs bypass Redis database calls for up to 15 seconds (negative caching), ensuring maximum throughput under DDoS conditions.</p>
+            </div>
+        </section>
+
+        <!-- Database ERD Section -->
+        <section id="database-erd">
+            <h2>📊 Database Schema & Entity Relationship</h2>
+            <p>The core of TenantShield is its strict PostgreSQL database schema. The diagram below details how Tenant memberships, roles, transactions, blocked IPs, immutable audit logs, and AI RAG knowledge documents are mapped and isolated.</p>
+            
+            <div class="mermaid">
+erDiagram
+    TENANTS ||--o{ TENANT_MEMBERS : "has membership"
+    TENANTS ||--o{ TRANSACTIONS : "ledger entry"
+    TENANTS ||--o{ AUDIT_LOGS : "writes logs"
+    TENANTS ||--o{ DHARMA_DOCUMENTS : "AI knowledge base"
+    
+    USERS ||--o{ TENANT_MEMBERS : "member of"
+    USERS ||--o{ USER_PROFILES : "user details"
+    
+    TENANT_MEMBERS ||--o{ TENANT_MEMBER_ROLES : "assigned"
+    ROLES ||--o{ TENANT_MEMBER_ROLES : "has roles"
+
+    TENANT_MEMBERS {
+        UUID id PK
+        UUID user_id FK
+        UUID tenant_id FK
+        TIMESTAMP created_at
+    }
+
+    TENANT_MEMBER_ROLES {
+        UUID member_id PK_FK
+        VARCHAR role_id PK_FK
+        TIMESTAMP created_at
+    }
+
+    ROLES {
+        VARCHAR id PK
+        VARCHAR name
+        TEXT description
+    }
+
+    TENANTS {
+        UUID id PK
+        VARCHAR domain "Unique domain alias"
+        VARCHAR subdomain "Unique subdomain"
+        VARCHAR lifecycle_status "active | suspended"
+        JSONB modules_config "Enabled SaaS modules"
+    }
+    
+    TRANSACTIONS {
+        UUID id PK
+        UUID tenant_id FK
+        NUMERIC amount
+        VARCHAR status
+        TEXT purpose
+    }
+    
+    AUDIT_LOGS {
+        UUID id PK
+        UUID tenant_id FK
+        VARCHAR action "insert | update | delete | violation"
+        VARCHAR table_name
+        TEXT record_id
+        JSONB old_data
+        JSONB new_data
+        INET ip_address
+    }
+    
+    BLOCKED_IPS {
+        UUID id PK
+        TEXT ip
+        UUID tenant_id FK
+        TIMESTAMP blocked_until
+        TEXT reason
+    }
+    
+    DHARMA_DOCUMENTS {
+        UUID id PK
+        UUID tenant_id FK
+        TEXT content
+        VARCHAR source_tier
+    }
+            </div>
+        </section>
+
         <!-- FORCE RLS -->
         <section id="architecture-rls">
             <h2>🔒 Row-Level Security (FORCE RLS)</h2>
@@ -540,6 +664,21 @@ $$ LANGUAGE plpgsql;</code></pre>
                     link.classList.add('active');
                 }
             });
+        });
+    </script>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ 
+            startOnLoad: true, 
+            theme: 'dark',
+            themeVariables: {
+                background: '#090d16',
+                primaryColor: '#6366f1',
+                primaryTextColor: '#f1f5f9',
+                lineColor: '#475569',
+                actorBkg: '#1e293b',
+                actorBorder: '#334155'
+            }
         });
     </script>
 </body>
